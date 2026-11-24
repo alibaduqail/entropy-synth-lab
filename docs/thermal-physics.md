@@ -85,7 +85,48 @@ moves in the opposite direction to LiDAR (whose 905 nm attenuation is ~5x strong
 This is a simulated prediction; it has never been checked against a real fogged Lepton recording.
 Caveat: the room is 2.6 m, so path lengths are short; a larger space would lose contrast faster.
 
-## 4. Jetson banks and cost  [pending: `jetson_bank_runs.json`, `cost_vs_ht.png`, `bench_jetson.json`]
+## 4. Jetson: renderer speed, banks and cost
+
+### Renderer speed on the Jetson  [`renderer_bench_jetson.json`, n = 30 frames per row, run under the measurement lock]
+
+frames/s including the sensor model (render + sensor), supersample 2 (default) / 1:
+
+| Condition | numpy CPU | torch CUDA |
+|---|---|---|
+| A0 empty | 44.7 / 147 | 87.1 / 116 |
+| A1 one person | 1.8 / 7.9 | 14.6 / 24.0 |
+| A2 three people | 0.7 / 2.7 | 9.5 / 11.6 |
+| A3 people + warm objects | 0.9 / 3.8 | 10.0 / 12.5 |
+| B2 fog + person | 1.9 / 8.2 | 19.1 / 22.9 |
+| C16 16 warm objects (static) | 80.0 / 221 | 87.1 / 116 |
+
+With torch CUDA every condition renders faster than the Lepton's 8.7 fps, so the simulator could feed
+the pipeline live; static scenes are cached (only the sensor model runs per frame). The banks below were
+pre-rendered on the Mac (numpy, `bank_generation_summary_mac_numpy.json`), so rendering is NOT part of
+the measured pipeline cost.
+
+### Banks  [`bank_generation_summary_mac_numpy.json`, `refbank_manifests.json`]
+On the Jetson under `~/synthlab/thermal-physics/banks/<name>/` (frames.npy uint16 (128,120,160) TLinear +
+manifest.json with per-frame labels), scene room_v1, seed 20261123, supersample 2, sensor noise on.
+Real reference banks (128 frames evenly subsampled from each real recording) under
+`~/synthlab/thermal-physics/refbanks/real_*`.
+
+| Bank | HT (mean of 32 frames) | mean / max C |
+|---|---|---|
+| A0 empty | 0.0166 | 22.7 / 24.2 |
+| A1 one person (walking) | 0.0916 | 24.7 / 33.8 |
+| A2 three people | 0.0871 | 26.9 / 34.9 |
+| A3 three people + 5 warm objects + lamp | 0.1132 | 29.6 / 95.6 |
+| B0-B3 standing person, fog 0-3 | 0.0732 / 0.0689 / 0.0607 / 0.0446 | 24.5-23.0 / 33.6-30.0 |
+| L0 / L1 lamp off / on (empty room) | 0.0166 / 0.1939 | 22.7 / 53.9 max |
+| C00 C01 C02 C04 C08 C12 C16 warm objects | 0.0166 0.0170 0.0463 0.0609 0.0911 0.0899 0.0888 | max up to 99 C |
+
+Notes: A2 HT is slightly below A1 (people overlap and fill blocks uniformly; HT is not monotone in
+people count). The complexity sweep saturates above 8 objects (blocks already contain a hot edge;
+objects above 50 C clip in the fixed 10-50 C BIE scale). C01 is almost equal to C00 because the single
+object drawn for this seed is a mug, which covers only a few pixels (or is occluded) from this pose.
+
+### Cost on the Jetson  [pending: `jetson_bank_runs.json`, `cost_vs_ht.png`]
 
 ## 5. Limits
 - Appearance validated against 5 real recording groups only, none taken from the room_v1 camera pose.
