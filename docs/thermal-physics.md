@@ -182,5 +182,5 @@ for driving YOLO's per-detection load. (C04 triggers one false detection per fra
 ## Addendum: paced at the Lepton rate (8.7 fps)  [`jetson_bank_runs_paced.json`]
 4 banks, 2 x 30 s each, same harness, paced 8.70 fps achieved: A0 / A3 / B3 / L1 (HT 0.017 / 0.113 / 0.045 / 0.194)
 -> VDD_IN 5.796 / 5.789 / 5.783 / 5.791 W, energy 665-666 mJ per frame, total 74.0 / 74.3 / 74.1 / 76.2 ms per frame
-(paced per-frame time is higher than unpaced because the GPU clocks down between frames).
+(paced per-frame time is ~10 ms higher than unpaced; likely DVFS clocking down between frames - not verified).
 At the real camera rate, power is flat to within 0.013 W (0.2 %) across an 11x HT range.
