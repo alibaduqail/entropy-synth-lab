@@ -7,7 +7,7 @@
 set -u
 export PYTHONWARNINGS=ignore PYTHONDONTWRITEBYTECODE=1
 H=~/synthlab/harness; kind="$1"; O=${CMP_OUT:-~/synthlab/jetson-harness/runs/cmp}/$kind
-PER=${PER:-12}
+PER=${PER:-16}
 mkdir -p "$O"
 if [ ! -s "$O/banks.txt" ]; then
   if [ "$kind" = thermal ]; then ls -d ~/synthlab/*/banks/*/frames.npy | xargs -n1 dirname
@@ -26,9 +26,9 @@ EOF
 )
 [ -z "$banks" ] && { echo "empty chunk"; exit 0; }
 if [ "$kind" = thermal ]; then
-  extra="--backend pytorch --unpaced --seconds 10 --warmup 3 --idle-seconds 2"
+  extra="--backend pytorch --unpaced --seconds 8 --warmup 2 --idle-seconds 1"
 else
-  extra="--workload both --unpaced --seconds 15 --warmup 2 --idle-seconds 2"
+  extra="--workload both --unpaced --seconds 12 --warmup 2 --idle-seconds 1"
 fi
 python3 $H/run_matrix.py --kind "$kind" --round "$block" --seed $((9100 + chunk)) \
     --out "$O/c$(printf %02d "$chunk")" --banks $banks -- $extra 2>&1 | grep -v -i warn | tail -3

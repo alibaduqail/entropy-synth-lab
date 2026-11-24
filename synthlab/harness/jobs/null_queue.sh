@@ -1,18 +1,18 @@
 #!/bin/bash
-# Run from the Mac: queue the step-2 (null-hypothesis) runs, one short locked command each.
-# Rounds are interleaved across configurations so slow drifts hit every config equally.
-# usage: synthlab/harness/jobs/null_queue.sh [first_round] [last_round]
+# Run from the Mac: queue the step-2 (null-hypothesis) control rounds. The shared lock is busy,
+# so two configurations share one locked command (~10 min). Rounds interleave configurations.
+# Noise floor (noise_floor.sh pytorch|tensorrt) is queued separately.
+# usage: synthlab/harness/jobs/null_queue.sh [first_round] [last_round] [skip_first_pt]
 set -u
 J="$(cd "$(dirname "$0")/../../.." && pwd)/tools/jetson.sh"
-first="${1:-0}"; last="${2:-2}"
+first="${1:-0}"; last="${2:-2}"; skip="${3:-}"
+C=~/synthlab/harness/jobs/ctl_round.sh
 log() { echo "$(date +%H:%M:%S) $*"; }
-log "noise floor tensorrt"
-"$J" measured 'bash ~/synthlab/harness/jobs/noise_floor.sh tensorrt' | tail -4
 for r in $(seq "$first" "$last"); do
-  for cfg in "pytorch unpaced" "tensorrt unpaced" "pytorch unpaced nobie" "pytorch paced" "tensorrt paced"; do
-    log "round $r: $cfg"
-    set -- $cfg
-    "$J" measured "bash ~/synthlab/harness/jobs/ctl_round.sh $1 $2 $r ${3:-}" | tail -2
-  done
+  if [ "$r" = "$first" ] && [ -n "$skip" ]; then a="bash $C pytorch unpaced $r nobie"
+  else a="bash $C pytorch unpaced $r; bash $C pytorch unpaced $r nobie"; fi
+  log "round $r: pytorch unpaced (+nobie)"; "$J" measured "$a" | tail -2
+  log "round $r: tensorrt unpaced + pytorch paced"
+  "$J" measured "bash $C tensorrt unpaced $r; bash $C pytorch paced $r" | tail -2
 done
 log "queue done"
