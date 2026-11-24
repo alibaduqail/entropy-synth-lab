@@ -1,0 +1,68 @@
+{
+  "_note": "Photo-guided nominal geometry. Thermal and return properties are simulation assumptions. Legacy readers need to honor solid=false, wall cutouts and pane transmission for corridor rays.",
+  "units": "m",
+  "up": "z",
+  "origin": "south-west floor corner",
+  "room": {
+    "size_xyz": [2.56, 2.66, 2.56],
+    "air_temp_c": 22.5,
+    "surfaces": {"floor": {"material": "carpet", "emissivity": 0.95, "temp_c": 22.0, "lidar_reflectivity": 0.25}, "ceiling": {"material": "acoustic_tile", "emissivity": 0.92, "temp_c": 23.0, "lidar_reflectivity": 0.7}, "wall_north": {"material": "painted_drywall_teal", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.45}, "wall_south": {"material": "painted_drywall_white", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.8, "openings": ["door_opening"], "glazing_object": "glass_partition", "_note": "Use glass and door apertures instead of wall hits there. Residual end strips and header assumed opaque."}, "wall_west": {"material": "painted_drywall_white", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.8}, "wall_east": {"material": "painted_drywall_white", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.8}}
+  },
+  "objects": [
+    {"shape": "box", "material": "glass_lcd_off", "emissivity": 0.9, "specular": 0.1, "temp_c": 23.0, "lidar_reflectivity": 0.08, "id": "tv", "center": [1.65, 2.614, 1.47], "size": [0.92, 0.065, 0.518], "uncertainty_m": 0.15, "source": "3, teal wall"},
+    {"shape": "box", "material": "wood_veneer", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.5, "id": "door", "center": [2.434, 0.503, 1.191], "size": [0.042, 0.914, 2.37], "uncertainty_m": 0.15, "source": "1/2/3; nominal quarter turn into room", "state": "open", "hinge_xy": [2.434, 0.046], "open_angle_deg": 90, "closed_center": [1.977, 0.046, 1.191], "closed_size": [0.914, 0.042, 2.37]},
+    {"shape": "box", "material": "air", "emissivity": 0, "temp_c": 22.5, "lidar_reflectivity": 0, "id": "door_opening", "center": [1.977, 0.046, 1.2], "size": [0.94, 0.05, 2.4], "uncertainty_m": 0.18, "source": "1/3; inferred south-wall jamb", "solid": false, "wall": "wall_south", "extents": {"x": [1.507, 2.447], "z": [0, 2.4]}},
+    {"shape": "box", "material": "clear_architectural_glass", "emissivity": 0.9, "specular": 0.1, "temp_c": 23.0, "lidar_reflectivity": 0.035, "id": "glass_partition", "center": [0.752, 0.031, 1.207], "size": [1.35, 0.012, 2.29], "uncertainty_m": 0.25, "source": "1/4 black mullions; glazing extent inferred", "transmissive_lwir": false, "lidar_transmission": 0.88},
+    {"shape": "box", "material": "black_anodized_aluminium", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.18, "id": "glass_frame_west", "center": [0.047, 0.032, 1.207], "size": [0.045, 0.044, 2.29], "uncertainty_m": 0.2, "source": "1/4; frame extent inferred"},
+    {"shape": "box", "material": "black_anodized_aluminium", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.18, "id": "glass_frame_jamb", "center": [1.46, 0.032, 1.207], "size": [0.05, 0.044, 2.29], "uncertainty_m": 0.2, "source": "1/4; frame extent inferred"},
+    {"shape": "box", "material": "black_anodized_aluminium", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.18, "id": "glass_frame_sill", "center": [0.752, 0.032, 0.032], "size": [1.458, 0.044, 0.044], "uncertainty_m": 0.2, "source": "1/4; frame extent inferred"},
+    {"shape": "box", "material": "black_anodized_aluminium", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.18, "id": "glass_frame_head", "center": [0.752, 0.032, 2.385], "size": [1.458, 0.044, 0.05], "uncertainty_m": 0.2, "source": "1/4; frame extent inferred"},
+    {"shape": "box", "material": "laminate_wood", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.55, "id": "desk_top", "center": [1.39, 1.87, 0.724], "size": [0.56, 1.4, 0.032], "uncertainty_m": 0.12, "source": "1/3/4 desk corners"},
+    {"shape": "box", "material": "laminate_wood", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.55, "id": "desk_modesty_panel", "center": [1.648, 1.87, 0.354], "size": [0.025, 1.36, 0.69], "uncertainty_m": 0.13, "source": "4/5, east side"},
+    {"shape": "box", "material": "painted_steel", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.38, "id": "desk_leg_south_west", "center": [1.14, 1.205, 0.354], "size": [0.029, 0.029, 0.692], "uncertainty_m": 0.15, "source": "1/3/5; hidden supports inferred"},
+    {"shape": "box", "material": "painted_steel", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.38, "id": "desk_leg_south_east", "center": [1.61, 1.205, 0.354], "size": [0.029, 0.029, 0.692], "uncertainty_m": 0.15, "source": "1/3/5; hidden supports inferred"},
+    {"shape": "box", "material": "painted_steel", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.38, "id": "desk_leg_north_west", "center": [1.14, 2.535, 0.354], "size": [0.029, 0.029, 0.692], "uncertainty_m": 0.15, "source": "1/3/5; hidden supports inferred"},
+    {"shape": "box", "material": "painted_steel", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.38, "id": "desk_leg_north_east", "center": [1.61, 2.535, 0.354], "size": [0.029, 0.029, 0.692], "uncertainty_m": 0.15, "source": "1/3/5; hidden supports inferred"},
+    {"shape": "box", "material": "fabric_plastic", "emissivity": 0.93, "temp_c": 22.5, "lidar_reflectivity": 0.2, "id": "chair_mesh", "center": [0.854, 2.24, 0.463], "size": [0.47, 0.43, 0.91], "uncertainty_m": 0.15, "source": "1/3 black chair"},
+    {"shape": "box", "material": "plastic", "emissivity": 0.93, "temp_c": 22.5, "lidar_reflectivity": 0.4, "id": "chair_green", "center": [0.855, 1.6, 0.428], "size": [0.47, 0.46, 0.84], "uncertainty_m": 0.15, "source": "3/5; seat and bag proxies"},
+    {"shape": "box", "material": "lcd_on", "emissivity": 0.9, "temp_c": 30.0, "lidar_reflectivity": 0.1, "id": "monitor_on_floor", "center": [1.90, 1.86, 0.289], "size": [0.44, 0.055, 0.29], "uncertainty_m": 0.15, "source": "3/5; seat and bag proxies", "specular": 0.1},
+    {"shape": "box", "material": "fabric_plastic", "emissivity": 0.93, "temp_c": 22.5, "lidar_reflectivity": 0.2, "id": "backpack", "center": [1.46, 1.36, 0.241], "size": [0.21, 0.25, 0.465], "uncertainty_m": 0.15, "source": "3/5; seat and bag proxies"},
+    {"shape": "box", "material": "black_plastic", "emissivity": 0.9, "temp_c": 22.5, "lidar_reflectivity": 0.55, "id": "monitor_stand", "center": [1.90, 1.86, 0.073], "size": [0.16, 0.15, 0.126], "uncertainty_m": 0.16, "source": "3/5"},
+    {"shape": "box", "material": "black_enclosure", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.18, "id": "rig_base", "center": [1.444, 1.49, 0.806], "size": [0.205, 0.196, 0.122], "uncertainty_m": 0.115, "source": "1/3 and both rig crops"},
+    {"shape": "box", "material": "cardboard", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.6, "id": "cardboard_lower", "center": [1.444, 1.49, 0.896], "size": [0.18, 0.166, 0.046], "uncertainty_m": 0.115, "source": "1/3 and both rig crops"},
+    {"shape": "box", "material": "cardboard", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.6, "id": "cardboard_middle", "center": [1.444, 1.49, 0.948], "size": [0.18, 0.166, 0.046], "uncertainty_m": 0.115, "source": "1/3 and both rig crops"},
+    {"shape": "box", "material": "cardboard", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.6, "id": "cardboard_upper", "center": [1.456, 1.49, 1.012], "size": [0.13, 0.125, 0.07], "uncertainty_m": 0.115, "source": "1/3 and both rig crops"},
+    {"shape": "box", "material": "sensor_housing", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.22, "id": "mid360_body", "center": [1.444, 1.484, 1.083], "size": [0.065, 0.065, 0.06], "uncertainty_m": 0.115, "source": "1/3 and both rig crops"},
+    {"shape": "box", "material": "sensor_housing", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.22, "id": "webcam", "center": [1.354, 1.49, 0.996], "size": [0.051, 0.085, 0.037], "uncertainty_m": 0.115, "source": "1/3 and both rig crops"},
+    {"shape": "box", "material": "electronics", "emissivity": 0.85, "temp_c": 45.0, "lidar_reflectivity": 0.2, "id": "jetson", "center": [1.61, 1.29, 0.771], "size": [0.079, 0.1, 0.052], "uncertainty_m": 0.1, "source": "1/3/4; photo 5 shows a changed peripheral layout"},
+    {"shape": "box", "material": "electronics", "emissivity": 0.85, "temp_c": 32, "lidar_reflectivity": 0.2, "id": "second_board", "center": [1.25, 2.04, 0.762], "size": [0.09, 0.095, 0.034], "uncertainty_m": 0.1, "source": "1/3/4; photo 5 shows a changed peripheral layout"},
+    {"shape": "box", "material": "black_plastic", "emissivity": 0.85, "temp_c": 22.5, "lidar_reflectivity": 0.2, "id": "keyboard_primary", "center": [1.186, 1.75, 0.755], "size": [0.118, 0.44, 0.02], "uncertainty_m": 0.1, "source": "1/3/4; photo 5 shows a changed peripheral layout"},
+    {"shape": "box", "material": "black_plastic", "emissivity": 0.85, "temp_c": 22.5, "lidar_reflectivity": 0.2, "id": "keyboard_secondary", "center": [1.19, 1.3, 0.755], "size": [0.36, 0.12, 0.02], "uncertainty_m": 0.1, "source": "1/3/4; photo 5 shows a changed peripheral layout"},
+    {"shape": "box", "material": "black_plastic", "emissivity": 0.85, "temp_c": 22.5, "lidar_reflectivity": 0.2, "id": "mouse_primary", "center": [1.23, 1.452, 0.764], "size": [0.075, 0.052, 0.038], "uncertainty_m": 0.1, "source": "1/3/4; photo 5 shows a changed peripheral layout"},
+    {"shape": "box", "material": "black_plastic", "emissivity": 0.85, "temp_c": 22.5, "lidar_reflectivity": 0.2, "id": "mouse_secondary", "center": [1.435, 1.324, 0.764], "size": [0.072, 0.05, 0.038], "uncertainty_m": 0.1, "source": "1/3/4; photo 5 shows a changed peripheral layout"},
+    {"shape": "box", "material": "plastic", "emissivity": 0.93, "temp_c": 22.5, "lidar_reflectivity": 0.4, "id": "light_switch", "center": [2.541, 1.36, 1.15], "size": [0.022, 0.073, 0.118], "uncertainty_m": 0.17, "source": "1/2 east wall", "detail": true},
+    {"shape": "box", "material": "plastic", "emissivity": 0.93, "temp_c": 22.5, "lidar_reflectivity": 0.4, "id": "thermostat", "center": [0.021, 0.52, 1.4], "size": [0.026, 0.075, 0.115], "uncertainty_m": 0.17, "source": "4 west wall", "detail": true},
+    {"shape": "box", "material": "plastic", "emissivity": 0.93, "temp_c": 22.5, "lidar_reflectivity": 0.4, "id": "fire_strobe", "center": [0.032, 1.87, 2.22], "size": [0.05, 0.11, 0.145], "uncertainty_m": 0.17, "source": "4 west wall", "detail": true}
+  ],
+  "sensors": {
+    "_note": "Mid-360 cap located from crops; scan origin proxy just above cap, forward yaw assumed. Lepton and radar identities and poses ASSUMED. Aim both southwest across the desk end toward torso height at the mark. Webcam faces approximately west.",
+    "lepton35": {"position": [1.32, 1.432, 1.038], "look_dir": [-0.66286, -0.74819, -0.02895], "hfov_deg": 57.0, "vfov_deg": 44.0, "width": 160, "height": 120, "fps": 8.7, "uncertainty_m": 0.14},
+    "mid360": {"position": [1.444, 1.484, 1.119], "forward": [-1.0, 0.0, 0.0], "hfov_deg": 360.0, "vfov_deg": [-7.0, 52.0], "points_per_s": 200000, "frame_hz": 10, "uncertainty_m": 0.115},
+    "iwr6843isk": {"position": [1.32, 1.437, 1.008], "boresight": [-0.66124, -0.75017, -0.00608], "az_fov_deg": 120, "el_fov_deg": 30, "uncertainty_m": 0.14}
+  },
+  "dynamic_slots": {
+    "person_mark": [0.45, 0.45, 0],
+    "heat_lamp": {"position": [0.48, 0.9, 1.0], "temp_c": 180.0, "note": "250 W-class heat lamp used as thermal entropy injector in Experiment A"},
+    "fog_source": {"position": [1.38, 0.55, 0.3], "note": "ultrasonic mist maker for Experiment B (not yet run in real life)"}
+  },
+  "version": "v1",
+  "provenance": {"model": "gpt-6.2-astra (OpenAI Codex CLI 0.171, medium reasoning effort); orchestrated and reviewed by Claude (room-3d track)", "reviewer_edits": "person_mark moved from (0.27,0.23) to (0.45,0.45) so a 0.5 m wide person fits clear of the SW corner; lepton/radar aim recomputed to torso height at the new mark", "method": "Hand-picked pixel landmarks, robust multi-view pinhole fit and axis-aligned object proxies. See docs/room-3d.md.", "date": "2026-11-23", "photos_used": ["photo_1", "photo_2", "photo_3", "photo_4", "photo_5", "crop1_rig", "crop3_rig"]},
+  "uncertainty": {"size_xyz_1sigma_m": [0.26, 0.32, 0.23], "object_convention": "uncertainty_m is an approximate one-sigma per-axis absolute center error in metres. Nearby objects share scale and registration errors."},
+  "cameras": [
+    {"id": "photo_1", "position": [0.13, 1.62, 1.6], "look_at": [1.01837, 1.60263, 1.1412], "up": [0.45862, -0.01385, 0.88853], "hfov_deg": 82.47, "vfov_deg": 98.89, "image_wh": [1050, 1400], "uncertainty_m": 0.18},
+    {"id": "photo_2", "position": [0.12, 1.63, 1.61], "look_at": [1.01383, 1.62626, 1.16162], "up": [0.4482, -0.02195, 0.89366], "hfov_deg": 82.47, "vfov_deg": 98.89, "image_wh": [1050, 1400], "uncertainty_m": 0.18},
+    {"id": "photo_3", "position": [1.76, 0.22, 1.55], "look_at": [1.68326, 1.12067, 1.12233], "up": [-0.04483, 0.42539, 0.9039], "hfov_deg": 82.47, "vfov_deg": 98.89, "image_wh": [1050, 1400], "uncertainty_m": 0.18},
+    {"id": "photo_4", "position": [2.37, 1.68, 1.45], "look_at": [1.43286, 1.71076, 1.10241], "up": [-0.34487, 0.07014, 0.93603], "hfov_deg": 82.47, "vfov_deg": 98.89, "image_wh": [1050, 1400], "uncertainty_m": 0.18},
+    {"id": "photo_5", "position": [1.99, -0.26, 1.38], "look_at": [1.85583, 0.45078, 0.6895], "up": [-0.15684, 0.67279, 0.72302], "hfov_deg": 38.72, "vfov_deg": 64.01, "image_wh": [787, 1400], "uncertainty_m": 0.32}
+  ]
+}

@@ -1,0 +1,102 @@
+newmtl floor
+Kd 0.35 0.36 0.36
+# emissivity 0.95
+# lidar_reflectivity 0.25
+
+newmtl ceiling
+Kd 0.84 0.83 0.79
+# emissivity 0.92
+# lidar_reflectivity 0.7
+
+newmtl wall_south
+Kd 0.84 0.83 0.79
+# emissivity 0.92
+# lidar_reflectivity 0.8
+
+newmtl wall_north
+Kd 0.08 0.49 0.48
+# emissivity 0.92
+# lidar_reflectivity 0.45
+
+newmtl wall_west
+Kd 0.84 0.83 0.79
+# emissivity 0.92
+# lidar_reflectivity 0.8
+
+newmtl wall_east
+Kd 0.84 0.83 0.79
+# emissivity 0.92
+# lidar_reflectivity 0.8
+
+newmtl glass_lcd_off
+Kd 0.09 0.11 0.12
+# emissivity 0.9
+# lidar_reflectivity 0.08
+d 0.3
+
+newmtl wood_veneer
+Kd 0.57 0.38 0.23
+# emissivity 0.9
+# lidar_reflectivity 0.5
+
+newmtl clear_architectural_glass
+Kd 0.45 0.79 0.84
+# emissivity 0.9
+# lidar_reflectivity 0.035
+d 0.3
+
+newmtl black_anodized_aluminium
+Kd 0.84 0.83 0.79
+# emissivity 0.9
+# lidar_reflectivity 0.18
+
+newmtl laminate_wood
+Kd 0.57 0.38 0.23
+# emissivity 0.9
+# lidar_reflectivity 0.55
+
+newmtl painted_steel
+Kd 0.84 0.83 0.79
+# emissivity 0.9
+# lidar_reflectivity 0.38
+
+newmtl fabric_plastic
+Kd 0.13 0.14 0.15
+# emissivity 0.93
+# lidar_reflectivity 0.2
+
+newmtl plastic
+Kd 0.13 0.14 0.15
+# emissivity 0.93
+# lidar_reflectivity 0.4
+
+newmtl lcd_on
+Kd 0.09 0.11 0.12
+# emissivity 0.9
+# lidar_reflectivity 0.1
+
+newmtl black_plastic
+Kd 0.13 0.14 0.15
+# emissivity 0.9
+# lidar_reflectivity 0.55
+
+newmtl black_enclosure
+Kd 0.84 0.83 0.79
+# emissivity 0.92
+# lidar_reflectivity 0.18
+
+newmtl cardboard
+Kd 0.69 0.52 0.32
+# emissivity 0.92
+# lidar_reflectivity 0.6
+
+newmtl sensor_housing
+Kd 0.84 0.83 0.79
+# emissivity 0.92
+# lidar_reflectivity 0.22
+
+newmtl electronics
+Kd 0.17 0.18 0.19
+# emissivity 0.85
+# lidar_reflectivity 0.2
+
