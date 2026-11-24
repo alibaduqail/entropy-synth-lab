@@ -1,0 +1,65 @@
+Shared Jetson measurement harness (owner: jetson-harness track)
+================================================================
+Installed at ~/synthlab/harness/. Source: repo branch jetson-harness, synthlab/harness/.
+Do not edit files here; ask the jetson-harness track. Write outputs under YOUR folder.
+
+EVERY timed run must hold the shared lock (from the Mac):
+  tools/jetson.sh measured '<command>'
+Keep one locked command under ~20 minutes.
+
+THERMAL
+  python3 ~/synthlab/harness/run_thermal_bank.py \
+      --bank ~/synthlab/<track>/banks/<bank> --out ~/synthlab/<track>/runs/<new_dir> \
+      [--seconds 60] [--warmup 15] [--fps 8.7] [--unpaced] \
+      [--backend pytorch|tensorrt|none] [--repeats N] [--no-bie] [--idle-seconds 3] \
+      [--max-frames K] [--conf 0.25] [--no-candidates]
+  --no-bie      : skip the entropy stage inside the timed loop (HT is then computed after
+                  the trial, outside all timings), to measure the pipeline without BIE
+  --backend tensorrt uses ~/synthlab/harness/models/yolov8n_fp16_480x640.engine (TensorRT
+                  10.3 FP16, built without sudo); pytorch loads ~/yolov8n.pt read-only
+  bank   : frames.npy uint16 (N,120,160) TLinear counts (0.01 K/count) + manifest.json
+  does   : TLinear->Celsius, fixed 10..50 C -> 8-bit, block image entropy (HT), YOLOv8n
+           (pytorch = CUDA FP32, as in the original project; tensorrt = FP16 engine), NMS
+  writes : frames.csv   one row per frame: convert_ms, bie_ms, prep_ms, yolo_pre_ms,
+                        yolo_inf_ms, yolo_post_ms (NMS), yolo_wall_ms, yolo_extract_ms,
+                        total_ms, HT, n_det, n_person, n_candidates (pre-NMS), max_conf
+           tegrastats.csv   timestamped raw tegrastats lines every 200 ms
+           summary.json     means, p50/p95/p99, power_w, energy_per_frame_j, idle power,
+                            telemetry coverage checks ("ok": true/false, "problems": [...])
+  modes  : paced (default) = one frame every 1/8.7 s like the Lepton; --unpaced = as fast
+           as possible (GPU busy all the time, so power differences are easier to see)
+  quick check (about 25 s):  --seconds 10 --warmup 5
+
+LIDAR
+  python3 ~/synthlab/harness/run_lidar_bank.py \
+      --bank ~/synthlab/<track>/banks/<bank> --out ~/synthlab/<track>/runs/<new_dir> \
+      [--window 1.0] [--workload entropy|cluster|both] [--seconds 60] [--warmup 10] \
+      [--unpaced] [--z-min -0.85] [--roi -6 6 -6 6 -2 3] [--repeats N]
+  bank   : frame_00000.npz ... (100 ms frames; xyz float32 (M,3) sensor frame, tag uint8)
+           + manifest.json. 10 frames make one 1 s window; leftover frames are unused.
+  does   : entropy = ROI crop -> 5 cm voxel downsample -> radius 0.20 m kNN (k_max 150,
+           k_min 10, scipy cKDTree) -> covariance eigenvalues -> L,P,S -> H_DS, H_eigen
+           cluster = Euclidean clustering (0.10 m) + person-candidate size filter
+  writes : windows.csv  one row per window: accumulate_ms, roi_ms, voxel_ms, knn_ms,
+                        eig_ms, entropy_ms, cl_pairs_ms, cl_cc_ms, cl_stats_ms,
+                        entropy_total_ms, cluster_total_ms, total_ms, H_DS, H_eigen,
+                        mean_L/P/S, frac_high_S, n_raw, n_roi, n_voxel, n_pairs,
+                        n_clusters, n_person_candidates, frac_tag_particle
+           tegrastats.csv, summary.json (as above, energy_per_window_j)
+  notes  : --z-min is the floor cut in the SENSOR frame (default -0.85 m is the LiDAR
+           track's value); set it for your sensor height. Cost grows fast with the number
+           of occupied 5 cm voxels: ~100k voxels takes ~2.8 s per window on this Jetson,
+           so a 1 s paced window overruns (summary.json reports overrun_windows).
+
+MANY BANKS IN ONE RANDOMISED ROUND (model loaded once; one round per locked command)
+  python3 ~/synthlab/harness/run_matrix.py --kind thermal|lidar --banks <bank dirs...> \
+      --round R --seed 2026 --out ~/synthlab/<track>/runs/<dir> [--max-minutes 18] \
+      -- <any run_thermal_bank.py / run_lidar_bank.py options, e.g. --seconds 12 --unpaced>
+  writes <out>/round_RR/<order>_<track>__<bank>/... and order.json; a failing bank writes
+  FAILED.json and the round continues.
+
+SELF-TEST BANKS (made-up, not research data): ~/synthlab/harness/selftest_banks/
+  thermal_flat, thermal_blobs, lidar_room, lidar_room_fog
+
+Not measured: camera/LiDAR acquisition, USB/network transfer, disk reads (banks are looped
+from RAM). Power is tegrastats VDD_IN (module input), not wall power.

@@ -1,0 +1,12 @@
+{
+ "n_trials": 88,
+ "n_ok": 88,
+ "problems": [],
+ "configs": [
+  "pytorch_paced",
+  "pytorch_unpaced",
+  "pytorch_unpaced_nobie",
+  "tensorrt_paced",
+  "tensorrt_unpaced"
+ ]
+}

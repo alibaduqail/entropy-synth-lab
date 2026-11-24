@@ -1,0 +1,114 @@
+{
+ "thermal": {
+  "n_trials": 99,
+  "n_ok": 99,
+  "n_banks": 65,
+  "n_blocks": 2,
+  "temp_tj_range_c": 12.285128205128188,
+  "problems": [],
+  "noise": {
+   "total_ms": {
+    "resid_sd": 0.3928697168869907,
+    "temp_slope_per_C": -0.026789783330218087
+   },
+   "bie_ms": {
+    "resid_sd": 0.10415491016125875,
+    "temp_slope_per_C": -0.009997092043057237
+   },
+   "convert_ms": {
+    "resid_sd": 0.0020526406521146835,
+    "temp_slope_per_C": -6.528544406250898e-05
+   },
+   "yolo_pre_ms": {
+    "resid_sd": 0.019107689238283605,
+    "temp_slope_per_C": -0.00037599820577155843
+   },
+   "yolo_inf_ms": {
+    "resid_sd": 0.3572311721174727,
+    "temp_slope_per_C": -0.026741503502438757
+   },
+   "yolo_post_ms": {
+    "resid_sd": 0.045928225350074514,
+    "temp_slope_per_C": 0.007307702799206783
+   },
+   "total_no_bie_ms": {
+    "resid_sd": 0.3873272362862687,
+    "temp_slope_per_C": -0.016792691287157768
+   },
+   "power_w": {
+    "resid_sd": 0.04524842647140138,
+    "temp_slope_per_C": 0.011071915741981832
+   },
+   "energy_per_unit_j": {
+    "resid_sd": 0.003714366937795449,
+    "temp_slope_per_C": 0.0005187021817620457
+   }
+  }
+ },
+ "lidar": {
+  "n_trials": 58,
+  "n_ok": 58,
+  "n_banks": 29,
+  "n_blocks": 2,
+  "hyp_b_fog_vs_clear": {
+   "HL": {
+    "fog_mean": 0.7936477317660703,
+    "clear_mean": 0.762397285826894,
+    "diff": 0.03125044593917625
+   },
+   "total_ms": {
+    "fog_mean": 569.2913045215494,
+    "clear_mean": 496.85715984907,
+    "diff": 72.43414467247936,
+    "mde_two_banks": 13.940154657027504
+   },
+   "power_w": {
+    "fog_mean": 6.319614434953246,
+    "clear_mean": 6.318236132379229,
+    "diff": 0.001378302574017276,
+    "mde_two_banks": 0.07841955810482445
+   },
+   "energy_per_unit_j": {
+    "fog_mean": 3.5980639648108554,
+    "clear_mean": 3.1435654039942116,
+    "diff": 0.45449856081664386,
+    "mde_two_banks": 0.11061019585905849
+   }
+  },
+  "noise": {
+   "total_ms": {
+    "resid_sd": 4.978626663224109,
+    "temp_slope_per_C": 4.6417773616491464
+   },
+   "entropy_total_ms": {
+    "resid_sd": 4.888417180005825,
+    "temp_slope_per_C": 3.7283821914073205
+   },
+   "knn_ms": {
+    "resid_sd": 1.494851588518499,
+    "temp_slope_per_C": 0.42275071720047563
+   },
+   "eig_ms": {
+    "resid_sd": 3.9690677843478066,
+    "temp_slope_per_C": 3.4551979124712253
+   },
+   "voxel_ms": {
+    "resid_sd": 0.9831926610900604,
+    "temp_slope_per_C": -0.128085658656378
+   },
+   "cluster_total_ms": {
+    "resid_sd": 0.9601296964474091,
+    "temp_slope_per_C": 0.9140911575081065
+   },
+   "power_w": {
+    "resid_sd": 0.028006985037437305,
+    "temp_slope_per_C": 0.0008329750649690622
+   },
+   "energy_per_unit_j": {
+    "resid_sd": 0.03950364137823518,
+    "temp_slope_per_C": 0.02983677352956452
+   }
+  }
+ },
+ "vdd_in_step_w": 0.0395
+}
