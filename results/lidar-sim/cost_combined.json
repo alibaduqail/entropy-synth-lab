@@ -1,6 +1,7 @@
 {
  "campaigns": [
-  "ent_unp"
+  "ent_unp",
+  "clu_unp"
  ],
  "note": "unpaced: windows back to back, so power = loaded power; energy per window = time-weighted VDD_IN x duration / windows (module input, not wall)",
  "entropy": {
@@ -180,6 +181,188 @@
     "energy_per_window_j": 2.463057881171944,
     "energy_above_idle_per_window_j": 0.7207524581842597,
     "n_person_candidates": -1.0,
+    "n_voxel": 11374.575757575758,
+    "H_eigen": 0.8525588497558485
+   }
+  }
+ },
+ "cluster": {
+  "n_banks": 29,
+  "runs_per_bank": [
+   1
+  ],
+  "total_ms": {
+   "r_n_voxel": 0.8680337374308621,
+   "r_H_eigen": 0.41481876379717225,
+   "partial_r_H_eigen_given_n_voxel": 0.40408837187126356,
+   "partial_r_n_voxel_given_H_eigen": 0.8665253337783343,
+   "slope_per_1000_voxels": 5.233645291072268,
+   "clear_A1": 65.91504424993926
+  },
+  "energy_per_window_j": {
+   "r_n_voxel": 0.8623746553457889,
+   "r_H_eigen": 0.4143626884181184,
+   "partial_r_H_eigen_given_n_voxel": 0.39830226766809623,
+   "partial_r_n_voxel_given_H_eigen": 0.8600298367761822,
+   "slope_per_1000_voxels": 0.032197400318606954,
+   "clear_A1": 0.40309014812884597
+  },
+  "energy_above_idle_per_window_j": {
+   "r_n_voxel": 0.8325501612251563,
+   "r_H_eigen": 0.4133576936485292,
+   "partial_r_H_eigen_given_n_voxel": 0.37630391316157324,
+   "partial_r_n_voxel_given_H_eigen": 0.8260210425153401,
+   "slope_per_1000_voxels": 0.007190142618422033,
+   "clear_A1": 0.08352169694639225
+  },
+  "power_w": {
+   "r_n_voxel": 0.5470137503816762,
+   "r_H_eigen": 0.25385129742453355,
+   "partial_r_H_eigen_given_n_voxel": 0.14169830535863537,
+   "partial_r_n_voxel_given_H_eigen": 0.5157469009655492,
+   "slope_per_1000_voxels": 0.010554496112621516,
+   "clear_A1": 6.040822523875862
+  },
+  "matched_count": [
+   {
+    "clear": "thin_clear_012",
+    "fog": "thin_fog1p00_012",
+    "n_voxel": [
+     6255.555555555556,
+     6051.915492957746
+    ],
+    "H_eigen": [
+     0.7960896136300178,
+     1.0291298871742056
+    ],
+    "ms": [
+     15.016175086453304,
+     19.414485590249665
+    ],
+    "ms_per_1000_vox": [
+     2.4004542766976864,
+     3.207990199605587
+    ]
+   },
+   {
+    "clear": "thin_clear_025",
+    "fog": "thin_fog1p00_025",
+    "n_voxel": [
+     8369.351851851852,
+     8979.145833333334
+    ],
+    "H_eigen": [
+     0.8081774858214806,
+     1.0326446467447168
+    ],
+    "ms": [
+     27.25068654133192,
+     32.64494404640315
+    ],
+    "ms_per_1000_vox": [
+     3.2560091896844168,
+     3.6356402549132385
+    ]
+   },
+   {
+    "clear": "A1",
+    "fog": "thin_fog1p00_050",
+    "n_voxel": [
+     11820.28125,
+     12511.129032258064
+    ],
+    "H_eigen": [
+     0.836703610670023,
+     1.0398188840098763
+    ],
+    "ms": [
+     65.91504424993926,
+     59.91719062932056
+    ],
+    "ms_per_1000_vox": [
+     5.576436199429625,
+     4.789111396328269
+    ]
+   }
+  ],
+  "levels": {
+   "B0 (=A1)": {
+    "total_ms": 65.91504424993926,
+    "power_w": 6.040822523875862,
+    "idle_power_w": 4.789142857142857,
+    "energy_per_window_j": 0.40309014812884597,
+    "energy_above_idle_per_window_j": 0.08352169694639225,
+    "n_person_candidates": 1.0,
+    "n_voxel": 11820.28125,
+    "H_eigen": 0.836703610670023
+   },
+   "B1": {
+    "total_ms": 81.77560944133238,
+    "power_w": 5.980712734355506,
+    "idle_power_w": 4.659285714285715,
+    "energy_per_window_j": 0.4972593204021064,
+    "energy_above_idle_per_window_j": 0.1098684985746929,
+    "n_person_candidates": 0.0,
+    "n_voxel": 15338.4,
+    "H_eigen": 0.8888942533336172
+   },
+   "B2": {
+    "total_ms": 95.92590233880343,
+    "power_w": 6.030377945077231,
+    "idle_power_w": 4.813142857142857,
+    "energy_per_window_j": 0.5871232637733108,
+    "energy_above_idle_per_window_j": 0.11851115519921779,
+    "n_person_candidates": 0.0,
+    "n_voxel": 19347.714285714286,
+    "H_eigen": 0.9310073015830799
+   },
+   "B3": {
+    "total_ms": 104.83678741228799,
+    "power_w": 6.05914675178219,
+    "idle_power_w": 4.683142857142857,
+    "energy_per_window_j": 0.6416371124620841,
+    "energy_above_idle_per_window_j": 0.14571279197864384,
+    "n_person_candidates": 0.40350877192982454,
+    "n_voxel": 17123.238095238095,
+    "H_eigen": 1.0440319287009017
+   },
+   "alpha 0.45": {
+    "total_ms": 111.53102820576903,
+    "power_w": 6.031590565356936,
+    "idle_power_w": 4.666642857142856,
+    "energy_per_window_j": 0.6813348804026079,
+    "energy_above_idle_per_window_j": 0.15418594172480798,
+    "n_person_candidates": 0.0,
+    "n_voxel": 22797.29411764706,
+    "H_eigen": 0.9766009537830748
+   },
+   "alpha 3.0": {
+    "total_ms": 79.70932708712702,
+    "power_w": 6.12223492764114,
+    "idle_power_w": 4.913571428571429,
+    "energy_per_window_j": 0.49638884788471577,
+    "energy_above_idle_per_window_j": 0.09799804538428651,
+    "n_person_candidates": 0.19463087248322147,
+    "n_voxel": 7477.021739130435,
+    "H_eigen": 1.0215887444413407
+   },
+   "P3 plume": {
+    "total_ms": 83.62401679189841,
+    "power_w": 6.105306128939418,
+    "idle_power_w": 4.670142857142857,
+    "energy_per_window_j": 0.5108329363945044,
+    "energy_above_idle_per_window_j": 0.1200805834587849,
+    "n_person_candidates": 0.0,
+    "n_voxel": 15533.791666666666,
+    "H_eigen": 0.910086133572428
+   },
+   "A3 clutter": {
+    "total_ms": 67.30546975988545,
+    "power_w": 6.033510653272314,
+    "idle_power_w": 4.684285714285715,
+    "energy_per_window_j": 0.41460730885078906,
+    "energy_above_idle_per_window_j": 0.09271525722314974,
+    "n_person_candidates": 1.4,
     "n_voxel": 11374.575757575758,
     "H_eigen": 0.8525588497558485
    }

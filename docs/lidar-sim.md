@@ -1,6 +1,6 @@
 # lidar-sim: Livox Mid-360 + fog simulator in the test room (first look at Hypothesis B)
 
-Status: IN PROGRESS (overnight run 2026-11-23). Sections marked TODO are filled as results land.
+Status: FINAL for the overnight run (2026-11-24 02:45). Cost: 1 pass per workload (pass 2 cancelled, lock queue).
 Everything about fog here is a SIMULATION-ONLY prediction. No real fog data exists in the project.
 
 ## What was built
@@ -183,3 +183,94 @@ Magnitudes agree within ~0.01-0.04 on H_eigen / H_DS / n_voxel. frac_high_S is 7
 the simulator has too few isolated stray points in clear air (real sensors produce edge mixed pixels and
 multipath that are not modelled beyond "glue" points). The real lab M1-M0 difference (+0.004 H_eigen) is
 even smaller than the simulated A3-A0 (+0.018): scene clutter barely moves HL in reality either.
+
+### 7. Cost on the Jetson (MEASURED on simulated input; `cost_runs_*.csv`, `cost_combined.{json,md}`)
+Setup: shared harness `~/synthlab/harness/run_lidar_bank.py`, every run inside `tools/jetson.sh measured`,
+Orin Nano MAXN_SUPER, 29 banks (A0-A3, B1-B3, P1-P3, 13 fog-sweep levels, 6 thinned controls; B0 = A1),
+each bank looped from RAM for 12 s after 2 s warm-up, UNPACED (windows back to back, so VDD_IN is the
+loaded power and energy per window = time-weighted VDD_IN x duration / windows), 3 s idle baseline before
+each run, bank order shuffled (seed 11). Windows per run n = 17-54. Same ROI as the lab (z cut -0.3 to
+1.3 m in the sensor frame), 10 frames per window. Excluded: driver, transport, bag decoding, disk.
+Entropy and clustering were run as SEPARATE workloads so each has its own energy.
+
+(a) HL entropy computation (`ent_unp`, 1 pass, 29 runs):
+
+| condition | n_voxel | H_eigen | entropy ms / window | mJ / window (VDD_IN) | loaded VDD_IN W |
+|---|---|---|---|---|---|
+| B0 (= A1, clear, person) | 11820 | 0.837 | 374 | 2390 | 6.35 |
+| A3 clutter | 11375 | 0.853 | 368 | 2460 | 6.63 |
+| B1 (alpha 0.1) | 15338 | 0.889 | 480 | 3060 | 6.34 |
+| B2 (alpha 0.3) | 19348 | 0.931 | 592 | 3770 | 6.37 |
+| alpha 0.45 (peak voxels) | 22797 | 0.977 | 741 | 4710 | 6.33 |
+| B3 (alpha 1.0) | 17123 | 1.044 | 572 | 3650 | 6.36 |
+| alpha 3.0 (fog wall) | 7477 | 1.022 | 264 | 1700 | 6.43 |
+| P3 plume | 15534 | 0.910 | 507 | 3260 | 6.38 |
+
+- Clear-air 374 ms per 1 s window matches the teammate's live figure (~350 ms per window on the Nano).
+- Time is set by the voxel count: r(ms, n_voxel) = 0.992, R^2 = 0.985, slope 33 ms per 1000 voxels
+  (all 29 banks); r(ms, H_eigen) = 0.31. Energy per window: r = 0.991 with n_voxel, 0.30 with H_eigen;
+  partial r(energy, H_eigen | n_voxel) = 0.41 for total energy and 0.02 for energy above idle.
+- Matched point count (thinned controls): dense fog (H_eigen 1.03-1.04) vs clear (0.80-0.84) at equal voxel
+  count costs 28.0 vs 26.9, 28.2 vs 26.9 and 31.6 vs 31.6 ms per 1000 voxels: fog adds at most ~5 % per
+  voxel. A +0.2 jump in entropy by itself is nearly free.
+- Loaded VDD_IN does not move (6.29-6.63 W over all banks, r with n_voxel -0.19): the workload is a
+  single-threaded CPU loop, so fog changes HOW LONG the board is busy, not how hard it draws. In the live
+  paced system (one window per second) this appears as extra average power = extra energy per second:
+  +0.67 J/s at B1, +1.38 at B2, +1.26 at B3 vs clear (total energy differences from the table).
+- Sign: cost goes UP for light-to-moderate fog (peak x1.98 time at alpha 0.45, strongest rule) and DOWN
+  for very dense fog (x0.71 at alpha 3.0), because it follows n_voxel, which is non-monotonic in fog.
+  Under the literal first-return rule the voxel peak is earlier and higher (x2.55 at alpha 0.1, i.e.
+  B1); the fitted line (33.5 ms per 1000 voxels - 23 ms) predicts ~990 ms, +610 ms (x2.6) at that point. Predicted, not measured: those banks
+  were not costed.
+
+(b) Genuine LiDAR consumer: voxelise + Euclidean clustering + person-candidate filter (`clu_unp`, 1 pass,
+29 runs, n = 137-367 windows per run). ms / mJ are the whole workload per 1 s window.
+
+| condition | n_voxel | cluster ms / window | mJ / window | loaded VDD_IN W | person candidates / window |
+|---|---|---|---|---|---|
+| B0 (= A1) | 11820 | 65.9 | 403 | 6.04 | 1.00 |
+| A3 clutter | 11375 | 67.3 | 415 | 6.03 | 1.40 |
+| B1 | 15338 | 81.8 | 497 | 5.98 | 0.00 |
+| B2 | 19348 | 95.9 | 587 | 6.03 | 0.00 |
+| alpha 0.45 | 22797 | 111.5 | 681 | 6.03 | 0.00 |
+| B3 | 17123 | 104.8 | 642 | 6.06 | 0.40 |
+| alpha 3.0 | 7477 | 79.7 | 496 | 6.12 | 0.19 |
+
+- The consumer costs ~6x less than measuring entropy (66 vs 374 ms, 0.40 vs 2.39 J per window in clear air).
+  Fog raises it by +24 % (B1), +46 % (B2), +59 % (B3); r(ms, n_voxel) = 0.87, slope 5.2 ms per 1000 voxels,
+  partial r(ms, H_eigen | n_voxel) = 0.40 (fog merges into large clusters, so the pair search does more
+  work per voxel; matched-count pairs: 15.0 vs 19.4 and 27.3 vs 32.6 ms, but 65.9 vs 59.9 at ~12k voxels).
+- Fog also BREAKS the consumer: the one person is no longer a candidate at B1-B2 (0.00 per window),
+  because fog points glue onto the body cluster. A functional loss, not only a cost change.
+
+### 8. What this means for the hypotheses (simulation + measured cost on simulated clouds)
+- Hyp B (fog raises HL, power rises): HL side supported in simulation for H_eigen / mean_S / frac_high_S
+  (sign +, robust across 9 model variants); NOT for H_DS. Power side: loaded VDD_IN is flat (+/- 0.3 W);
+  what rises is busy time and therefore energy per window, by up to x2 for HL and x1.6 for clustering.
+- The audit worry is confirmed in size: in clear air, measuring entropy costs 2.39 J per window, the only
+  genuine consumer 0.40 J. Of the fog-induced extra energy at B2 (HL +1.38 J, clustering +0.18 J), 88 % is
+  the cost of measuring fog. Experiment B should report both workloads separately, or a power rise will
+  mostly measure the entropy node.
+- Entropy itself does not cost: at matched voxel count, H_eigen +0.2 changes HL time by 0-5 %. Cost is
+  a function of occupied voxels (R^2 0.985), which fog raises then lowers. Analyse power vs n_voxel with
+  entropy as a covariate (partial correlation), and log n_voxel per window in the real runs.
+- Hyp C (knee): entropy saturates (knee in H_eigen); cost is non-monotonic (rise then fall), not a knee.
+- Null: a flat loaded power is expected; a flat energy per window is NOT expected under moderate fog.
+
+### 9. Not verified / limits
+- No real fog data. Onset density depends on the unknown near-field sensitivity (overlap, gate): onset
+  0.01-0.45 /m across variants. Scan pattern analytic (real Livox CSV not used). Firmware particle-tag
+  rate assumed 60 %. frac_high_S in clear air is 7x lower than real.
+- Cost: one pass per workload (n = 1 run of 17-367 windows per bank); between-pass repeatability not
+  measured tonight. Energy above idle is noisy (3 s idle baseline; idle 4.67-5.44 W). Unpaced runs; live
+  paced behaviour inferred, not measured (one paced probe, `probe_paced_B3_both_summary.json`: B3 both workloads 1226 ms per window, overruns
+  6/15 windows at 1 Hz).
+- Jetson banks use the strongest-echo rule and the 21:57 room_v1 draft.
+
+## Figures (`results/lidar-sim/`)
+- `fig_clouds_clear_vs_fog.png`: simulated clouds, clear vs fog.
+- `fig_hl_vs_fog.png`: HL metrics vs extinction, both return rules (knee, sign, H_DS non-monotonic).
+- `fig_cost_summary.png`: mJ per window vs n_voxel / H_eigen / alpha for HL and for clustering.
+- `fig_cost_vs_entropy_and_voxels_ent_unp.png`, `fig_cost_vs_fog_ent_unp.png`: HL ms per window.
+- `fig_fog_model_variants.png`, `fig_hl_sensitivity.png`, `fig_conditions.png`, `fig_scan_pattern.png`.
+
