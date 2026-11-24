@@ -328,7 +328,7 @@ slide("Limits", [
 
 # 21 --------------------------------------------------------------------------
 slide("Jetson overnight", [
-    "tegrastats every 5 s from 21:50",
+    "tegrastats every 5 s, 21:50 to 06:13 (6032 samples): mean 7.9 W, 65.9 Wh",
     "Peaks near 20 W and 69 °C during on-device training; no throttling range reached",
     "Paced thermal runs sit near 5.8 W; unpaced near 7.2 W",
 ], img=R / "overnight/overnight_power_temp.png", layout="bottom",
