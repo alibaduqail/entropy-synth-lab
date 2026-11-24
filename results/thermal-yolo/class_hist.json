@@ -1,0 +1,355 @@
+{
+ "imgsz": 640,
+ "banks": {
+  "real_A0_0": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    }
+   }
+  },
+  "real_A1_0": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 1.0
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 1.0,
+      "frisbee": 0.03125
+     }
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.90625,
+     "per_frame_by_class": {
+      "person": 1.4609375,
+      "car": 0.0078125
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 2.96875,
+      "bicycle": 0.0625,
+      "car": 0.0390625
+     }
+    }
+   }
+  },
+  "real_A1_1": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 0.7890625,
+     "per_frame_by_class": {
+      "person": 0.7890625,
+      "toothbrush": 0.109375
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 1.0,
+      "toothbrush": 0.2109375
+     }
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.9765625,
+     "per_frame_by_class": {
+      "person": 1.4296875,
+      "car": 0.109375,
+      "bicycle": 0.0078125
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 2.8359375,
+      "car": 0.15625,
+      "bicycle": 0.1015625
+     }
+    }
+   }
+  },
+  "real_A1_2": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 1.0
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 1.0078125,
+      "baseball bat": 0.0078125
+     }
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.828125,
+     "per_frame_by_class": {
+      "person": 0.9609375,
+      "bicycle": 0.140625
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 3.59375,
+      "bicycle": 0.359375,
+      "car": 0.015625
+     }
+    }
+   }
+  },
+  "real_radiometric_A0": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    }
+   }
+  },
+  "real_radiometric_A1": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 0.9895833333333334,
+     "per_frame_by_class": {
+      "person": 0.9895833333333334
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 1.0208333333333333
+     }
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.052083333333333336,
+     "per_frame_by_class": {
+      "car": 0.6979166666666666,
+      "person": 0.052083333333333336
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.28125,
+     "per_frame_by_class": {
+      "car": 0.8645833333333334,
+      "person": 0.28125
+     }
+    }
+   }
+  },
+  "real_heatlamp_on": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 0.78125,
+     "per_frame_by_class": {
+      "person": 0.8020833333333334,
+      "toothbrush": 0.17708333333333334,
+      "sports ball": 0.03125,
+      "vase": 0.020833333333333332,
+      "baseball bat": 0.010416666666666666
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.8645833333333334,
+     "per_frame_by_class": {
+      "person": 0.9375,
+      "toothbrush": 0.21875,
+      "vase": 0.03125,
+      "sports ball": 0.03125,
+      "cell phone": 0.020833333333333332,
+      "frisbee": 0.020833333333333332,
+      "baseball bat": 0.010416666666666666
+     }
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.8020833333333334,
+     "per_frame_by_class": {
+      "person": 1.2395833333333333,
+      "car": 0.2708333333333333,
+      "bicycle": 0.03125
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.9270833333333334,
+     "per_frame_by_class": {
+      "person": 2.4583333333333335,
+      "car": 0.4791666666666667,
+      "bicycle": 0.041666666666666664
+     }
+    }
+   }
+  },
+  "real_heatlamp_off": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {}
+    }
+   }
+  },
+  "people_1": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 1.0
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 1.03125
+     }
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.46875,
+     "per_frame_by_class": {
+      "person": 0.6953125,
+      "car": 0.0234375
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.78125,
+     "per_frame_by_class": {
+      "person": 2.140625,
+      "car": 0.125
+     }
+    }
+   }
+  },
+  "people_2": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 2.0,
+      "cat": 0.046875
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 1.0,
+     "per_frame_by_class": {
+      "person": 2.0,
+      "cat": 0.046875
+     }
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.359375,
+     "per_frame_by_class": {
+      "person": 0.5,
+      "car": 0.03125
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.921875,
+     "per_frame_by_class": {
+      "person": 2.4609375,
+      "car": 0.5234375,
+      "bicycle": 0.0078125
+     }
+    }
+   }
+  },
+  "A1_one_person": {
+   "stock": {
+    "conf_0.25": {
+     "person_frame_frac": 0.0859375,
+     "per_frame_by_class": {
+      "toothbrush": 0.1875,
+      "person": 0.0859375,
+      "toilet": 0.0546875
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.2734375,
+     "per_frame_by_class": {
+      "toothbrush": 0.71875,
+      "toilet": 0.546875,
+      "person": 0.2734375,
+      "scissors": 0.03125
+     }
+    }
+   },
+   "thermal": {
+    "conf_0.25": {
+     "person_frame_frac": 0.0,
+     "per_frame_by_class": {
+      "bicycle": 0.0078125
+     }
+    },
+    "conf_0.10": {
+     "person_frame_frac": 0.03125,
+     "per_frame_by_class": {
+      "bicycle": 0.046875,
+      "person": 0.03125,
+      "car": 0.015625
+     }
+    }
+   }
+  }
+ }
+}
