@@ -40,6 +40,11 @@ def parse_exclude(s):
     return {k: int(v) for k, v in (kv.split("=") for kv in s.split(","))} if s else {}
 
 
+def c2x(f, n=1024):
+    # chunked: the float64 intermediates of counts_to_x on the whole pack need ~6 GB and get OOM-killed
+    return np.concatenate([counts_to_x(f[i:i + n]) for i in range(0, len(f), n)])
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", choices=["ddpm", "vae"], default="ddpm")
@@ -68,11 +73,11 @@ def main():
         tr &= ~pack.mask(**ex)
     te = pack.mask(split="test")
     labels = np.stack([pack.person, pack.lamp, pack.session], 1)
-    xtr = torch.from_numpy(counts_to_x(pack.frames[tr]))[:, None] * D.ZSCALE
+    xtr = torch.from_numpy(c2x(pack.frames[tr]))[:, None] * D.ZSCALE
     ctr = torch.from_numpy(labels[tr])
     rng = np.random.default_rng(123)
     te_idx = rng.choice(np.where(te)[0], 256, replace=False)
-    xte = torch.from_numpy(counts_to_x(pack.frames[te_idx]))[:, None] * D.ZSCALE
+    xte = torch.from_numpy(c2x(pack.frames[te_idx]))[:, None] * D.ZSCALE
     cte = torch.from_numpy(labels[te_idx])
     tr_idx = rng.choice(len(xtr), 256, replace=False)
 
