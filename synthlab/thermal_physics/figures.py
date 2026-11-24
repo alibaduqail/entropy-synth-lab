@@ -140,7 +140,15 @@ def fog():
 
 def cost():
     d = json.load(open(f"{RES}/jetson_bank_runs.json"))
-    rows = [r for r in d["rows"] if r.get("mode") == "unpaced"] or d["rows"]
+    trials = [r for r in d["rows"] if r.get("mode") == "unpaced"] or d["rows"]
+    rows = []  # one point per bank = mean over its repeat trials
+    for b in sorted({r["bank"] for r in trials}):
+        tb = [r for r in trials if r["bank"] == b]
+        m = dict(bank=b, mode=tb[0].get("mode"), n_trials=len(tb))
+        for k in ("ht_mean", "total_ms_mean", "yolo_inf_ms_mean", "power_w"):
+            v = [r[k] for r in tb if r.get(k) is not None]
+            m[k] = float(np.mean(v)) if v else None
+        rows.append(m)
     fig, ax = plt.subplots(1, 3, figsize=(15, 4.4))
     fam = {"A": "tab:red", "B": "tab:blue", "C": "tab:green", "L": "tab:orange", "R": "k", "r": "k"}
     for r in rows:
