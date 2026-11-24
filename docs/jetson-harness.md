@@ -86,4 +86,47 @@ passed the telemetry checks. Values are mean / trial-to-trial SD.
 - Chip temperature drifted < 1.4 C within a configuration; power-vs-temperature slope was
   0.002-0.35 W/C with R^2 <= 0.12 (not a dominant term at this drift).
 
+### 2b-2e. Control banks, one randomised round per configuration
+
+14 banks (4 real Lepton recordings, flat and noise controls, MVP composites with 0-16 objects),
+10 s measured per bank, round 0 only for each of 4 configurations (rounds 1-2 were dropped
+because the shared lock queue was ~1.5 h deep; the step-3 comparison repeats the PyTorch-unpaced
+configuration over 3 blocks). n = 1 trial per bank per configuration; frame-level fits use
+1218-1344 bank-frames. Files: `step2_spread_vs_noise.csv`, `step2_ht_regression.csv`,
+`step2_stage_correlations.csv`, `fig_inference_vs_nms.png`, `fig_stage_breakdown.png`.
+
+**(b) Inference vs NMS - confirmed with fresh data.**
+- YOLO inference does not follow the input: TensorRT FP16 inference is 9.67 ms with 0.04 ms SD
+  across all bank-frames (r with candidates 0.09). PyTorch inference sits on a few discrete levels
+  (~18, 24, 27, 31 ms) that track GPU clock state, not the image (r with candidates -0.17 to 0.02).
+- NMS/postprocess follows the pre-NMS candidate count (r = 0.93 in every configuration):
+  ~1.7 ms at 0 candidates, ~3.2 ms at 1, ~4.7 ms at 2-10, up to ~11 ms at ~40 candidates.
+  Regression (PyTorch unpaced): +1.82 ms (SE 0.04) for any detection plus 0.16 ms (SE 0.003) per
+  candidate. The audit's "~2 ms step from an early exit at zero candidates" is right about the
+  zero-candidate shortcut, but the cost keeps rising with candidate count after that.
+- HT alone predicts NMS time (31.8 ms per unit HT, R^2 0.22) only because HT and detections
+  co-vary: with any-detection and candidate count in the model the HT slope is -0.78 ms
+  (SE 0.46) per unit HT, i.e. zero. The same holds for total time without BIE under TensorRT
+  (0.16 ms per unit HT, SE 0.58). Across these banks HT spans only 0.097 units.
+
+**(c) PyTorch FP32 vs TensorRT FP16** (engine built without sudo from the extracted TensorRT 10.3
+wheels; noise-floor bank, 8 repeats each): inference 30.58 -> 9.64 ms, total 63.88 -> 42.45 ms,
+energy 465 -> 277 mJ/frame, VDD_IN 7.25 -> 6.50 W (unpaced).
+
+**(d) Paced 8.7 fps vs unpaced** (PyTorch): 5.81 vs 7.25 W VDD_IN; 668 vs 465 mJ/frame (paced
+energy includes idle time between frames); per-frame time is *longer* when paced (73.8 vs
+63.9 ms) because CPU and GPU governors down-clock during the idle gaps. Across 14 banks paced
+power spanned 69 mW (1.2 noise SD, under 2 VDD_IN steps).
+
+**(e) With vs without the BIE stage in the measured loop** (PyTorch unpaced, 14-bank means):
+total 64.4 -> 25.2 ms/frame, energy 462 -> 240 mJ/frame, but VDD_IN *rises* 7.16 -> 9.46 W and
+YOLO inference *drops* 29.8 -> 18.1 ms. Removing the CPU-bound BIE stage keeps the GPU busy back
+to back, so the GPU governor holds a higher clock. Inference latency therefore depends on duty
+cycle, not on image content - a confound for any latency-vs-entropy claim made with BIE in
+the loop.
+
+**Bank-to-bank spread vs noise (PyTorch unpaced).** Across 14 banks, power spanned 0.127 W =
+0.99 x trial noise SD (no detectable input effect); total latency spanned 1.15 ms (9 noise SD),
+of which NMS spanned 2.98 ms (largest on `real_radiometric_A1`, which has people detected).
+
 RESULTS_PLACEHOLDER
