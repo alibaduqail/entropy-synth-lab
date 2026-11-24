@@ -98,7 +98,7 @@ def exp_sensitivity():
     rows = []
     for a in (0.0, 0.3, 1.0):
         frames = [fr for fr, _ in generate("A1", 40, seed=400, alpha=a)]
-        grid = [("window_s", w, HLParams(), int(round(w * 10))) for w in (0.1, 0.2, 0.5, 1.0, 2.0)]
+        grid = [("window_s", w, HLParams(), int(round(w * 10))) for w in (0.1, 0.2, 0.5, 1.0, 1.1, 2.0)]
         grid += [("leaf_m", v, HLParams(leaf=v), 10) for v in (0.02, 0.03, 0.05, 0.08, 0.10)]
         grid += [("radius_m", r, HLParams(radius=r), 10) for r in (0.10, 0.15, 0.20, 0.30, 0.40)]
         for pname, pval, hp, per in grid:

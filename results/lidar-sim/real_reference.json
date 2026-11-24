@@ -1,0 +1,9 @@
+{
+ "_note": "Reference magnitudes transcribed (rounded) from the LiDAR teammate's Drive summaries (ThreatDet/sam/entropysep14: pilot_report.json, entropy_summary.json, trial_summary.json; and an Aug CAL run). Real Mid-360, lab room, Jetson AGX (labagx). Only summary numbers are quoted; no teammate files are copied. HL parameters there: window 1.0 s, leaf 0.05, radius 0.20, k_max 150, k_min 10, ROI [-5,2]x[-1.5,6.5]x[-0.3,1.5] m, z_min 0.04.",
+ "lab_M0_empty": {"n_trials": 2, "H_DS": 0.7695, "H_DS_sd_between": 0.0014, "H_eigen": 0.8227, "H_eigen_sd_between": 0.0022, "mean_L": 0.335, "mean_P": 0.535, "mean_S": 0.1302, "frac_high_S": 0.129, "n_raw": 151000, "n_roi": 92800, "n_voxel": 12146, "mean_neighbors": 66, "voxel_retention": 0.131, "frac_tag_particle": 0.0046, "frac_tag_glue": 0.034, "within_trial_sd_H_eigen": 0.0009, "within_trial_sd_H_DS": 0.002},
+ "lab_M1_clutter_people": {"n_trials": 2, "H_DS": 0.7764, "H_eigen": 0.8264, "mean_S": 0.1347, "frac_high_S": 0.137, "n_voxel": 12142, "frac_tag_particle": 0.0047},
+ "lab_M2_single_run": {"n_trials": 1, "H_DS": 0.7716, "H_eigen": 0.8249, "mean_S": 0.1317, "frac_high_S": 0.131, "n_voxel": 12057, "frac_tag_particle": 0.0046, "comment": "labelled M2 in the pilot report; indistinguishable from M0 on every metric including the particle tag. The track summary doc says mist has not been run, so this is not evidence about fog."},
+ "aug_CAL_run": {"HL(H_DS)": 0.709, "HL_weinmann(H_eigen)": 0.793, "n_raw": 184000, "n_voxel": 22173, "frac_scatter": 0.078, "roi": "[-3,2]x[-1.5,6.5]x[-0.1,2.5]"},
+ "hl_live_cost_ms_per_window_nano": 350,
+ "mid360_spec": {"points_per_s": 200000, "frame_hz": 10, "fov_el_deg": [-7, 52], "range_precision_1sigma_m": "<=0.02 @10 m, <=0.03 @0.2 m", "angular_precision_1sigma_deg": "<0.15", "blind_zone_m": 0.1, "range_10pct_m": 40, "range_80pct_m": 70, "false_alarm": "<0.01 %", "source": "https://www.livoxtech.com/mid-360/specs"}
+}
