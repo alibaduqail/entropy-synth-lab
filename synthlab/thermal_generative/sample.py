@@ -25,7 +25,7 @@ HOME = os.path.expanduser("~/synthlab/thermal-generative")
 def load_model(name, dev="cuda"):
     ck = torch.load(f"{HOME}/ckpt/{name}.pt", map_location=dev)
     kind = ck["args"]["model"]
-    model = (UNet(base=ck["args"].get("base", 32)) if kind == "ddpm" else CVAE()).to(dev)
+    model = (UNet(base=ck["args"].get("base", 48)) if kind == "ddpm" else CVAE()).to(dev)
     model.load_state_dict(ck["ema"])
     model.eval()
     return model, kind, ck

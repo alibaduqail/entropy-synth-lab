@@ -49,7 +49,7 @@ def main():
     ap.add_argument("--max-steps", type=int, default=10 ** 9)
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--lr", type=float, default=3e-4)
-    ap.add_argument("--base", type=int, default=32)
+    ap.add_argument("--base", type=int, default=48)
     ap.add_argument("--beta", type=float, default=1.0, help="VAE KL weight (per-pixel normalised)")
     ap.add_argument("--exclude", default="", help="drop a label combination from training")
     ap.add_argument("--no-amp", action="store_true")
@@ -76,11 +76,11 @@ def main():
     cte = torch.from_numpy(labels[te_idx])
     tr_idx = rng.choice(len(xtr), 256, replace=False)
 
-    model = make_model(a.model, a.base).to(dev).to(memory_format=torch.channels_last)
+    model = make_model(a.model, a.base).to(dev)  # channels_last measured slower on the Orin Nano
     ema = copy.deepcopy(model).requires_grad_(False)
     opt = torch.optim.AdamW(model.parameters(), lr=a.lr, weight_decay=0.0)
     amp = not a.no_amp
-    scaler = torch.cuda.amp.GradScaler(enabled=amp)
+    scaler = torch.amp.GradScaler('cuda', enabled=amp)
     state = dict(step=0, train_seconds=0.0, chunks=0)
     if os.path.exists(ckpt_path):
         ck = torch.load(ckpt_path, map_location=dev)
@@ -115,7 +115,7 @@ def main():
         model.train()
         while time.time() - t0 < budget and state["step"] < a.max_steps:
             idx = torch.randint(0, len(xtr), (a.batch,))
-            z0 = xtr[idx].to(dev, non_blocking=True).contiguous(memory_format=torch.channels_last)
+            z0 = xtr[idx].to(dev, non_blocking=True)
             cond = ctr[idx].to(dev)
             with torch.autocast("cuda", dtype=torch.float16, enabled=amp):
                 if a.model == "ddpm":
@@ -138,7 +138,7 @@ def main():
             with torch.no_grad():
                 for pe, pm in zip(ema.parameters(), model.parameters()):
                     pe.lerp_(pm, 1 - decay)
-            losses.append(float(loss))
+            losses.append(float(loss.detach()))
             if state["step"] % 200 == 0:
                 rec = dict(step=state["step"], loss=float(np.mean(losses[-200:])),
                            train_seconds=state["train_seconds"] + time.time() - t0, chunk=state["chunks"])
