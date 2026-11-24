@@ -1,0 +1,224 @@
+{
+ "hl": {
+  "n_trials": 13,
+  "n_frames": 6701,
+  "bg_mean_c": 24.614101562500025,
+  "sigma_median_counts": 7.483258247375488,
+  "sigma_p05_p95_counts": [
+   6.246691966056824,
+   11.926276636123657
+  ],
+  "pca_sv_fraction_top8": [
+   0.19158141024290484,
+   0.09854269271446219,
+   0.0867407346963585,
+   0.05094906761428926,
+   0.045923577677449826,
+   0.03683915806274565,
+   0.02875396704094248,
+   0.022576729491065886
+  ],
+  "coef_sd_counts": [
+   45.291683197021484,
+   2.942307472229004,
+   3.515925407409668
+  ],
+  "noise_excess_kurtosis": 0.5351715022844092,
+  "rho_median": 0.9198110103607178,
+  "slow_fraction_median": 0.9949733018875122,
+  "row_noise_var_fraction": 0.3078441023826599,
+  "col_noise_var_fraction": 0.04466540366411209,
+  "seed": 0
+ },
+ "rj": {
+  "n_trials": 2,
+  "n_frames": 1037,
+  "bg_mean_c": 26.628164062500048,
+  "sigma_median_counts": 6.863036155700684,
+  "sigma_p05_p95_counts": [
+   5.555846095085144,
+   9.539669561386106
+  ],
+  "pca_sv_fraction_top8": [
+   0.25067228179795936,
+   0.05174002301197665,
+   0.04484366277001614,
+   0.03548708821997179,
+   0.031969797090438574,
+   0.01760660180125352,
+   0.01661819977544808,
+   0.015940782956333586
+  ],
+  "coef_sd_counts": [
+   9.839751243591309,
+   4.608911514282227,
+   2.093385934829712
+  ],
+  "noise_excess_kurtosis": 0.30067949468489674,
+  "rho_median": 0.9047378301620483,
+  "slow_fraction_median": 1.0,
+  "row_noise_var_fraction": 0.30903080105781555,
+  "col_noise_var_fraction": 0.04178588092327118,
+  "seed": 0
+ },
+ "w120": {
+  "n_trials": 3,
+  "n_frames": 3095,
+  "bg_mean_c": 21.591464843750032,
+  "sigma_median_counts": 8.105392456054688,
+  "sigma_p05_p95_counts": [
+   6.567522716522217,
+   10.766807603836059
+  ],
+  "pca_sv_fraction_top8": [
+   0.27923927169366314,
+   0.13417538992556932,
+   0.07805108760742693,
+   0.048213321092241315,
+   0.03530456011424384,
+   0.013046420006343455,
+   0.011276843453559626,
+   0.009583873711725208
+  ],
+  "coef_sd_counts": [
+   49.33232116699219,
+   5.095751762390137,
+   3.6288557052612305
+  ],
+  "noise_excess_kurtosis": 0.30505030558704815,
+  "rho_median": 0.9338397979736328,
+  "slow_fraction_median": 0.9945933818817139,
+  "row_noise_var_fraction": 0.30275386571884155,
+  "col_noise_var_fraction": 0.04976264014840126,
+  "seed": 0
+ },
+ "lamp_surface_hl": {
+  "pixels_gt_0p4K": 2258,
+  "max_K": 1.9565582275390625,
+  "mean_K_over_frame": 0.10109370231628419
+ },
+ "layer_library": {
+  "hl_on__EXP-A_A1_run01": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 9
+  },
+  "hl_on__EXP-A_A1_run02": {
+   "frames": 504,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 295
+  },
+  "hl_on__EXP-A_A1_run03": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 85
+  },
+  "hl_on__EXP-A_A1_run04": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 519
+  },
+  "hl_on__EXP-A_A1_run05": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 516
+  },
+  "hl_on__EXP-A_A1_run06": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 514
+  },
+  "hl_on__EXP-A_A1_run07": {
+   "frames": 504,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 388
+  },
+  "hl_on__EXP-A_A1_run08": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 519
+  },
+  "hl_on__EXP-A_A1_run09": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 513
+  },
+  "hl_on__EXP-A_A1_run10": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 519
+  },
+  "hl_on__EXP-A_A1_run11": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 81
+  },
+  "hl_on__EXP-A_A1_run12": {
+   "frames": 519,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 519
+  },
+  "rj_A1__EXP-A_A1_run01": {
+   "frames": 504,
+   "people": 1,
+   "presence": [
+    1.0
+   ],
+   "lamp_frames": 0
+  },
+  "w120_A1__EXP-A_A1_run01": {
+   "frames": 1033,
+   "people": 2,
+   "presence": [
+    1.0,
+    1.0
+   ],
+   "lamp_frames": 0
+  },
+  "w120_A1__EXP-A_A1_run02": {
+   "frames": 1032,
+   "people": 2,
+   "presence": [
+    1.0,
+    1.0
+   ],
+   "lamp_frames": 0
+  }
+ }
+}
