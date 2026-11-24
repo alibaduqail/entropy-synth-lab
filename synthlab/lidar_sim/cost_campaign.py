@@ -34,12 +34,13 @@ def main():
     ap.add_argument("--chunk", type=int, default=10)
     ap.add_argument("--seed", type=int, default=11)
     ap.add_argument("--only", nargs="*", default=None)
+    ap.add_argument("--pass-offset", type=int, default=0, help="first pass index (for resuming)")
     a = ap.parse_args()
     banks = sorted(sh("run", "ls %s/banks" % REMOTE).stdout.split())
     if a.only:
         banks = [b for b in banks if b in a.only]
     rng = random.Random(a.seed)
-    for p in range(a.passes):
+    for p in range(a.pass_offset, a.pass_offset + a.passes):
         order = banks[:]
         rng.shuffle(order)
         for c in range(0, len(order), a.chunk):

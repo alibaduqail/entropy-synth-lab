@@ -68,6 +68,14 @@ def exp_sweep(n_windows=3):
     write_csv("fog_sweep.csv", rows)
 
 
+def exp_sweep_first(n_windows=3):
+    """Same sweep with the literal first-return rule (the Mid-360 reports only the first echo)."""
+    rows = []
+    for a in SWEEP_ALPHA:
+        rows += run_windows("A1", n_windows, seed=200, alpha=a, fog_kw=dict(return_mode="first"))[0]
+    write_csv("fog_sweep_first.csv", rows)
+
+
 def exp_variants(n_windows=2):
     """Same sweep under the uncertain model choices: near-field overlap, pulse length, return rule."""
     variants = {
@@ -127,7 +135,7 @@ def exp_coverage():
 
 def main():
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
-    fns = dict(conditions=exp_conditions, sweep=exp_sweep, variants=exp_variants,
+    fns = dict(conditions=exp_conditions, sweep=exp_sweep, sweep_first=exp_sweep_first, variants=exp_variants,
                sensitivity=exp_sensitivity, coverage=exp_coverage)
     for k, fn in fns.items():
         if which in (k, "all"):

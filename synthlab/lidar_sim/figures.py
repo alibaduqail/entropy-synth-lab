@@ -114,7 +114,10 @@ def _sweep_panels(rows, axs, color, label, marker="o"):
 def fig_sweep():
     rows = read("fog_sweep.csv")
     fig, axs = plt.subplots(2, 3, figsize=(12, 6.4))
-    _sweep_panels(rows, axs, C["blue"], "default model")
+    _sweep_panels(rows, axs, C["blue"], "strongest-echo rule (Hahner)")
+    if os.path.exists(os.path.join(OUT, "fog_sweep_first.csv")):
+        _sweep_panels(read("fog_sweep_first.csv"), axs, C["orange"], "first-return rule (Mid-360)", "s")
+        axs[0, 0].legend(fontsize=7, loc="lower right")
     for ax in axs.ravel():
         for a, nm in ((0.10, "B1"), (0.30, "B2"), (1.00, "B3")):
             ax.axvline(a, c=C["ink2"], lw=0.7, ls=":")
