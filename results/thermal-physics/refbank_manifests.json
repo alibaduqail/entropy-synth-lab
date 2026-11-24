@@ -1,0 +1,47 @@
+{
+ "real_empty_room_A0": {
+  "generator": "real Lepton 3.5 recording (subsampled, read-only source data/)",
+  "bank_name": "real_empty_room_A0",
+  "n_frames": 128,
+  "source_frames": 518,
+  "ht_mean": 0.013320135022537075,
+  "ht_sd": 0.000800242246837539,
+  "lamp_on": false
+ },
+ "real_flat_wall_A0": {
+  "generator": "real Lepton 3.5 recording (subsampled, read-only source data/)",
+  "bank_name": "real_flat_wall_A0",
+  "n_frames": 128,
+  "source_frames": 1031,
+  "ht_mean": 0.015347499564690047,
+  "ht_sd": 0.0015947820200346164,
+  "lamp_on": false
+ },
+ "real_person_holding_lamp_A1": {
+  "generator": "real Lepton 3.5 recording (subsampled, read-only source data/)",
+  "bank_name": "real_person_holding_lamp_A1",
+  "n_frames": 128,
+  "source_frames": 504,
+  "ht_mean": 0.07052051738507185,
+  "ht_sd": 0.006254129708694302,
+  "lamp_on": true
+ },
+ "real_standing_person_A1": {
+  "generator": "real Lepton 3.5 recording (subsampled, read-only source data/)",
+  "bank_name": "real_standing_person_A1",
+  "n_frames": 128,
+  "source_frames": 504,
+  "ht_mean": 0.07266315749190538,
+  "ht_sd": 0.002936244212538811,
+  "lamp_on": false
+ },
+ "real_two_seated_A1": {
+  "generator": "real Lepton 3.5 recording (subsampled, read-only source data/)",
+  "bank_name": "real_two_seated_A1",
+  "n_frames": 128,
+  "source_frames": 1033,
+  "ht_mean": 0.09852511083672069,
+  "ht_sd": 0.0035924082312776234,
+  "lamp_on": false
+ }
+}
