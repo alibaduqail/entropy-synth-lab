@@ -48,16 +48,36 @@ def fog_of(manifest):
     fog = manifest.get("fog")
     if isinstance(fog, dict) and isinstance(fog.get("alpha"), (int, float)):
         return float(fog["alpha"])
-    params = manifest.get("parameters")
-    if isinstance(params, dict):
-        return fog_of(params)
-    frames = manifest.get("frames")
+    for sub in ("parameters", "spec"):
+        if isinstance(manifest.get(sub), dict):
+            v = fog_of(manifest[sub])
+            if v:
+                return v
+    frames = manifest.get("frames") or manifest.get("labels")
     if isinstance(frames, list) and frames and isinstance(frames[0], dict):
         vals = [f.get("fog_level", f.get("fog_alpha")) for f in frames]
         vals = [v for v in vals if isinstance(v, (int, float))]
         if vals:
             return float(np.mean(vals))
     return 0.0
+
+
+def people_of(manifest):
+    """Mean labelled people per frame (NaN if the generator gave no label)."""
+    for key in ("frames", "labels"):
+        rows = manifest.get(key)
+        if isinstance(rows, list) and rows and isinstance(rows[0], dict):
+            vals = [r.get("n_people") for r in rows if isinstance(r.get("n_people"), (int, float))]
+            if vals:
+                return float(np.mean(vals))
+    for d in (manifest, manifest.get("parameters"), manifest.get("spec")):
+        if isinstance(d, dict):
+            for key in ("n_people", "n_people_requested"):
+                try:
+                    return float(d[key])
+                except (KeyError, TypeError, ValueError):
+                    pass
+    return np.nan
 
 
 def load(runs, kind):
@@ -70,13 +90,14 @@ def load(runs, kind):
     t["block"] = t["round"]
     t["approach"] = t.apply(approach, axis=1)
     t["bank_id"] = t.track + "__" + t.bank
-    fogs, conds = [], []
+    fogs, conds, people = [], [], []
     for d in t.dir:
         p = Path(d) / "bank_manifest.json"
         m = json.loads(p.read_text()) if p.exists() else {}
         fogs.append(fog_of(m))
         conds.append(str(m.get("condition", "")))
-    t["fog"], t["condition"] = fogs, conds
+        people.append(people_of(m))
+    t["fog"], t["condition"], t["n_people_label"] = fogs, conds, people
     t["entropy"] = t["HT"] if kind == "thermal" else t["H_DS"]
     return t
 
@@ -155,6 +176,7 @@ def bank_table(t, metrics, extra):
     info = t.groupby("bank_id").agg(
         approach=("approach", "first"), bank=("bank", "first"), n_blocks=("block", "nunique"),
         fog=("fog", "first"), condition=("condition", "first"),
+        n_people_label=("n_people_label", "first"),
         temp_tj_c=("temp_tj_c", "mean"), all_ok=("ok", "all"),
         **{k: (k, "mean") for k in extra if k in t})
     return info.join(tab), stats
@@ -232,6 +254,48 @@ def fig_stages(tab, out):
     plt.close(fig)
 
 
+def group_diff(tab, stats, a_ids, b_ids, metrics, nb, label):
+    """Mean of group a minus mean of group b (bank means); CI from trial noise plus, when a
+    group has >= 2 banks, its bank-to-bank variance."""
+    out = []
+    a, b = tab.loc[[i for i in a_ids if i in tab.index]], tab.loc[[i for i in b_ids if i in tab.index]]
+    if not len(a) or not len(b):
+        return out
+    for m in metrics:
+        if m not in tab:
+            continue
+        sd = stats[m]["resid_sd"] if m in stats else 0.0
+        var = sd ** 2 / (nb * len(a)) + sd ** 2 / (nb * len(b))
+        for g in (a, b):
+            if len(g) >= 2:
+                var += g[m].var(ddof=1) / len(g)
+        d = float(a[m].mean() - b[m].mean())
+        se = float(np.sqrt(var))
+        out.append({"comparison": label, "metric": m, "a_banks": "+".join(a.bank), "b_banks": "+".join(b.bank),
+                    "a_mean": float(a[m].mean()), "b_mean": float(b[m].mean()), "diff": d,
+                    "ci_lo": d - 1.96 * se, "ci_hi": d + 1.96 * se})
+    return out
+
+
+def series(tab, stats, xcol, ids, metrics, nb, label):
+    """Slope of each metric along a generator sweep (e.g. people count, fog level)."""
+    g = tab.loc[[i for i in ids if i in tab.index]].dropna(subset=[xcol])
+    rows = []
+    if len(g) < 3:
+        return rows
+    for m in metrics:
+        if m not in g:
+            continue
+        b, ci = slope_ci(g[xcol], g[m])
+        rows.append({"series": label, "x": xcol, "metric": m, "n_banks": len(g),
+                     "x_min": float(g[xcol].min()), "x_max": float(g[xcol].max()),
+                     "slope": b, "slope_lo": ci[0], "slope_hi": ci[1],
+                     "effect_over_range": b * float(g[xcol].max() - g[xcol].min()),
+                     "mde_two_banks": mde(stats[m]["resid_sd"], nb) if m in stats else np.nan,
+                     **{f"hinge_{k}": v for k, v in hinge_test(g[xcol], g[m]).items()}})
+    return rows
+
+
 def residual_vs_ht(tab, metric):
     """metric residual after regressing on any-detection fraction and candidate count."""
     ctl = [k for k in ("any_det_frac", "n_candidates") if k in tab and tab[k].std() > 0]
@@ -246,7 +310,7 @@ def main():
     ap.add_argument("--out", type=Path, required=True)
     args = ap.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
-    verdicts, summary = [], {}
+    verdicts, summary, named, sweeps = [], {}, [], []
     labels = {"total_ms": "ms / frame", "power_w": "VDD_IN W", "energy_per_unit_j": "mJ / unit",
               "total_no_bie_ms": "ms / frame without BIE", "entropy_total_ms": "HL stage ms / window"}
 
@@ -278,6 +342,24 @@ def main():
                     "Thermal cost vs HT after regressing out any-detection fraction and "
                     "pre-NMS candidate count", nb)
         fig_stages(tab, args.out / "fig_cmp_thermal_stages.png")
+        ids = list(tab.index)
+        pick = lambda f: [i for i in ids if f(i)]  # noqa: E731
+        tm = ["HT", "total_ms", "yolo_post_ms", "total_no_bie_ms", "power_w", "energy_per_unit_j",
+              "n_det", "any_det_frac"]
+        for cond in ("A0", "A1"):
+            named += group_diff(tab, stats, pick(lambda i: i == f"thermal-datadriven__syn_{cond}"),
+                                pick(lambda i: i.startswith(f"thermal-datadriven__real_{cond}_")),
+                                tm, nb, f"datadriven syn_{cond} - real_{cond}")
+        named += group_diff(tab, stats, pick(lambda i: i.startswith("thermal-physics__A1")),
+                            pick(lambda i: i.startswith("thermal-datadriven__real_A1_")),
+                            tm, nb, "physics A1 - real_A1")
+        sweeps += series(tab, stats, "n_people_label",
+                         pick(lambda i: i.startswith("thermal-datadriven__people_")), tm, nb,
+                         "datadriven people_0..8")
+        sweeps += series(tab, stats, "fog", pick(lambda i: i.startswith("thermal-physics__B")),
+                         tm, nb, "thermal-physics fog B0..B3 (one person)")
+        sweeps += series(tab, stats, "HT", pick(lambda i: i.startswith("thermal-datadriven__noise_")),
+                         tm, nb, "datadriven noise sweep")
         summary["thermal"] = {"n_trials": int(len(th)), "n_ok": int(th.ok.sum()), "n_banks": len(tab),
                               "n_blocks": nb, "temp_tj_range_c": float(th.temp_tj_c.max() - th.temp_tj_c.min()),
                               "problems": sorted(set(p for p in th.problems if p))[:10],
@@ -307,10 +389,17 @@ def main():
                          "diff": d}
                 if m in stats:
                     hb[m]["mde_two_banks"] = mde(stats[m]["resid_sd"], nb)
+        lids = list(tab.index)
+        lm = ["HL", "total_ms", "entropy_total_ms", "power_w", "energy_per_unit_j", "n_voxel"]
+        sweeps += series(tab, stats, "fog", [i for i in lids if "__fog_a" in i], lm, nb,
+                         "lidar-sim fog alpha sweep")
+        sweeps += series(tab, stats, "HL", lids, lm[1:], nb, "lidar all banks vs HL")
         summary["lidar"] = {"n_trials": int(len(li)), "n_ok": int(li.ok.sum()), "n_banks": len(tab),
                             "n_blocks": nb, "hyp_b_fog_vs_clear": hb,
                             "noise": stats}
 
+    pd.DataFrame(named).to_csv(args.out / "cmp_named_comparisons.csv", index=False)
+    pd.DataFrame(sweeps).to_csv(args.out / "cmp_sweeps.csv", index=False)
     v = pd.DataFrame(verdicts)
     v.to_csv(args.out / "cmp_verdicts.csv", index=False)
     summary["vdd_in_step_w"] = VDD_STEP_W
