@@ -13,8 +13,11 @@ from .scene import box_corners, iter_boxes, load_scene, shell_quads
 
 def color(material):
     name = material.lower()
-    for token, rgb in (("teal", (.08,.49,.48)), ("cardboard", (.69,.52,.32)),
-                       ("wood", (.57,.38,.23)), ("carpet", (.35,.36,.36)),
+    for token, rgb in (("teal", (.60,.68,.65)), ("sage", (.53,.56,.45)),
+                       ("white", (.95,.94,.92)), ("acoustic", (.94,.94,.93)),
+                       ("charcoal", (.25,.26,.25)), ("black", (.15,.15,.16)), ("steel", (.51,.53,.54)),
+                       ("strobe", (.52,.20,.19)), ("lcd_on", (.22,.19,.32)), ("cardboard", (.69,.52,.32)),
+                       ("wood", (.80,.64,.46)), ("carpet", (.60,.59,.57)),
                        ("lcd", (.09,.11,.12)), ("glass", (.45,.79,.84)),
                        ("plastic", (.13,.14,.15)), ("electronics", (.17,.18,.19)),
                        ("metal", (.52,.55,.57)), ("fabric", (.36,.41,.39))):
@@ -87,7 +90,7 @@ def write_glb(path, scene, props):
         meshes.append(dict(name=name, primitives=[dict(attributes=attrs, indices=ix, material=i)]))
         nodes.append(dict(mesh=i, name=name))
         p = props[name]
-        glass = "glass" in p["material"].lower()
+        glass = "glass" in p["material"].lower() and "lcd" not in p["material"].lower()
         paints.append(dict(name=name, doubleSided=True, alphaMode="BLEND" if glass else "OPAQUE",
                            pbrMetallicRoughness=dict(baseColorFactor=[*color(p["material"]),
                                                     .3 if glass else 1.], metallicFactor=0.,
@@ -115,7 +118,7 @@ def build_mesh(scene, out):
             f.write(f"newmtl {name}\nKd %g %g %g\n" % color(p["material"]))
             for key in ("emissivity", "lidar_reflectivity"):
                 f.write(f"# {key} {p[key]}\n")
-            if "glass" in p["material"].lower():
+            if "glass" in p["material"].lower() and "lcd" not in p["material"].lower():
                 f.write("d 0.3\n")
             f.write("\n")
     with obj.open("w") as f:

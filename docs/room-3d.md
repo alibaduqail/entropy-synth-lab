@@ -1,49 +1,61 @@
 ## Metric estimation (Astra pass 1)
 
-**Room interior estimate: 2.56 ± 0.26 m east–west, 2.66 ± 0.32 m south–north, 2.56 ± 0.23 m floor to ceiling.** The uncertainties are judgmental one-sigma estimates. Depth is the weakest dimension because the south boundary is only partly visible and the west wall curves into the glass jamb in photo 4. “North” denotes the TV wall by convention. Absolute compass bearing is unknown.
+**The adopted interior is 2.56 m east–west × 2.66 m south–north × 2.56 m high.** North is the TV wall. The pass‑1 positional uncertainties of ±0.26, ±0.32 and ±0.23 m are judgmental estimates. Depth is particularly uncertain because the south boundary is only partly visible. The shared model uses metres, with its origin at the southwest floor corner. [Fit report](../results/room-3d/fit_report.json) · [Geometry record](../results/room-3d/verification_round_1.json)
 
 ### Landmarks and scale
 
-I picked corresponding image landmarks by hand in the supplied upright frames and fitted a rectangular room, desk corners, open leaf, wall fixtures, rig and five camera poses by robust least squares. The model uses a centered pinhole with one effective focal length for photos 1–4 and another for photo 5, with camera roll fitted. The two rig crops add identification detail only. Photos 1 and 2 have almost no stereo baseline. The export rounds the fit and separates solids for ray tracing.
+The recovered pass‑1 picks locate wall corners, the tabletop, leaf, keyboard, fixtures and sensor stack. Each photo has a centered pinhole camera with fitted roll. The first four share a focal length. The close-up has its own. Photos 1 and 2 have little stereo baseline. The rig crops identify components but do not constrain room scale. The far desk corners in the original close-up were partly extrapolated. The verification fit retains these original picks for reproducing pass 1 and fits the final close-up pose separately. [Pixel picks and world parametrization](../results/room-3d/landmarks.json)
 
-The table reports sensitivity to the choice of physical ruler. In a comparison fit, the desk top set the scale at 0.74 m. I removed the door, keyboard, switch, TV, strobe, thermostat and desk-plan size priors, kept the focal-length and hinge-setback priors, and rescaled the resulting geometry by each nominal reference divided by its reconstructed length. Each row thus uses a different physical standard but shares the same image picks and shape errors. The uncertainty column gives an approximate **scale-induced** one-sigma error per room dimension, before wall and camera model errors. Triples are width × depth × height in metres.
+The joint fit anchors the desk height and gives the other rulers soft weights. It returns **2.555 × 2.659 × 2.556 m** and a **2.374 m** leaf. To check the scale independently of the soft metric priors, a second fit retains the desk height, focal-length and hinge-setback priors, then rescales the reconstructed room using each ruler in turn. Rows share the same image observations and shape errors. Fixture mounting heights and TV width are assumptions. [Fit settings and unrounded results](../results/room-3d/fit_report.json)
 
-| Physical reference | What was picked or checked | Implied room or local dimension | Approx. uncertainty |
-|---|---|---|---|
-| Desk top, 0.74 m high | Top quadrilateral in 1 and 3, reverse edge in 4, floor corners in 3/4. In 3 the near edge runs from (256,842) to (528,862) px. | 2.74 × 2.88 × 2.70. Desk plan 0.59 × 1.48. | ±0.15 m per room dimension for ±0.04 m desk height |
-| Door width, 0.914 m | Leaf top in 1 from approximately (720,85) to (1032,82), lower hinge-side corner near (834,775). Comparison fit recovered 0.985 m. | 2.54 × 2.67 × 2.50 | ±0.15 m for ±0.05 m effective width or edge choice |
-| Door height, 2.134 m | Same leaf top and lower corners in 1/2. Desk-scaled reconstruction gave 2.545 m. | 2.30 × 2.41 × 2.26. A 2.03 m leaf gives 2.19 × 2.29 × 2.15. | ±0.11 m for ±0.10 m height, plus a larger pose systematic |
-| Full keyboard, 0.44 m | Primary keyboard long edges in 1/2, roughly 185 px in 1. Reconstructed end-to-end segment 0.423 m. | 2.86 × 2.99 × 2.81 | ±0.17 m for ±0.025 m in case width/endpoints |
-| 16:9 TV, nominal 43-inch diagonal | In 3 the top bezel spans (430,360)–(687,358), bottom right (669,518). Estimated width 0.969 m under desk scaling. | A 0.952 m active width gives 2.69 × 2.83 × 2.65. Choosing 50 or 55 inches gives room widths near 3.13 or 3.45 m. | ±0.15 m conditional on 43 inches. Model identity dominates. |
-| Switch center, nominal 1.20 m | East-wall plate center (578,519) in 1, corroborated in 2. Desk-scaled height 1.215 m. | 2.71 × 2.84 × 2.66 | ±0.23 m for ±0.10 m mounting height |
-| Thermostat and strobe | On west wall in 4, centers near (179,515) and (534,226). Desk-scaled heights 1.49 and 2.38 m. | Joint fit gives 1.40 and 2.22 m, broadly compatible with nominal 1.5 and 2.0–2.3 m mounting heights. | ±0.17 m center, plus ambiguity in fixture height convention |
-| Livox body, 65 × 65 × 60 mm | Crop 6 shows finned base about 60 px across and black enclosure about 185 px. Crop 7 confirms the stack order. | Roughly 0.20 m black enclosure width, modeled 0.205 m. The two faces lie at different ranges. | ±0.04 m enclosure width |
-| Jetson carrier, nominal 100 × 79 mm | Fan board by east edge in 3/7, close-up in 5. | 0.100 × 0.079 m footprint prior. Board identity and enclosure thickness uncertain. | ±0.02 m footprint, ±0.10 m absolute center |
+| Ruler | Assumed length (m) | Desk-scaled reconstruction (m) | Implied width × depth × height (m) |
+|---|---:|---:|---|
+| Desk height | 0.740 | 0.740 | 2.74 × 2.88 × 2.70 |
+| Door width | 0.914 | 0.985 | 2.54 × 2.67 × 2.50 |
+| Short leaf height | 2.134 | 2.545 | 2.30 × 2.41 × 2.26 |
+| Tall leaf height | 2.438 | 2.545 | 2.63 × 2.75 × 2.58 |
+| Full keyboard width | 0.440 | 0.423 | 2.86 × 2.99 × 2.81 |
+| TV active width | 0.952 | 0.969 | 2.69 × 2.83 × 2.65 |
+| Switch center height | 1.200 | 1.215 | 2.71 × 2.84 × 2.66 |
 
-The independent keyboard and door-width standards differ by 0.32 m in width, 0.32 m in depth and 0.31 m in height. The combined fit used a 0.74 m desk plane, soft priors on the scale references and downweighted ambiguous desk and wall corners. It recovered a 2.37 m open leaf despite a 2.134 m height prior. I retained the taller leaf to match the photographed outline. A door measurement would resolve much of this disagreement. The lever appears around (686,583) in 1, but the lower free corner is partly hidden. I did not treat the handle and switch as interchangeable heights.
+The thermostat and strobe have only a single shared view and uncertain installed heights. The report includes their conditional scales. The Livox enclosure and Jetson carrier constrain local rig dimensions. Perspective, uncertain board identity and the absence of a surveyed baseline limit their use as room rulers. Carpet seams, ceiling tiles and baseboard edges also lack a confirmed pitch or height. [Landmarks](../results/room-3d/landmarks.json) · [Reference reconstructions](../results/room-3d/fit_report.json)
 
-Carpet texture and a few seams are visible, but there is no countable run with known pitch between opposite walls. The ceiling shows grid lines without a confirmed tile size or a complete wall-to-wall count. The rubber baseboard helps identify the floor junction in 3, but its nominal 0.10 m is too small and its lower edge too ambiguous for an independent room scale. Single-view dimensions can easily miss by 5–10%, and the depth and door estimates can miss by more.
+**The 2.438 m leaf is more consistent with the other references.** At that scale, the reconstructed desk, keyboard, door width and switch differ from nominal by −4.2%, −8.0%, +3.3% and −3.0%. The 2.134 m leaf gives −16.2%, −19.5%, −9.6% and −15.1%. The longer leaf is plausible, but its actual height has never been measured. Its conditional room estimate differs from the adopted dimensions by only about 7, 9 and 2 cm, all within the estimated room uncertainty. The nominal scene therefore retains the joint-fit dimensions and 2.37 m modeled leaf. [Door-height comparison](../results/room-3d/fit_report.json)
 
 ### Geometry and viewpoints
 
-Compared with v0, width changed from 2.70 to 2.56 m, depth from 3.50 to 2.66 m and height from 2.70 to 2.56 m. The desk long axis now runs north–south. Its top is 1.40 × 0.56 m with a 0.09 m north-wall gap, an east modesty panel and chairs along the west side. Photo 3 places the floor monitor east of the desk, about 0.80 m south of the teal wall. The rig sits on the southern half. The visible camera-like device faces roughly west. The v0 south-facing sensor assumption has been replaced with a southwest sightline for the two unidentified sensors.
+The long desk axis runs north–south, with chairs on the west, a modesty panel on the east and the monitor on the floor beyond the panel. The door swings toward the east wall from an inferred south jamb. The glass width, residual wall strips, opening angle and extent of the corridor remain uncertain. The preview continues the carpet color outside the room as a visual backdrop. Exported meshes and sensor ray casts end at the modeled boundary.
 
-The open leaf lies near the east wall. Photos 1 and 4 support black-framed glazing along the south boundary. I infer that the closed door spans the **south** opening at the east end, hinged on its east jamb. The east wall carries the switch. Door and glazing cutouts are separate from the room's opaque surface fallback. The estimated pane width, west return, opaque end strips, header, hinge setback and 90° opening angle have low confidence. The physical door swing and amount of south drywall cannot be uniquely recovered. A renderer that treats the entire south wall as opaque will suppress transmitted LiDAR rays. A renderer that treats every object as solid will fill the door opening.
+| Photo | Fitted camera xyz (m) | Focal length (native px) | Landmarks | Fit RMS (native px) | Exported geometry RMS (native px) |
+|---|---|---:|---:|---:|---:|
+| 1 | 0.126, 1.624, 1.599 | 598.6 | 13 | 5.6 | 13.5 |
+| 2 | 0.125, 1.625, 1.608 | 598.6 | 13 | 5.7 | 13.3 |
+| 3 | 1.755, 0.218, 1.548 | 598.6 | 12 | 8.6 | 8.8 |
+| 4 | 2.369, 1.675, 1.454 | 598.6 | 7 | 25.8 | 26.1 |
+| 5 | 2.242, −0.757, 1.696 | 1343.7 | 10 | 16.9 | 16.9 |
 
-| Photo | Camera xyz (m) | Yaw / pitch (degrees) | Effective horizontal × vertical FOV | Position σ |
-|---|---|---|---|---|
-| 1 | 0.13, 1.62, 1.60 | −1.1 / −27.3 | 82.5° × 98.9° | 0.18 m |
-| 2 | 0.12, 1.63, 1.61 | −0.2 / −26.6 | 82.5° × 98.9° | 0.18 m |
-| 3 | 1.76, 0.22, 1.55 | 94.9 / −25.3 | 82.5° × 98.9° | 0.18 m |
-| 4 | 2.37, 1.68, 1.45 | 178.1 / −20.3 | 82.5° × 98.9° | 0.18 m |
-| 5 | 1.99, −0.26, 1.38 | 100.7 / −43.7 | 38.7° × 64.0° | 0.32 m |
-
-Yaw increases from east toward north. Pitch is positive upward. The JSON up vectors include roll. Photo 5 fits from the corridor looking through the opening. It has fewer shared landmarks, including partly extrapolated desk corners, and its pose is the least certain. The fitted ultrawide FOV is narrower than the approximate 88° × 108° input prior. Allow several degrees of camera-angle error and roughly 5–10° of FOV error. These are registration estimates for preview rendering.
+RMS is the root mean squared Euclidean pixel distance per fitted point at full upright resolution. The exported-geometry column projects the actual box corners, faces or centers used for those landmarks. The close-up fits directly against those proxies. All values describe registration on the picked points. Camera focal lengths include any crop and remain correlated with estimated camera distance. [Poses, fields of view and per-landmark residuals](../results/room-3d/fit_report.json)
 
 ### Sensor placement and validation
 
-The Mid-360 body is visible. Its scan origin is a free-space proxy 6 mm above the body box. Its yaw is assumed. Neither the Lepton nor the radar can be identified in these photos. Their synthetic origins sit on the west/front side of the stack and point southwest toward torso height at the person mark (0.27, 0.23, 0). The horizontal Lepton-to-mark distance is 1.60 m. Along its azimuth the ray exits the desk footprint after about 0.32 m, then crosses about 1.58 m of unobstructed floor before reaching the south boundary. The heat lamp and mist source are hypothetical placements. The scene represents the desk arrangement in photos 1–4. Photo 5 shows a keyboard moved to the floor.
+The Mid-360 cap is visible and its synthetic origin lies above it. Its yaw is assumed. The Lepton and radar identities and poses remain **ASSUMED**. Their aim is southwest toward torso height at the reviewer’s mark **(0.45, 0.45, 0) m**. Geometry checks cover both feet and torso sightlines, free origins, child containment and a minimum **5 mm** separating-axis gap between top-level solids in both peripheral layouts. [Geometry record](../results/room-3d/verification_round_1.json)
 
-Temperatures, emissivities, reflectivities and transmission fractions are simulation inputs. The glass is LWIR-opaque with a nominal reflected fraction of 0.10. The 905 nm transmission estimate is particularly sensitive to incidence angle and coatings. Chair envelopes, desk supports, webcam proxy, board identities and unmeasured sensor offsets are approximations. Each object carries an absolute center uncertainty. Shared support surfaces constrain relative vertical ordering much better than absolute room coordinates.
+The south wall now has distinct doorway and glazing apertures. A ray through open air escapes. A ray aimed at the pane hits glass for thermal or first-surface queries. The range preview shows the branch conditional on glass transmission, where an unobstructed transmitted ray escapes. Actual transmission, surface temperature, emissivity and return probabilities remain simulation inputs. Heat lamp and fog source positions are hypothetical. This verification supplies matched scene geometry for A/B/C and the null. It contains no observations of entropy, power or latency.
 
-The inline geometry check verified 33 solids inside the room, at least 5 mm separation along a separating axis for every pair, free sensor origins and clear segments from the Lepton and radar to both the feet and torso at the mark. The 34th object is the non-solid door opening. The scene supplies geometry for matched A/B/C and null simulations. These photos provide no entropy, fog, latency or power measurements.
+## Verification round 1 (Astra critique of renders)
+
+The comparisons below use **preview pixels** at half the native image scale. Distances are rounded from the exported landmark residuals. Original and final object values are recorded alongside the figures. [Residuals](../results/room-3d/fit_report.json) · [Object changes](../results/room-3d/verification_round_1.json)
+
+| Photo | What changed after inspection | Remaining discrepancy |
+|---|---|---|
+| 1 | The chair blocks hid the desk. Mesh-chair depth along x went from 0.47 to 0.264 m and its center x from 0.854 to 0.971 m. The seat, framed back and legs now leave floor visible. The green chair has a shell, post and spread base. | The door’s top hinge corner is about 14 px off. Chair backs have square edges and the black mesh uses a surface proxy. |
+| 2 | The green chair center x moved from 0.855 to 0.971 m. Its seat reaches the desk edge with a 7 mm horizontal gap. The primary keyboard center xy moved from (1.186, 1.750) to (1.200, 1.712) m. | The rendered hinge corner differs by about 15 px and the keyboard’s north endpoint by 8 px. A literal tuck under the top would intersect the required one-box chair envelope. |
+| 3 | The desk had no apron. Two end rails now join the legs visually. The angled keyboard went from 0° to −34° yaw and the floor monitor center xy from (1.90, 1.86) to (1.89, 1.94) m. | TV bezel picks differ by about 2–3 px and the near desk edge by 1–4 px. The northwest floor junction is about 11 px off. Cable loops and chair curvature remain unresolved. |
+| 4 | The strobe and thermostat now read separately from the wall. The sage wall replaces saturated teal, the white wall is lighter, and the framed chair back replaces the full 0.91 m block. | Visible fixtures and desk corners agree within about 3 px. The partly obscured northwest floor junction misses by 34 px. The rectangular shell also simplifies the curved west return. |
+| 5 | Four tabletop picks became ten desk, leg, panel, bag, monitor and hinge-foot picks for the pose refit. Camera xyz moved from (1.99, −0.26, 1.38) to (2.24, −0.76, 1.70) m. The floor keyboard and mouse use a photo-specific arrangement. On the same final proxies and ten picks, native RMS fell from 100.7 to 16.9 px. | The desk foot is about 2 px off, the bag base 13 px, the screen’s top right 14 px and the estimated hinge foot 10 px. The soft bag and screen stand remain simplified. |
+
+The fit can be regenerated from the repo root with the following command. Both the SciPy solver and the NumPy fallback were exercised. Neither draws random samples. The exported cameras, material colors and idealized sensor views serve visual and geometric checks only. [Fit report](../results/room-3d/fit_report.json) · [Solver agreement](../results/room-3d/verification_round_1.json)
+
+```sh
+python3 -m synthlab.room3d.fit_room --landmarks results/room-3d/landmarks.json --out results/room-3d/fit_report.json
+```

@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from synthlab.room3d.build_mesh import build_mesh, scene_to_triangles
 from synthlab.room3d.render_preview import cameras, near_clip, render
-from synthlab.room3d.scene import (SURFACES, cast_scene, iter_boxes, load_scene,
+from synthlab.room3d.scene import (SURFACES, box_corners, rotation, cast_scene, iter_boxes, load_scene,
                                    overlaps, ray_box_intersect, schema_problems, shell_quads,
                                    validate_scene)
 
@@ -109,6 +109,60 @@ def test_door_and_children():
     for name, q in shell_quads(s):
         normal = np.cross(q[1]-q[0], q[2]-q[0])
         assert normal @ (np.array(s["room"]["size_xyz"])/2-q[0]) > 0, name
+
+
+def test_two_apertures():
+    s = v0()
+    pane = dict(s["objects"][0], id="pane", wall="wall_south", cutout=True, solid=True,
+                u_range=[.3,.8], z_range=[.4,1.8], center=[.55,.03,1.1],
+                size=[.5,.01,1.4], lidar_transmission=.88)
+    s["objects"] = [pane,dict(pane,id="passage",cutout=False,solid=False,u_range=[1,2],
+                              z_range=[0,2])]
+    xyz,faces,_,_,ids = scene_to_triangles(s)
+    walls = xyz[faces[ids == "wall_south"]]
+    area = np.linalg.norm(np.cross(walls[:,1]-walls[:,0],walls[:,2]-walls[:,0]),axis=1).sum()/2
+    width,_,height = s["room"]["size_xyz"]
+    assert np.isclose(area,width*height-.5*1.4-2)
+    for x,z,expected in ((.55,1,"pane"),(1.5,1,""),(.9,1,"wall_south"),(.55,.2,"wall_south")):
+        for transmit in (True,False):
+            dist,hit = cast_scene(s,[x,.5,z],np.array([[0,-1,0]]),iter_boxes(s),
+                                  transmit_glass=transmit)
+            want = "" if expected == "pane" and transmit else expected
+            assert hit[0] == want and np.isinf(dist[0]) == (want == "")
+
+
+def test_verified_geometry():
+    s = load_scene("scene/room_v1.json")
+    mark = s["dynamic_slots"]["person_mark"]
+    assert mark == [.45,.45,0]
+    report = json.loads((ROOT/"results/room-3d/fit_report.json").read_text())
+    for cam,fitted in zip(s["cameras"],report["cameras"]):
+        assert cam["id"] == fitted["id"] and cam["image_wh"] == fitted["image_wh"]
+        for field in ("position","look_at","up","hfov_deg","vfov_deg"):
+            assert np.allclose(cam[field],fitted[field],atol=1e-4)
+        implied = np.array(cam["image_wh"])/(2*np.tan(np.radians([cam["hfov_deg"],cam["vfov_deg"]])/2))
+        assert np.allclose(implied,fitted["focal_px"])
+    for parent in iter_boxes(s):
+        for child in parent.get("children", []):
+            vertices = box_corners(np.array(child["center"]),np.array(child["size"]),child.get("yaw_deg",0))
+            local = (vertices-parent["center"]) @ rotation(parent["yaw_deg"])
+            assert (abs(local) <= parent["size"]/2+1e-9).all(), child["id"]
+    for overrides in ({},s["cameras"][-1]["object_overrides"]):
+        view = dict(s,objects=[{**o,**overrides.get(o["id"],{})} for o in s["objects"]])
+        assert not validate_scene(view)
+        solids = [b for b in iter_boxes(view) if b["solid"]]
+        for i,a in enumerate(solids):
+            for b in solids[i+1:]:
+                ra,rb = rotation(a["yaw_deg"]),rotation(b["yaw_deg"])
+                delta = b["center"]-a["center"]
+                gap = max(abs(n@delta)-(abs(n@ra)@a["size"]+abs(n@rb)@b["size"])/2
+                          for n in (*ra.T,*rb.T[:2]))
+                assert gap >= .005-1e-9, (a["id"],b["id"],gap)
+        for name in ("lepton35","iwr6843isk"):
+            eye = np.array(s["sensors"][name]["position"])
+            for z in (0,1):
+                distance,_ = cast_scene(view,eye,np.array([np.array(mark)+[0,0,z]-eye]),solids)
+                assert distance[0] >= 1-1e-9
 
 
 def test_mesh():

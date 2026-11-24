@@ -76,6 +76,9 @@ def rasterize(rgb, depth, triangle, focal, shade):
 
 
 def render(scene, camera):
+    overrides = camera.get("object_overrides", {})
+    if overrides:
+        scene = dict(scene, objects=[{**o, **overrides.get(o["id"], {})} for o in scene["objects"]])
     w, h = camera["image_wh"]
     scale = min(1., 525/w, 700/h)
     w, h = max(1, round(w*scale)), max(1, round(h*scale))
@@ -84,7 +87,11 @@ def render(scene, camera):
     frame = basis(np.asarray(camera["look_at"])-origin, camera["up"])
     verts, faces, indices, mats, _ = scene_to_triangles(scene)
     local = (verts-origin) @ frame
-    rgb = np.full((h,w,3), 30, dtype=np.uint8)
+    # Preview-only continuation of the photographed corridor floor beyond the model boundary.
+    yy, xx = np.ogrid[:h, :w]
+    ray_z = frame[2,2] + (xx+.5-w/2)/focal[0]*frame[2,0] + (yy+.5-h/2)/focal[1]*frame[2,1]
+    floor_rgb = 255*np.array(color(scene["room"]["surfaces"]["floor"]["material"]))
+    rgb = np.where(ray_z[...,None] < 0, floor_rgb, [221,219,212]).astype(np.uint8)
     depth = np.zeros((h,w))
     props = material_properties(scene)
     colors = np.asarray([color(props[m]["material"]) for m in mats])
@@ -92,7 +99,10 @@ def render(scene, camera):
     for face, idx in zip(faces, indices):
         a, b, c = verts[face]
         normal = normalize(np.cross(b-a,c-a))
-        shade = (255*colors[idx]*(.48+.52*max(0., normal @ light))).astype(np.uint8)
+        lighting = .73 + .27 * (normal @ light)
+        if mats[idx] in scene["room"]["surfaces"]:
+            lighting = .94 + .06 * (normal @ light)
+        shade = (255 * colors[idx] * lighting).astype(np.uint8)
         poly = near_clip(local[face])
         for i in range(1, len(poly)-1):
             rasterize(rgb, depth, np.asarray([poly[0],poly[i],poly[i+1]]), focal, shade)
@@ -187,7 +197,7 @@ def sensor_views(scene, path):
     az, el = np.meshgrid(np.deg2rad(np.arange(-180,180)), np.deg2rad(np.arange(-7,53)))
     yaw = np.arctan2(mid["forward"][1],mid["forward"][0])
     rays = np.stack((np.cos(az+yaw)*np.cos(el), np.sin(az+yaw)*np.cos(el), np.sin(el)),axis=-1)
-    ranges, _ = cast_scene(scene, mid["position"], rays, boxes)
+    ranges, _ = cast_scene(scene, mid["position"], rays, boxes, transmit_glass=True)
     fig, axes = plt.subplots(2,1,figsize=(8,8), constrained_layout=True)
     im = axes[0].imshow(heat.repeat(4,axis=0).repeat(4,axis=1), cmap="inferno",
                         interpolation="nearest")
@@ -201,7 +211,7 @@ def sensor_views(scene, path):
         fig.colorbar(im, ax=axes[0], label="Temperature (°C)")
     im = axes[1].imshow(np.ma.masked_invalid(ranges), origin="lower", aspect="auto",
                         extent=(-180.5,179.5,-7.5,52.5), interpolation="nearest", cmap="viridis")
-    axes[1].set(title="Mid-360 · first-surface range", xlabel="Azimuth from forward (°)",
+    axes[1].set(title="Mid-360 · range conditional on pane transmission", xlabel="Azimuth from forward (°)",
                 ylabel="Elevation (°)")
     fig.colorbar(im, ax=axes[1], label="Range (m)")
     fig.savefig(path, dpi=120)

@@ -72,22 +72,38 @@ def ray_box_intersect(origin, direction, center, size, yaw_deg=0.):
 
 
 def shell_quads(scene):
-    """Yield (surface id, inward-wound quad), splitting the wall around the doorway."""
+    """Yield (surface id, inward-wound quad), splitting walls around the union of their rectangular apertures."""
     size = scene["room"]["size_xyz"]
-    opening = next((o for o in scene["objects"] if o["id"] == "door_opening" and "wall" in o), {})
+    def apertures(objects):
+        for o in objects:
+            if o.get("wall") and (not o.get("solid", True) or o.get("cutout")):
+                yield o
+            yield from apertures(o.get("children", ()))
+
+    openings = list(apertures(scene["objects"]))
     for name, (u, v, w, high, reverse) in zip(SURFACES, (
             (0,1,2,False,False), (0,1,2,True,True), (0,2,1,False,True),
             (0,2,1,True,False), (1,2,0,False,False), (1,2,0,True,True))):
         U, V = size[u], size[v]
         rects = [(0, U, 0, V)]
-        if opening and name == "wall_" + opening["wall"].removeprefix("wall_"):
+        for opening in openings:
+            if name != "wall_" + opening["wall"].removeprefix("wall_"):
+                continue
             extents = opening.get("extents", {})
-            horizontal = opening.get("u_range", extents.get("xy"[u]))
-            vertical = opening.get("z_range", extents.get("z"))
-            if horizontal is not None and vertical is not None:
-                a, b = np.clip(horizontal, 0, U)
-                c, d = np.clip(vertical, 0, V)
-                rects = [(0,a,0,V), (b,U,0,V), (a,b,0,c), (a,b,d,V)]
+            span = opening.get("u_range", extents.get("xy"[u]))
+            height = opening.get("z_range", extents.get("z"))
+            if span is None or height is None:
+                continue
+            remaining = []
+            for left, right, bottom, top in rects:
+                a, b = max(left, span[0]), min(right, span[1])
+                c, d = max(bottom, height[0]), min(top, height[1])
+                if a >= b or c >= d:
+                    remaining.append((left, right, bottom, top))
+                else:
+                    remaining.extend([(left,a,bottom,top), (b,right,bottom,top),
+                                      (a,b,bottom,c), (a,b,d,top)])
+            rects = remaining
         for left, right, bottom, top in rects:
             if right <= left or top <= bottom:
                 continue
@@ -98,7 +114,7 @@ def shell_quads(scene):
             yield name, q[::-1] if reverse else q
 
 
-def cast_scene(scene, origin, directions, boxes):
+def cast_scene(scene, origin, directions, boxes, *, transmit_glass=False):
     """Nearest opaque surface distance and object name. Rays escaping a door return inf."""
     d = np.asarray(directions)
     origin = np.asarray(origin)
@@ -114,7 +130,7 @@ def cast_scene(scene, origin, directions, boxes):
                ((lo-1e-9 <= point) & (point <= hi+1e-9)).all(axis=-1))
         best[hit], ids[hit] = t[hit], name
     for box in boxes:
-        if box["solid"]:
+        if box["solid"] and not (transmit_glass and box.get("lidar_transmission", 0) > 0):
             t = ray_box_intersect(origin, d, box["center"], box["size"], box["yaw_deg"])
             hit = t < best
             best[hit], ids[hit] = t[hit], box["id"]
@@ -161,7 +177,7 @@ def schema_problems(scene):
             return
         values = {**inherited, **raw}
         check(values, path, id=str, shape=str, center=3, size=3, **props)
-        for key, kind in dict(yaw_deg=float, solid=bool, children=list,
+        for key, kind in dict(yaw_deg=float, solid=bool, cutout=bool, children=list,
                               specular=float, lidar_transmission=float, wall=str, u_range=2,
                               z_range=2, hinge_xy=2, open_angle_deg=float, extents=dict).items():
             if key in raw:
@@ -270,7 +286,7 @@ def validate_scene(scene):
     el = np.deg2rad(10)
     rays = np.column_stack((np.cos(az)*np.cos(el), np.sin(az)*np.cos(el),
                             np.full(360, np.sin(el))))
-    ranges, _ = cast_scene(scene, scene["sensors"]["mid360"]["position"], rays, boxes)
+    ranges, _ = cast_scene(scene, scene["sensors"]["mid360"]["position"], rays, iter_boxes(scene, expand_children=True), transmit_glass=True)
     if np.mean(ranges >= .5) < .60:
         problems.append(f"mid360 clearance {np.mean(ranges >= .5):.1%} below 60%")
     return problems
