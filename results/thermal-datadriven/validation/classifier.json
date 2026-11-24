@@ -1,0 +1,58 @@
+{
+ "hl_A0": {
+  "synth_vs_real_test": 0.9626984126984126,
+  "real_build_vs_real_test": 0.8064285714285713,
+  "synth_vs_real_test_noise_features_only": 0.9791798941798943,
+  "real_build_vs_real_test_noise_features_only": 0.7155291005291006,
+  "n_frames_real_test": 1512,
+  "n_frames_synth": 1512
+ },
+ "hl_A1lamp": {
+  "synth_vs_real_test": 0.9800000000000001,
+  "real_build_vs_real_test": 0.8044954648526076,
+  "synth_vs_real_test_noise_features_only": 0.7373015873015873,
+  "real_build_vs_real_test_noise_features_only": 0.5915967498110355,
+  "n_frames_real_test": 1638,
+  "n_frames_synth": 1638
+ },
+ "rj_A0": {
+  "synth_vs_real_test": 0.95,
+  "real_build_vs_real_test": 0.9396825396825397,
+  "synth_vs_real_test_noise_features_only": 0.9706349206349207,
+  "real_build_vs_real_test_noise_features_only": 0.8436507936507937,
+  "n_frames_real_test": 378,
+  "n_frames_synth": 378
+ },
+ "rj_A1": {
+  "synth_vs_real_test": 0.9457671957671957,
+  "real_build_vs_real_test": 0.9457671957671957,
+  "synth_vs_real_test_noise_features_only": 0.8814814814814815,
+  "real_build_vs_real_test_noise_features_only": 0.9222222222222223,
+  "n_frames_real_test": 756,
+  "n_frames_synth": 756
+ },
+ "w120_A0": {
+  "synth_vs_real_test": 0.9119047619047619,
+  "real_build_vs_real_test": 0.7235449735449736,
+  "synth_vs_real_test_noise_features_only": 0.9589947089947091,
+  "real_build_vs_real_test_noise_features_only": 0.6880952380952381,
+  "n_frames_real_test": 756,
+  "n_frames_synth": 756
+ },
+ "w120_A2": {
+  "synth_vs_real_test": 0.9515873015873015,
+  "real_build_vs_real_test": 0.832010582010582,
+  "synth_vs_real_test_noise_features_only": 0.7804232804232804,
+  "real_build_vs_real_test_noise_features_only": 0.7722222222222223,
+  "n_frames_real_test": 945,
+  "n_frames_synth": 945
+ },
+ "rj_A1_transplant": {
+  "synth_vs_real_test": 0.9915343915343915,
+  "real_build_vs_real_test": 0.9457671957671957,
+  "synth_vs_real_test_noise_features_only": 0.9746031746031747,
+  "real_build_vs_real_test_noise_features_only": 0.9222222222222223,
+  "n_frames_real_test": 756,
+  "n_frames_synth": 756
+ }
+}
