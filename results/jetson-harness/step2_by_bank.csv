@@ -1,0 +1,1 @@
+config,backend,mode,bie_in_loop,bank,n_trials,HT,n_det,n_candidates,any_det_frac,rate_hz,total_ms,total_no_bie_ms,bie_ms,convert_ms,yolo_inf_ms,yolo_post_ms,yolo_wall_ms,power_w,energy_per_unit_j,gpu_pct,temp_tj_c,total_ms_sd,total_no_bie_ms_sd,bie_ms_sd,convert_ms_sd,yolo_inf_ms_sd,yolo_post_ms_sd,yolo_wall_ms_sd,power_w_sd,energy_per_unit_j_sd,gpu_pct_sd,temp_tj_c_sd,kind
