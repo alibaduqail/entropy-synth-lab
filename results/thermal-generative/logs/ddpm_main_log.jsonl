@@ -1,0 +1,44 @@
+{"step": 200, "loss": 0.3740867857635021, "train_seconds": 77.35311675071716, "chunk": 0}
+{"step": 400, "loss": 0.14245790153741836, "train_seconds": 150.5270974636078, "chunk": 0}
+{"step": 600, "loss": 0.11781334292143583, "train_seconds": 223.7588815689087, "chunk": 0}
+{"step": 800, "loss": 0.10598391886800528, "train_seconds": 296.9987015724182, "chunk": 0}
+{"step": 1000, "loss": 0.10138381605967879, "train_seconds": 370.20959520339966, "chunk": 0}
+{"step": 1200, "loss": 0.09727633131667972, "train_seconds": 443.4321880340576, "chunk": 0}
+{"step": 1400, "loss": 0.08998686119914055, "train_seconds": 516.6820967197418, "chunk": 0}
+{"step": 1600, "loss": 0.0875796183384955, "train_seconds": 589.9707956314087, "chunk": 0}
+{"step": 1800, "loss": 0.08416022181510925, "train_seconds": 663.1923747062683, "chunk": 0}
+{"step": 2000, "loss": 0.08104040555655956, "train_seconds": 736.4161684513092, "chunk": 0}
+{"step": 2200, "loss": 0.08001884615048765, "train_seconds": 809.6295948028564, "chunk": 0}
+{"step": 2400, "loss": 0.08271942004561424, "train_seconds": 882.8873314857483, "chunk": 0}
+{"step": 2600, "loss": 0.0795944669470191, "train_seconds": 956.1245446205139, "chunk": 0}
+{"step": 2775, "chunk_end": true, "chunk": 0, "chunk_seconds": 1020.1911215782166, "steps_in_chunk": 2775, "it_per_s": 2.72007856303153, "mean_vdd_in_w": 18.81783234714004, "train_seconds": 1020.1911215782166, "nonfinite": 0, "eval_train": 0.056187847862020135, "eval_test": 0.06675136974081397, "peak_gpu_mem_mb": 1924.48291015625, "batch": 32, "amp": true, "exclude": "", "wall_total_s": 1065.263738155365}
+{"step": 2800, "loss": 0.08542055308818818, "train_seconds": 1034.0409626960754, "chunk": 1}
+{"step": 3000, "loss": 0.0731909248419106, "train_seconds": 1110.8511807918549, "chunk": 1}
+{"step": 3200, "loss": 0.0731406076811254, "train_seconds": 1187.754118680954, "chunk": 1}
+{"step": 3400, "loss": 0.07459538951516151, "train_seconds": 1264.7390019893646, "chunk": 1}
+{"step": 3600, "loss": 0.0722229371406138, "train_seconds": 1341.6538734436035, "chunk": 1}
+{"step": 3800, "loss": 0.07164407908916473, "train_seconds": 1418.6001117229462, "chunk": 1}
+{"step": 4000, "loss": 0.06959918661974371, "train_seconds": 1495.4742105007172, "chunk": 1}
+{"step": 4200, "loss": 0.06978010285645724, "train_seconds": 1572.3718028068542, "chunk": 1}
+{"step": 4400, "loss": 0.07402076417580247, "train_seconds": 1649.3424944877625, "chunk": 1}
+{"step": 4600, "loss": 0.0675206692609936, "train_seconds": 1726.3084626197815, "chunk": 1}
+{"step": 4800, "loss": 0.07131084439344704, "train_seconds": 1803.2737820148468, "chunk": 1}
+{"step": 5000, "loss": 0.06710316646844149, "train_seconds": 1880.237249135971, "chunk": 1}
+{"step": 5200, "loss": 0.06803697891533375, "train_seconds": 1957.177733182907, "chunk": 1}
+{"step": 5400, "loss": 0.06682744299061597, "train_seconds": 2034.1152927875519, "chunk": 1}
+{"step": 5572, "chunk_end": true, "chunk": 1, "chunk_seconds": 1080.071748495102, "steps_in_chunk": 2797, "it_per_s": 2.5896427750259634, "mean_vdd_in_w": 18.314100652376514, "train_seconds": 2100.2628700733185, "nonfinite": 0, "eval_train": 0.04843951226212084, "eval_test": 0.05898118927143514, "peak_gpu_mem_mb": 1953.3515625, "batch": 32, "amp": true, "exclude": "", "wall_total_s": 1122.7698543071747}
+{"step": 5600, "loss": 0.07154715393802949, "train_seconds": 2115.2753698825836, "chunk": 2}
+{"step": 5800, "loss": 0.06645897109992802, "train_seconds": 2191.9735770225525, "chunk": 2}
+{"step": 6000, "loss": 0.06752879437059164, "train_seconds": 2268.875638961792, "chunk": 2}
+{"step": 6200, "loss": 0.06257753229700029, "train_seconds": 2345.7462289333344, "chunk": 2}
+{"step": 6400, "loss": 0.0671636843122542, "train_seconds": 2422.5055775642395, "chunk": 2}
+{"step": 6600, "loss": 0.06436154874041676, "train_seconds": 2499.297417640686, "chunk": 2}
+{"step": 6800, "loss": 0.06369553134776652, "train_seconds": 2576.1491067409515, "chunk": 2}
+{"step": 7000, "loss": 0.06354863413609564, "train_seconds": 2652.983950614929, "chunk": 2}
+{"step": 7200, "loss": 0.0645565230306238, "train_seconds": 2729.8071286678314, "chunk": 2}
+{"step": 7400, "loss": 0.063782439250499, "train_seconds": 2806.715040922165, "chunk": 2}
+{"step": 7600, "loss": 0.06343124474398792, "train_seconds": 2883.543314218521, "chunk": 2}
+{"step": 7800, "loss": 0.06491174573078752, "train_seconds": 2960.362483024597, "chunk": 2}
+{"step": 8000, "loss": 0.06461881386116147, "train_seconds": 3037.119515657425, "chunk": 2}
+{"step": 8200, "loss": 0.06377920123748482, "train_seconds": 3113.9807019233704, "chunk": 2}
+{"step": 8373, "chunk_end": true, "chunk": 2, "chunk_seconds": 1080.0833134651184, "steps_in_chunk": 2801, "it_per_s": 2.593318464493118, "mean_vdd_in_w": 18.323603914259085, "train_seconds": 3180.346183538437, "nonfinite": 0, "eval_train": 0.045203572139143944, "eval_test": 0.056456858990713954, "peak_gpu_mem_mb": 1953.3515625, "batch": 32, "amp": true, "exclude": "", "wall_total_s": 1123.5168447494507}

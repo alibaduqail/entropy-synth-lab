@@ -1,0 +1,14 @@
+{"step": 200, "loss": 0.15045635359361767, "train_seconds": 47.995657205581665, "chunk": 0}
+{"step": 400, "loss": 0.04042183250188827, "train_seconds": 91.59428215026855, "chunk": 0}
+{"step": 600, "loss": 0.028766253674402834, "train_seconds": 135.19406461715698, "chunk": 0}
+{"step": 800, "loss": 0.02412451642565429, "train_seconds": 178.78824472427368, "chunk": 0}
+{"step": 1000, "loss": 0.019813980655744672, "train_seconds": 222.3625602722168, "chunk": 0}
+{"step": 1200, "loss": 0.023729387018829585, "train_seconds": 266.001140832901, "chunk": 0}
+{"step": 1400, "loss": 0.017604802204295993, "train_seconds": 309.6120936870575, "chunk": 0}
+{"step": 1600, "loss": 0.014812954664230348, "train_seconds": 353.24156737327576, "chunk": 0}
+{"step": 1800, "loss": 0.013658587727695704, "train_seconds": 396.81405687332153, "chunk": 0}
+{"step": 2000, "loss": 0.012326113763265312, "train_seconds": 440.4435739517212, "chunk": 0}
+{"step": 2200, "loss": 0.012577922726050019, "train_seconds": 484.0399808883667, "chunk": 0}
+{"step": 2400, "loss": 0.01141444553155452, "train_seconds": 527.6980812549591, "chunk": 0}
+{"step": 2600, "loss": 0.0107832102291286, "train_seconds": 571.3732397556305, "chunk": 0}
+{"step": 2732, "chunk_end": true, "chunk": 0, "chunk_seconds": 600.1703615188599, "steps_in_chunk": 2732, "it_per_s": 4.552040845679363, "mean_vdd_in_w": 18.739191275167784, "train_seconds": 600.1703615188599, "nonfinite": 0, "eval_train": 0.007400205009616911, "eval_test": 0.054162039421498775, "peak_gpu_mem_mb": 1303.99267578125, "batch": 64, "amp": true, "exclude": "", "wall_total_s": 640.010008096695}

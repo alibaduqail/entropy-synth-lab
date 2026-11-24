@@ -1,0 +1,13 @@
+[
+ {
+  "kind": "vae",
+  "steps": 1,
+  "guidance": 1.0,
+  "batch": 32,
+  "frames": 1536,
+  "seconds": 1.908552068984136,
+  "frames_per_s": 804.7985826331508,
+  "mean_vdd_in_w": 15.409,
+  "joules_per_frame": 0.019146405488917027
+ }
+]
