@@ -220,9 +220,9 @@ def add_person(ps, pos_xy, yaw=0.0, pose="standing", phase=0.0, height=1.75, ins
     kw = dict(inst=inst)
     pelvis = np.array([0, 0, hip_h + 0.05 * s])
     chest = np.array([0, lean * 0.3, sh_h - 0.12 * s])
-    ps.add_capsule(W(pelvis), W(chest), 0.145 * s, t["torso"], label=CLOTH, tex=0.7, name="torso", **kw)
+    ps.add_capsule(W(pelvis), W(chest), 0.145 * s, t["torso"], label=CLOTH, tex=0.4, name="torso", **kw)
     ps.add_capsule(W([-0.15 * s, 0, sh_h - 0.03 * s]), W([0.15 * s, 0, sh_h - 0.03 * s]), 0.075 * s,
-                   t["torso"], label=CLOTH, tex=0.7, name="shoulders", **kw)
+                   t["torso"], label=CLOTH, tex=0.4, name="shoulders", **kw)
     ps.add_capsule(W([0, 0.01, sh_h]), W([0, 0.015, sh_h + 0.10 * s]), 0.052 * s, t["neck"],
                    emissivity=0.98, label=SKIN, tex=0.3, name="neck", **kw)
     head_c = np.array([0, 0.02, sh_h + 0.20 * s])
@@ -237,8 +237,8 @@ def add_person(ps, pos_xy, yaw=0.0, pose="standing", phase=0.0, height=1.75, ins
         kn = hip + thigh * d1
         d2 = _limb_dir(hip_flex[k] - knee[k])
         an = kn + shin * d2
-        ps.add_capsule(W(hip), W(kn), 0.075 * s, t["legs"], label=CLOTH, tex=0.5, name="thigh", **kw)
-        ps.add_capsule(W(kn), W(an), 0.052 * s, t["legs"] - 0.5, label=CLOTH, tex=0.5, name="shin", **kw)
+        ps.add_capsule(W(hip), W(kn), 0.075 * s, t["legs"], label=CLOTH, tex=0.35, name="thigh", **kw)
+        ps.add_capsule(W(kn), W(an), 0.052 * s, t["legs"] - 0.5, label=CLOTH, tex=0.35, name="shin", **kw)
         ps.add_capsule(W(an + [0, 0, 0.0]), W(an + [0, 0.14 * s, -0.02 * s]), 0.045 * s, t["shoes"],
                        label=CLOTH, tex=0.3, name="foot", **kw)
         sh = np.array([side * 0.20 * s, 0, sh_h - 0.03 * s])
@@ -246,7 +246,7 @@ def add_person(ps, pos_xy, yaw=0.0, pose="standing", phase=0.0, height=1.75, ins
         el = sh + uarm * u
         f = _limb_dir(sh_flex[k] + elbow[k], sh_abd[k] * 0.3, side if pose != "arms_raised" else -side * 0.5)
         wr = el + farm * f
-        ps.add_capsule(W(sh), W(el), 0.048 * s, t["torso"] + 0.8, label=CLOTH, tex=0.5, name="upper_arm", **kw)
+        ps.add_capsule(W(sh), W(el), 0.048 * s, t["torso"] + 0.8, label=CLOTH, tex=0.35, name="upper_arm", **kw)
         ps.add_capsule(W(el), W(wr), 0.038 * s, t["forearm"], emissivity=0.98, label=SKIN, tex=0.4,
                        name="forearm", **kw)
         hand = wr + 0.07 * s * f

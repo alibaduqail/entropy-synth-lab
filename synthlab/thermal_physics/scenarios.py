@@ -76,12 +76,16 @@ class Scenario:
         self.object_names = []
         n_obj = int(spec.get("n_objects", 0))
         if n_obj:
-            pts = sc.sample_floor_points(self.cam, room, n_obj, self.rng, depth=spec.get("object_depth", (0.7, 3.2)))
-            order = self.rng.permutation(len(sc.WARM_CATALOGUE))
-            for k, (x, y) in enumerate(pts):
-                z = float(self.rng.choice([0.0, 0.3, 0.74, 1.0]))
-                self.object_names.append(sc.add_warm_object(static, int(order[k % len(order)]), (x, y, z), self.rng,
-                                                            inst=-1, stand_temp_c=self.air_c))
+            # nested design: the first n of one fixed list of 16 placements (seeded by object_seed),
+            # so C04 is C02 plus two more objects, etc.
+            orng = np.random.default_rng(int(spec.get("object_seed", 1234)))
+            pts = sc.sample_floor_points(self.cam, room, 16, orng, depth=spec.get("object_depth", (0.8, 3.2)))
+            order = orng.permutation(len(sc.WARM_CATALOGUE))
+            heights = orng.choice([0.0, 0.3, 0.74, 1.0], 16)
+            for k, (x, y) in enumerate(pts[:n_obj]):
+                krng = np.random.default_rng(int(spec.get("object_seed", 1234)) * 100 + k)
+                self.object_names.append(sc.add_warm_object(static, int(order[k % len(order)]), (x, y, float(heights[k])),
+                                                            krng, inst=-1, stand_temp_c=self.air_c))
         # fixed heat lamp (faces away from the camera, toward the far wall)
         lamp = None
         if spec.get("lamp_on") and not spec.get("lamp_held"):

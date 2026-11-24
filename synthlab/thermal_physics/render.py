@@ -15,7 +15,7 @@ from . import radiometry
 from .raycast import Backend, camera_rays, trace, INF, ROOM, FURNITURE, LAMP
 from .scene import PrimSet
 
-N_TEX = 4
+N_TEX = 6
 
 
 def _texture_tables(props, seed):
@@ -50,7 +50,7 @@ class Layer:
 
 class Renderer:
     def __init__(self, room, cam, backend="numpy", device=None, supersample=2, seed=0,
-                 wall_gradient_k_per_m=0.3, ambient_c=None, lut=None):
+                 wall_gradient_k_per_m=0.0, ambient_c=None, lut=None):
         self.room, self.cam = room, dict(cam)
         self.bk = Backend(backend, device)
         self.ss = int(supersample)
@@ -143,8 +143,11 @@ class Renderer:
         d, n, p = self.d[m], st["n"][m], st["p"][m]
         r = d - 2.0 * (d * n).sum(-1, keepdims=True) * n
         o2 = p + 1e-3 * n
-        t, idx, n2 = trace(self.bk, o2, r, st["layer"].prims, self.size)
-        l2, _ = self._shade(st["layer"], t, idx, n2, r, o2, True)
+        if "spec_cache" not in st:                      # static part of the bounce never changes
+            t, idx, n2 = trace(self.bk, o2, r, st["layer"].prims, self.size)
+            l2, _ = self._shade(st["layer"], t, idx, n2, r, o2, True)
+            st["spec_cache"] = (t, l2)
+        t, l2 = st["spec_cache"]
         if dyn_layer is not None:
             td, idd, nd = trace(self.bk, o2, r, dyn_layer.prims, None)
             ld, _ = self._shade(dyn_layer, td, idd, nd, r, o2, False)
@@ -188,14 +191,23 @@ class Renderer:
             l = l.clone() if self.bk.kind != "numpy" else l.copy()
             l[m] = l1
         if dyn_layer is not None:
-            td, idd, nd = trace(self.bk, self.o, self.d, dyn_layer.prims, None)
-            ld, _ = self._shade(dyn_layer, td, idd, nd, self.d, self.o, False)
-            front = td < t
-            safe = xp.where(idd >= 0, idd, xp.zeros_like(idd))
-            l = xp.where(front, ld, l)
-            t = xp.where(front, td, t)
-            label = xp.where(front, dyn_layer.prims["label"][safe], label)
-            inst = xp.where(front, dyn_layer.prims["inst"][safe], inst)
+            if not st["any_spec"]:
+                l = l.clone() if self.bk.kind != "numpy" else l.copy()
+            t, label, inst = [(v.clone() if self.bk.kind != "numpy" else v.copy()) for v in (t, label, inst)]
+            for sub in self._split_by_instance(dynamic):
+                rows = self._screen_rows(sub)             # only rays inside the group's screen bbox
+                if rows is None:
+                    continue
+                lay = Layer(self.bk, sub, self.seed + 1 if dyn_seed is None else dyn_seed)
+                dd = self.d[rows]
+                td, idd, nd = trace(self.bk, self.o, dd, lay.prims, None)
+                ld, _ = self._shade(lay, td, idd, nd, dd, self.o, False)
+                front = td < t[rows]
+                safe = xp.where(idd >= 0, idd, xp.zeros_like(idd))
+                l[rows] = xp.where(front, ld, l[rows])
+                label[rows] = xp.where(front, lay.prims["label"][safe], label[rows])
+                inst[rows] = xp.where(front, lay.prims["inst"][safe], inst[rows])
+                t[rows] = xp.where(front, td, t[rows])
         tau = None
         if fog and (fog.get("beta_per_m", 0.0) > 0 or fog.get("plume")):
             tau = self._fog_tau(t, fog, time_s)
@@ -207,6 +219,53 @@ class Renderer:
         if tau is not None:
             out["tau_mean"] = float(self.bk.to_numpy(tau).mean())
         return out
+
+    @staticmethod
+    def _split_by_instance(ps):
+        groups = {}
+        for kind in ("box", "ell", "cap"):
+            for item in getattr(ps, kind):
+                g = groups.setdefault(item[-1]["inst"], PrimSet())
+                getattr(g, kind).append(item)
+        return list(groups.values())
+
+    def _screen_rows(self, ps, margin_px=3.0):
+        """Flat ray indices inside the screen-space bounding box of a primitive group
+        (bounding spheres projected through the pinhole). None if entirely off-screen."""
+        cen, rad = [], []
+        for c, h, _, _ in ps.box:
+            cen.append(c), rad.append(np.linalg.norm(h))
+        for c, r, _, _ in ps.ell:
+            cen.append(c), rad.append(np.max(r))
+        for a, b, r, _ in ps.cap:
+            cen.append(0.5 * (a + b)), rad.append(0.5 * np.linalg.norm(b - a) + r)
+        cen, rad = np.array(cen), np.array(rad)
+        cam, ss = self.cam, self.ss
+        w, h = self.w * ss, self.h * ss
+        f = (w / 2.0) / np.tan(np.radians(cam["hfov_deg"]) / 2.0)
+        fwd = np.asarray(cam["look_dir"], float)
+        fwd = fwd / np.linalg.norm(fwd)
+        right = np.cross(fwd, [0, 0, 1.0])
+        right /= np.linalg.norm(right)
+        up = np.cross(right, fwd)
+        v = cen - np.asarray(cam["position"], float)
+        z = v @ fwd
+        if np.any((z < rad + 0.05) & (z > -rad)):                # something touches the camera plane
+            x0, x1, y0, y1 = 0, w, 0, h
+        else:
+            keep = z > 0
+            if not keep.any():
+                return None
+            z, v, rad = z[keep], v[keep], rad[keep]
+            rp = f * rad / (z - rad) * 1.15 + margin_px * ss
+            px = w / 2.0 + f * (v @ right) / z
+            py = h / 2.0 - f * (v @ up) / z
+            x0, x1 = int(max(0, np.floor((px - rp).min()))), int(min(w, np.ceil((px + rp).max())))
+            y0, y1 = int(max(0, np.floor((py - rp).min()))), int(min(h, np.ceil((py + rp).max())))
+            if x1 <= x0 or y1 <= y0:
+                return None
+        rows = (np.arange(y0, y1)[:, None] * w + np.arange(x0, x1)[None, :]).ravel()
+        return self.bk.ints(rows)
 
     def person_boxes(self, out, min_pixels=6):
         """Bounding boxes [x0,y0,x1,y1] in native pixels for each visible person instance."""
