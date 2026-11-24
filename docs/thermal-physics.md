@@ -127,9 +127,53 @@ people count). The complexity sweep saturates above 8 objects (blocks already co
 objects above 50 C clip in the fixed 10-50 C BIE scale). C01 is almost equal to C00 because the single
 object drawn for this seed is a mug, which covers only a few pixels (or is occluded) from this pose.
 
-### Cost on the Jetson  [pending: `jetson_bank_runs.json`, `cost_vs_ht.png`]
+### Cost on the Jetson  [`jetson_bank_runs.json` (per trial), `jetson_bank_summary.json` (per bank), `cost_vs_ht.png`]
 
-## 5. Limits
+Shared harness `~/synthlab/harness/run_thermal_bank.py` (jetson-harness track): TLinear -> 8 bit -> BIE ->
+YOLOv8n PyTorch CUDA FP32 (the original pipeline), unpaced, 5 s warmup + 30 s measured, 2 repeats per bank,
+under `tools/jetson.sh measured`, MAXN_SUPER. 17 synthetic + 5 real banks = 44 trials, all `ok`.
+Power = tegrastats VDD_IN mean over the measured window.
+
+| | synthetic banks (n = 17) | real recordings (n = 5) |
+|---|---|---|
+| HT range | 0.017 - 0.194 (11x) | 0.013 - 0.099 |
+| total per-frame time | 63.94 - 64.50 ms | 64.11 - 64.59 ms |
+| YOLO inference | 27.6 - 30.6 ms | 26.6 - 30.6 ms |
+| YOLO post-processing (NMS etc.) | 1.68 - 4.57 ms | 1.65 - 5.86 ms |
+| BIE (HT) stage itself | 26.2 - 26.7 ms (constant, 41 % of the loop) | same |
+| VDD_IN power | 7.11 - 7.26 W (idle 4.7-4.9 W) | 7.12 - 7.24 W |
+| trial-to-trial SD (same bank) | <= 0.17 ms, <= 0.03 W | |
+
+Across the 17 synthetic banks: Pearson r(HT, total ms) = +0.23, r(HT, power) = +0.03, r(HT, YOLO inference)
+= -0.05, but r(detections, YOLO post ms) = +0.99 and r(detections, total ms) = +0.83. The fog banks B0-B3
+(HT -39 % from B0 to B3) cost 63.98 / 64.04 / 64.09 / 64.18 ms and 7.13 / 7.13 / 7.12 / 7.12 W.
+Lamp on vs off: HT 0.194 vs 0.017, 64.20 vs 64.17 ms, 7.163 vs 7.158 W.
+
+What this says: **in this pipeline the cost follows the number of YOLO detections, not HT**; the
+whole spread is ~0.6 ms (1 %) and ~0.15 W (2 %). Inference time drops a little when detections appear
+while post-processing rises (likely CUDA-sync time moving between the two timers), so their sum is flat.
+The earlier finding r(HT, yolo_ms) = 0.70 on the 279-trial sweep is consistent with this if HT and
+detections co-varied there.
+
+Big caveat: **YOLO rarely sees the simulated people**. Person detected in 0 % of frames for the standing
+person (B0-B3), 9 % (A1 walking), 29 % (A2), 0 % (A3), versus 57-100 % in the real recordings. So these
+physics banks under-drive detection-dependent cost; they are good for testing HT and the BIE stage, not
+for driving YOLO's per-detection load. (C04 triggers one false detection per frame on a warm object.)
+
+## 5. What it means for the hypotheses
+- **Hyp A (complexity raises HT and power):** HT rises with people, warm objects and the lamp (0.017 -> up to
+  0.19, but not monotone: A2 < A1, C sweep saturates above 8 objects). Power and latency do not follow
+  HT (spread <= 2 %); they follow detections. Thermal side of A: HT yes, power no (for this pipeline).
+- **Hyp B (fog: HL up, HT flat, power up):** simulated HT is not flat - it falls 4 / 14 / 34 % at B1 / B2 / B3.
+  Plain fixed-scale Shannon is flatter (-1 to -3 %). Thermal cost under fog is flat (64.0-64.2 ms,
+  7.12-7.13 W), so any power rise in Experiment B would have to come from the LiDAR side.
+- **Hyp C (knee):** nothing to see on the thermal side; there is no slope to bend.
+- **Null:** supported for the thermal pipeline: a fixed compute graph gives constant cost except for the
+  detection-count-dependent NMS/post-processing (~1.7 -> 5.9 ms).
+- Design flag: the BIE stage itself costs 26.5 ms per frame (41 % of the loop) and is HT-independent;
+  measuring entropy is a larger cost than anything entropy changes.
+
+## 6. Limits
 - Appearance validated against 5 real recording groups only, none taken from the room_v1 camera pose.
 - People, lamp, materials and temperatures are assumptions; HT absolute values differ from real by up to 49 %.
 - Fog constants are literature values, no real fog recording exists to validate.

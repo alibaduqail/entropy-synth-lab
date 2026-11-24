@@ -171,7 +171,7 @@ def cost():
                (("A0-A3 people", "tab:red"), ("B0-B3 fog", "tab:blue"), ("C00-C16 warm objects", "tab:green"),
                 ("lamp off/on", "tab:orange"), ("real recordings", "k"))]
     ax[0].legend(handles=handles, fontsize=7)
-    fig.suptitle("Jetson Orin Nano: cost vs thermal entropy for physically-based synthetic banks", fontsize=11)
+    fig.suptitle("Jetson Orin Nano: cost vs thermal entropy (pytorch FP32, 2 x 30 s per bank). NOTE zoomed y-axes: total time varies <1 %, power <2 %", fontsize=11)
     fig.tight_layout()
     fig.savefig(f"{RES}/cost_vs_ht.png", dpi=110)
     plt.close(fig)
