@@ -92,5 +92,4 @@ obscurant changes the input to a thermal-plus-LiDAR pipeline.
 
 Items read only as search summaries or through a secondary source are marked in each file. The
 main ones: the EVADE and DetStorm papers (read via the survey), the LWIR extinction coefficient
-(0.13-0.15 m^2/g assumed), the Livox fog-chamber study, the exact Ultralytics zero-candidate
-branch, Ayunts Eq. 5 from the publisher PDF, and all room-reconstruction accuracy claims.
+(0.13-0.15 m^2/g assumed), the Livox fog-chamber study, Ayunts Eq. 5 from the publisher PDF, and all room-reconstruction accuracy claims.

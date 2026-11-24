@@ -1,0 +1,8 @@
+/home/jetsonnano/.local/lib/python3.10/site-packages/ultralytics/utils/nms.py:13:def non_max_suppression(
+/home/jetsonnano/.local/lib/python3.10/site-packages/ultralytics/utils/nms.py:24:    max_nms: int = 30000,
+/home/jetsonnano/.local/lib/python3.10/site-packages/ultralytics/utils/nms.py:47:        max_nms (int): Maximum number of boxes for NMS.
+/home/jetsonnano/.local/lib/python3.10/site-packages/ultralytics/utils/nms.py:76:    xc = prediction[:, 4:mi].amax(1) > conf_thres  # candidates
+/home/jetsonnano/.local/lib/python3.10/site-packages/ultralytics/utils/nms.py:81:    time_limit = 2.0 + max_time_img * bs  # seconds to quit after
+/home/jetsonnano/.local/lib/python3.10/site-packages/ultralytics/utils/nms.py:108:        if not x.shape[0]:
+/home/jetsonnano/.local/lib/python3.10/site-packages/ultralytics/utils/nms.py:137:        if n > max_nms:  # excess boxes
+/home/jetsonnano/.local/lib/python3.10/site-packages/ultralytics/utils/nms.py:138:            filt = x[:, 4].argsort(descending=True)[:max_nms]  # sort by confidence and remove excess boxes

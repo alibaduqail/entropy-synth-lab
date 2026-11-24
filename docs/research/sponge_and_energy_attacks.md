@@ -98,9 +98,11 @@ that needs a matched-detection-count test.
   torchvision is already imported, else pure-torch `TorchNMS`) -> `i[:max_det]`. Time limit
   `2.0 + max_time_img * bs` seconds. If the output's last dimension is 6 or `end2end` is set,
   NMS is skipped. `max_det` caps what leaves NMS, not the work NMS does [S1].
-  Zero-candidate frames: as I recall the loop skips an image with no candidates
-  (`if not x.shape[0]: continue`), which would explain a 0-vs->=1 step; this line was not
-  confirmed in tonight's fetch (unverified).
+  Zero-candidate frames: the Jetson's installed Ultralytics 8.3.226 has the early-exit test
+  `if not x.shape[0]:` at `utils/nms.py` line 108, before box conversion and NMS, and the same
+  `xc`, `time_limit` and `max_nms` lines as above (grep saved in
+  `results/research/jetson_ultralytics_nms_grep.txt`). That fits the audit track's 0-vs->=1
+  detection step.
 - Other items named in [S1] and not fetched directly: SlowPerception (Ma et al., arXiv
   2406.05800); DetStorm (Muller et al., "Investigating physical latency attacks against
   camera-based perception", IEEE S&P 2025); Groundswell (Xia, Gao, Shi, VehicleSec 2026: sticker
