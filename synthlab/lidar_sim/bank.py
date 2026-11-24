@@ -83,7 +83,7 @@ def fog_for(condition, base, alpha=None, plume_alpha=None, **kw):
 
 
 def generate(condition, n_frames, seed=0, scene_path=None, alpha=None, plume_alpha=None,
-             fog_kw=None, sensor_kw=None, backend="numpy", start_frame=0, debug=True):
+             fog_kw=None, sensor_kw=None, backend="numpy", start_frame=0, debug=True, thin=1.0):
     """Yield (frame dict, label dict) for n_frames consecutive 100 ms frames."""
     base = Scene.load(scene_path)
     sp = SensorParams(**(sensor_kw or {}))
@@ -93,6 +93,12 @@ def generate(condition, n_frames, seed=0, scene_path=None, alpha=None, plume_alp
         t0 = time.perf_counter()
         sc, n_people = build_scene(base, condition, t=i / sp.frame_hz)
         fr = simulate_frame(sc, i, rng, sp, fog, backend, debug=debug)
+        if thin < 1.0:                                  # control: random point thinning
+            m = rng.random(fr["xyz"].shape[0]) < thin
+            for key in ("xyz", "intensity", "tag"):
+                fr[key] = fr[key][m]
+            if debug:
+                fr["n_fog"] = int((fr.pop("is_fog")[m]).sum())
         lab = dict(frame=i, n_people=n_people, fog_alpha=fog.alpha, plume_alpha=fog.plume_alpha,
                    n_points=int(fr["xyz"].shape[0]), gen_ms=(time.perf_counter() - t0) * 1e3)
         if debug:
@@ -114,7 +120,7 @@ def write_bank(out, condition, n_frames, seed=0, **kw):
     man = dict(generator="synthlab.lidar_sim.bank", sensor="Livox Mid-360 (simulated)",
                condition=condition, seed=seed, n_frames=n_frames, frame_s=0.1,
                scene=os.path.basename(base.path), backend=kw.get("backend", "numpy"),
-               fog=fog.describe(), sensor_params=sensor_describe(SensorParams(**(kw.get("sensor_kw") or {}))),
+               thin=kw.get("thin", 1.0), fog=fog.describe(), sensor_params=sensor_describe(SensorParams(**(kw.get("sensor_kw") or {}))),
                frame_convention="xyz in sensor frame: x forward, y left, z up [m]",
                tag_bits="bits 0-1 glue, bits 2-3 particle (rain/fog/dust); 0 normal, 1 medium, 2 low conf",
                gen_ms_per_frame_mean=float(np.mean([l["gen_ms"] for l in labels])),
@@ -152,11 +158,12 @@ def main():
     ap.add_argument("--xi-r2", type=float, default=None)
     ap.add_argument("--tau-h", type=float, default=None)
     ap.add_argument("--backend", default="numpy", choices=["numpy", "torch"])
+    ap.add_argument("--thin", type=float, default=1.0, help="control: keep this fraction of points")
     a = ap.parse_args()
     fk = {k: v for k, v in dict(return_mode=a.return_mode, xi_r2=a.xi_r2, tau_h=a.tau_h).items()
           if v is not None}
     man = write_bank(a.out, a.condition, a.windows * 10, a.seed, scene_path=a.scene, alpha=a.alpha,
-                     plume_alpha=a.plume_alpha, fog_kw=fk, backend=a.backend)
+                     plume_alpha=a.plume_alpha, fog_kw=fk, backend=a.backend, thin=a.thin)
     print("bank %s: %d frames, %.1f ms/frame, mean %.0f pts/frame, fog MOR %.1f m" % (
         a.out, man["n_frames"], man["gen_ms_per_frame_mean"],
         np.mean([l["n_points"] for l in man["frames"]]), alpha_to_mor(man["fog"]["alpha"])))

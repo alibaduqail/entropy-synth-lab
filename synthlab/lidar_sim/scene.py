@@ -8,6 +8,7 @@ All geometry is in WORLD coordinates (m, z up); `Scene.to_sensor` converts to th
 """
 import glob
 import json
+import math
 import os
 import re
 from dataclasses import dataclass, field
@@ -167,19 +168,26 @@ class Scene:
             k = 0
             for b in self.boxes:
                 k += 1
+                v = b.center - o
+                dist, rad = float(np.linalg.norm(v)), float(np.linalg.norm(b.size)) / 2
+                if dist > rad * 1.01:                 # bounding-cone prefilter
+                    sub = np.flatnonzero(d @ (v / dist) >= math.sqrt(1.0 - (rad / dist) ** 2) - 1e-9)
+                    if sub.size == 0:
+                        continue
+                else:
+                    sub = np.arange(n)
                 lo, hi = b.center - b.size / 2, b.center + b.size / 2
-                t1, t2 = (lo - o) * inv, (hi - o) * inv
+                ds, invs = d[sub], inv[sub]
+                t1, t2 = (lo - o) * invs, (hi - o) * invs
                 tn, tf = np.minimum(t1, t2), np.maximum(t1, t2)
                 tn = np.where(np.isnan(tn), -np.inf, tn)
                 tf = np.where(np.isnan(tf), np.inf, tf)
                 a_in = np.argmax(tn, axis=1)
-                tnear, tfar = tn[np.arange(n), a_in], tf.min(axis=1)
-                hit = (tnear < tfar) & (tnear > 1e-6) & (tnear < t)
-                t = np.where(hit, tnear, t)
-                cosi = np.where(hit, np.abs(d[np.arange(n), a_in]), cosi)
-                refl = np.where(hit, b.refl, refl)
-                pid = np.where(hit, k, pid)
-        t, cosi, refl = t.copy(), cosi.copy(), refl.copy()
+                rs = np.arange(sub.size)
+                tnear, tfar = tn[rs, a_in], tf.min(axis=1)
+                hit = (tnear < tfar) & (tnear > 1e-6) & (tnear < t[sub])
+                h = sub[hit]
+                t[h], cosi[h], refl[h], pid[h] = tnear[hit], np.abs(ds[rs, a_in])[hit], b.refl, k
         for c in self.capsules:
             k += 1
             sub = np.flatnonzero(_cone_xy(o, d, c.xy, c.r))      # cheap azimuth prefilter
