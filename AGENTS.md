@@ -77,3 +77,15 @@ Your final message is read by the lead who builds a 9 AM slideshow. Make it a ti
 what you built, what you measured (numbers with units and n), what it means for hypotheses
 A/B/C/null, what is unverified, the 2-3 best figures (paths), and the branch name + last commit.
 Also keep `docs/<track>.md` current as you go, so partial progress survives.
+
+## Data hand-off formats (so tracks interoperate)
+- Thermal frame bank: `~/synthlab/<track>/banks/<bank_name>/frames.npy` on the Jetson =
+  uint16 array (N,120,160) in Lepton TLinear units (0.01 K per count, e.g. 29515 = 22.0 C),
+  plus `manifest.json` (generator, parameters, seed, n_frames, optional per-frame labels:
+  n_people, boxes, fog_level, lamp_on ...). N is typically 96-256.
+- LiDAR bank: `~/synthlab/<track>/banks/<bank_name>/frame_00000.npz ...` each one 100 ms
+  Mid-360 frame with `xyz` float32 (M,3) in sensor frame, `intensity` uint8, `tag` uint8
+  (Livox tag byte; bits 2-3 = particle/fog flag), plus `manifest.json`.
+- Shared Jetson harness (owned by the jetson-harness track) is installed at
+  `~/synthlab/harness/` on the Jetson; `python3 ~/synthlab/harness/run_thermal_bank.py --help`
+  and `run_lidar_bank.py --help`. If it is not there yet, keep building and check again later.
