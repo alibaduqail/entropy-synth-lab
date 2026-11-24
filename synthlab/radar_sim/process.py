@@ -138,6 +138,7 @@ class FrameResult:
     n_clusters: int
     n_tracks: int
     timings_ms: Dict[str, float] = field(default_factory=dict)
+    zd_sub: Optional[np.ndarray] = None   # (n_sub, range, n_virtual): block means over chirps
 
 
 class Processor:
@@ -145,11 +146,13 @@ class Processor:
                  cfar_train: int = 8, doppler_thr_db: float = 12.0, n_az_fft: int = 64,
                  max_points: int = 1200, cluster_eps_m: float = 0.35, cluster_min_pts: int = 3,
                  min_range_m: float = 0.25, keep_maps: bool = True,
-                 cfar_mode: str = "caso", group_doppler: bool = False):
+                 cfar_mode: str = "caso", group_doppler: bool = False,
+                 n_sub: int = 0):
         self.cfg = cfg
         self.cfar_thr_db, self.cfar_guard, self.cfar_train = cfar_thr_db, cfar_guard, cfar_train
         self.doppler_thr_db = doppler_thr_db
         self.cfar_mode, self.group_doppler = cfar_mode, group_doppler
+        self.n_sub = n_sub
         self.n_az_fft = n_az_fft
         self.max_points = max_points
         self.cluster_eps_m, self.cluster_min_pts = cluster_eps_m, cluster_min_pts
@@ -173,6 +176,8 @@ class Processor:
         self.el_rx = (np.ones((cfg.n_tx, 1), dtype=int) * np.arange(cfg.n_rx))[row1][order1]
         self.el_pos = self.az_idx[row1][order1]
         self.tracker = Tracker(cfg.frame_period_s)
+        # flattened (slot*n_rx + rx) indices of the 8-element azimuth row, in azimuth order
+        self.az_flat = self.az_slots * cfg.n_rx + self.az_rx
 
     # ------------------------------------------------------------------
     def process(self, cube: np.ndarray) -> FrameResult:
@@ -224,7 +229,14 @@ class Processor:
         else:
             rd_total = det
         zd = mean.reshape(cfg.n_tx * cfg.n_rx, cfg.n_samples).T
-        return FrameResult(points, rd_total, det, zd, len(di), ncl, len(tracks), tm)
+        zd_sub = None
+        if self.n_sub:
+            # diagnostics for the phase-based stillness metric (outside the timed chain)
+            blk = cfg.n_loops // self.n_sub
+            zs = rf[:blk * self.n_sub].reshape(self.n_sub, blk, cfg.n_tx * cfg.n_rx,
+                                               cfg.n_samples).mean(axis=1)
+            zd_sub = zs.transpose(0, 2, 1)
+        return FrameResult(points, rd_total, det, zd, len(di), ncl, len(tracks), tm, zd_sub)
 
     def _angles(self, dop, det, noise, di, ki) -> np.ndarray:
         cfg = self.cfg
@@ -251,5 +263,6 @@ class Processor:
         r = self.range_axis[ki]
         uy = np.sqrt(np.clip(1.0 - ux ** 2 - uz ** 2, 0.0, 1.0))
         v = self.doppler_axis[di]
-        snr = 10 * np.log10(np.maximum(det[di, ki], 1e-300) / np.maximum(noise[di, ki], 1e-300))
+        snr = 10 * np.log10(np.maximum(det[di, ki].astype(float), 1e-300)
+                            / np.maximum(noise[di, ki].astype(float), 1e-300))
         return np.stack([r * ux, r * uy, r * uz, v, snr, r], axis=1)

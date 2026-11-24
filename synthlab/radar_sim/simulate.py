@@ -93,7 +93,9 @@ class RadarSimulator:
         base = FogState().atten_db_per_m_one_way(f_ghz)
         att = base + s * (self.fog.atten_db_per_m_one_way(f_ghz) - base)
         n_air = 1.0 + s * self.fog.delta_refractivity_ppm(f_ghz) * 1e-6
-        film = 1.0 + s * (self.fog.film_two_way(f_ghz) - 1.0) if self.fog.film_m > 0 else 1.0
+        # conj: in this model a delay is a POSITIVE phase (exp(+j 2 pi f0 tau))
+        film = (1.0 + s * (np.conj(self.fog.film_two_way(f_ghz)) - 1.0)
+                if self.fog.film_m > 0 else 1.0)
         return att, n_air, film, s
 
     # ------------------------------------------------------------------

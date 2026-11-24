@@ -1,0 +1,86 @@
+{
+ "seed": 0,
+ "frame": 11,
+ "panels": {
+  "A0": {
+   "n_det": 0,
+   "h_rd_total_bits": 3.403778188217847,
+   "h_rd_total_norm": 0.25845084067259916,
+   "h_rd_dyn_bits": 13.1074188183003,
+   "h_rd_dyn_norm": 0.995253869468872,
+   "h_points_bits": 0.0
+  },
+  "A1": {
+   "n_det": 2,
+   "h_rd_total_bits": 3.292650946235761,
+   "h_rd_total_norm": 0.2500128851056604,
+   "h_rd_dyn_bits": 12.896028741870166,
+   "h_rd_dyn_norm": 0.9792028990641822,
+   "h_points_bits": 1.0
+  },
+  "A2": {
+   "n_det": 2,
+   "h_rd_total_bits": 3.679135068029924,
+   "h_rd_total_norm": 0.2793588473455241,
+   "h_rd_dyn_bits": 12.21927730857035,
+   "h_rd_dyn_norm": 0.9278167724745697,
+   "h_points_bits": 1.0
+  },
+  "A3": {
+   "n_det": 2,
+   "h_rd_total_bits": 3.817551317495903,
+   "h_rd_total_norm": 0.2898688729873421,
+   "h_rd_dyn_bits": 12.219277201284001,
+   "h_rd_dyn_norm": 0.9278167643282554,
+   "h_points_bits": 1.0
+  },
+  "M3": {
+   "n_det": 30,
+   "h_rd_total_bits": 4.791418416585836,
+   "h_rd_total_norm": 0.36381516341673176,
+   "h_rd_dyn_bits": 4.776566644465568,
+   "h_rd_dyn_norm": 0.3626874597951362,
+   "h_points_bits": 3.1893643477641707
+  },
+  "B0": {
+   "n_det": 2,
+   "h_rd_total_bits": 3.292650946235761,
+   "h_rd_total_norm": 0.2500128851056604,
+   "h_rd_dyn_bits": 12.896028741870166,
+   "h_rd_dyn_norm": 0.9792028990641822,
+   "h_points_bits": 1.0
+  },
+  "B1": {
+   "n_det": 2,
+   "h_rd_total_bits": 3.2933132989396965,
+   "h_rd_total_norm": 0.25006317792842614,
+   "h_rd_dyn_bits": 12.898028315817696,
+   "h_rd_dyn_norm": 0.9793547278671033,
+   "h_points_bits": 1.0
+  },
+  "B2": {
+   "n_det": 2,
+   "h_rd_total_bits": 3.2936076082063495,
+   "h_rd_total_norm": 0.25008552500076103,
+   "h_rd_dyn_bits": 12.899041169784462,
+   "h_rd_dyn_norm": 0.9794316344528777,
+   "h_points_bits": 1.0
+  },
+  "B3": {
+   "n_det": 2,
+   "h_rd_total_bits": 3.2937320999251734,
+   "h_rd_total_norm": 0.25009497772876144,
+   "h_rd_dyn_bits": 12.899847772655319,
+   "h_rd_dyn_norm": 0.9794928802740018,
+   "h_points_bits": 1.0
+  },
+  "M1": {
+   "n_det": 22,
+   "h_rd_total_bits": 4.293498560280122,
+   "h_rd_total_norm": 0.32600782159427005,
+   "h_rd_dyn_bits": 3.2823530907602567,
+   "h_rd_dyn_norm": 0.24923096300098807,
+   "h_points_bits": 2.612650233042266
+  }
+ }
+}
