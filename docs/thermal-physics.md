@@ -100,6 +100,7 @@ frames/s including the sensor model (render + sensor), supersample 2 (default) /
 | B2 fog + person | 1.9 / 8.2 | 19.1 / 22.9 |
 | C16 16 warm objects (static) | 80.0 / 221 | 87.1 / 116 |
 
+A repeat run (n = 24, `renderer_bench_jetson_repeat.json`) agrees within 5 % for every torch row.
 With torch CUDA every condition renders faster than the Lepton's 8.7 fps, so the simulator could feed
 the pipeline live; static scenes are cached (only the sensor model runs per frame). The banks below were
 pre-rendered on the Mac (numpy, `bank_generation_summary_mac_numpy.json`), so rendering is NOT part of
