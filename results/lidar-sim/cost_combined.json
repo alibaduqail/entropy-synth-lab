@@ -1,0 +1,188 @@
+{
+ "campaigns": [
+  "ent_unp"
+ ],
+ "note": "unpaced: windows back to back, so power = loaded power; energy per window = time-weighted VDD_IN x duration / windows (module input, not wall)",
+ "entropy": {
+  "n_banks": 29,
+  "runs_per_bank": [
+   1
+  ],
+  "total_ms": {
+   "r_n_voxel": 0.9922567047029316,
+   "r_H_eigen": 0.3102402260264364,
+   "partial_r_H_eigen_given_n_voxel": 0.4816786304366965,
+   "partial_r_n_voxel_given_H_eigen": 0.9934237877426114,
+   "slope_per_1000_voxels": 33.48249020578759,
+   "clear_A1": 373.6466969375556
+  },
+  "energy_per_window_j": {
+   "r_n_voxel": 0.9914745855057365,
+   "r_H_eigen": 0.30367811544832213,
+   "partial_r_H_eigen_given_n_voxel": 0.40864738679933005,
+   "partial_r_n_voxel_given_H_eigen": 0.9921795781227073,
+   "slope_per_1000_voxels": 0.2125804788786731,
+   "clear_A1": 2.3882338429479413
+  },
+  "energy_above_idle_per_window_j": {
+   "r_n_voxel": 0.9190143387410168,
+   "r_H_eigen": 0.243089379438912,
+   "partial_r_H_eigen_given_n_voxel": 0.02449058783283637,
+   "partial_r_n_voxel_given_H_eigen": 0.9137428191343575,
+   "slope_per_1000_voxels": 0.05332806031115013,
+   "clear_A1": 0.5699881825394021
+  },
+  "power_w": {
+   "r_n_voxel": -0.18855646669308296,
+   "r_H_eigen": -0.14382699419288655,
+   "partial_r_H_eigen_given_n_voxel": -0.1009381892354508,
+   "partial_r_n_voxel_given_H_eigen": -0.15879302347493013,
+   "slope_per_1000_voxels": -0.0026586091260264186,
+   "clear_A1": 6.349655851250691
+  },
+  "matched_count": [
+   {
+    "clear": "thin_clear_012",
+    "fog": "thin_fog1p00_012",
+    "n_voxel": [
+     6255.555555555556,
+     6051.915492957746
+    ],
+    "H_eigen": [
+     0.7960896136300178,
+     1.0291298871742056
+    ],
+    "ms": [
+     168.42065212500125,
+     169.33662609863205
+    ],
+    "ms_per_1000_vox": [
+     26.923372453374977,
+     27.98066600494984
+    ]
+   },
+   {
+    "clear": "thin_clear_025",
+    "fog": "thin_fog1p00_025",
+    "n_voxel": [
+     8369.351851851852,
+     8979.145833333334
+    ],
+    "H_eigen": [
+     0.8081774858214806,
+     1.0326446467447168
+    ],
+    "ms": [
+     225.18110301852747,
+     253.56273902078405
+    ],
+    "ms_per_1000_vox": [
+     26.905441066945055,
+     28.23907125770044
+    ]
+   },
+   {
+    "clear": "A1",
+    "fog": "thin_fog1p00_050",
+    "n_voxel": [
+     11820.28125,
+     12511.129032258064
+    ],
+    "H_eigen": [
+     0.836703610670023,
+     1.0398188840098763
+    ],
+    "ms": [
+     373.6466969375556,
+     395.44142941972933
+    ],
+    "ms_per_1000_vox": [
+     31.61064352318652,
+     31.60717377305782
+    ]
+   }
+  ],
+  "levels": {
+   "B0 (=A1)": {
+    "total_ms": 373.6466969375556,
+    "power_w": 6.349655851250691,
+    "idle_power_w": 4.834214285714286,
+    "energy_per_window_j": 2.3882338429479413,
+    "energy_above_idle_per_window_j": 0.5699881825394021,
+    "n_person_candidates": -1.0,
+    "n_voxel": 11820.28125,
+    "H_eigen": 0.836703610670023
+   },
+   "B1": {
+    "total_ms": 479.9423713600845,
+    "power_w": 6.343785825101598,
+    "idle_power_w": 4.7225714285714275,
+    "energy_per_window_j": 3.062497611821657,
+    "energy_above_idle_per_window_j": 0.782650172245951,
+    "n_person_candidates": -1.0,
+    "n_voxel": 15338.4,
+    "H_eigen": 0.8888942533336172
+   },
+   "B2": {
+    "total_ms": 591.9091816192251,
+    "power_w": 6.369186293802646,
+    "idle_power_w": 4.820071428571429,
+    "energy_per_window_j": 3.770516611040213,
+    "energy_above_idle_per_window_j": 0.9170658653910473,
+    "n_person_candidates": -1.0,
+    "n_voxel": 19347.714285714286,
+    "H_eigen": 0.9310073015830799
+   },
+   "B3": {
+    "total_ms": 571.9907347147888,
+    "power_w": 6.359051335179483,
+    "idle_power_w": 4.686000000000001,
+    "energy_per_window_j": 3.653685310225052,
+    "energy_above_idle_per_window_j": 0.9612759265774148,
+    "n_person_candidates": -1.0,
+    "n_voxel": 17123.238095238095,
+    "H_eigen": 1.0440319287009017
+   },
+   "alpha 0.45": {
+    "total_ms": 740.9314112943214,
+    "power_w": 6.331802168191366,
+    "idle_power_w": 4.665999999999999,
+    "energy_per_window_j": 4.709713947200624,
+    "energy_above_idle_per_window_j": 1.2390550104468527,
+    "n_person_candidates": -1.0,
+    "n_voxel": 22797.29411764706,
+    "H_eigen": 0.9766009537830748
+   },
+   "alpha 3.0": {
+    "total_ms": 263.99150110845096,
+    "power_w": 6.425796042463711,
+    "idle_power_w": 4.925571428571429,
+    "energy_per_window_j": 1.6968276073124098,
+    "energy_above_idle_per_window_j": 0.39615675918120485,
+    "n_person_candidates": -1.0,
+    "n_voxel": 7477.021739130435,
+    "H_eigen": 1.0215887444413407
+   },
+   "P3 plume": {
+    "total_ms": 506.7611852081579,
+    "power_w": 6.384957732454794,
+    "idle_power_w": 4.815571428571429,
+    "energy_per_window_j": 3.2570018068271356,
+    "energy_above_idle_per_window_j": 0.8005525545018018,
+    "n_person_candidates": -1.0,
+    "n_voxel": 15533.791666666666,
+    "H_eigen": 0.910086133572428
+   },
+   "A3 clutter": {
+    "total_ms": 368.4939426664531,
+    "power_w": 6.629238429470884,
+    "idle_power_w": 4.6893571428571414,
+    "energy_per_window_j": 2.463057881171944,
+    "energy_above_idle_per_window_j": 0.7207524581842597,
+    "n_person_candidates": -1.0,
+    "n_voxel": 11374.575757575758,
+    "H_eigen": 0.8525588497558485
+   }
+  }
+ }
+}
