@@ -457,10 +457,10 @@ bounded null or a fused-pipeline effect, whichever the data give."
 
 - Nothing was measured tonight; all numbers are from existing recordings on one Orin Nano, one model,
   PyTorch FP32. TensorRT, FP16 or another detector may behave differently.
-- The step in post-processing is observed, not explained at code level. I did not profile Ultralytics
-  to confirm which function takes the 1.9 ms. The research track recalls an early `continue` for images
-  with no candidates in the Ultralytics NMS loop, which would fit, but could not confirm it; grep the
-  installed 8.3.226 on the Jetson.
+- The step in post-processing now has a code-level cause, found by the research track (not re-verified
+  here): in the Jetson's installed Ultralytics 8.3.226, `utils/nms.py` line 108 is `if not x.shape[0]:`,
+  an early exit for an image with zero candidates before box conversion and NMS (its grep output:
+  `results/research/jetson_ultralytics_nms_grep.txt`, branch `research`). I did not profile it myself.
 - The cause of the live state jump at A1 run 11 is unknown.
 - The idle baseline is 9 samples. The battery arithmetic assumes the module is the only load.
 - LiDAR statements rest on 5 pilot trials on the AGX and on reading the scripts; I did not have the
