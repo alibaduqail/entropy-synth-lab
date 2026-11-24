@@ -112,6 +112,13 @@ def test_runners_end_to_end(tmp_path):
     assert rc == 1 and summary["problems"] == ["tegrastats not available: no power data"]
     assert summary["frames"] == 20 and summary["HT"]["mean"] > 0
     assert (out / "frames.csv").read_text().count("\n") == 21
+    out = tmp_path / "thermal_nobie"
+    run_thermal_bank.main(["--bank", str(tmp_path / "banks" / "thermal_blobs"), "--out", str(out),
+                           "--seconds", "0.5", "--warmup", "0", "--idle-seconds", "0", "--no-bie",
+                           "--backend", "none", "--no-tegrastats", "--unpaced"])
+    nobie = json.loads((out / "summary.json").read_text())
+    assert nobie["HT"]["offline"] and nobie["HT"]["mean"] == pytest.approx(summary["HT"]["mean"], rel=0.05)
+    assert nobie["stages_ms"]["bie_ms"]["mean"] < 0.05 and not nobie["bie_in_loop"]
     out = tmp_path / "lidar_out"
     run_lidar_bank.main(["--bank", str(tmp_path / "banks" / "lidar_room_fog"), "--out", str(out),
                          "--seconds", "2", "--warmup", "0", "--idle-seconds", "0", "--unpaced",

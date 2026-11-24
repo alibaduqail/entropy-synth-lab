@@ -32,7 +32,7 @@ HARNESS = Path(__file__).resolve().parent
 DEFAULT_PT = Path("/home/jetsonnano/yolov8n.pt")
 DEFAULT_ENGINE = HARNESS / "models" / "yolov8n_fp16_480x640.engine"
 STAGES = ["convert_ms", "bie_ms", "prep_ms", "yolo_pre_ms", "yolo_inf_ms", "yolo_post_ms",
-          "yolo_wall_ms", "yolo_extract_ms", "total_ms"]
+          "yolo_wall_ms", "yolo_extract_ms", "total_ms", "total_no_bie_ms"]
 
 
 class Detector:
@@ -47,6 +47,9 @@ class Detector:
         self.raw = None
         if backend == "none":
             return
+        if backend == "tensorrt":
+            import build_trt_engine
+            build_trt_engine.add_tensorrt_path()
         import torch
         from ultralytics import YOLO
         self.torch = torch
@@ -108,19 +111,25 @@ class Detector:
         return out
 
 
-def process_frame(raw, detector):
+NO_BIE = {"value": float("nan"), "global_sd": float("nan")}
+
+
+def process_frame(raw, detector, with_bie=True):
+    """with_bie=False leaves the entropy (HT) stage out of the measured process, to
+    separate the cost of measuring entropy from the cost of the detection workload."""
     t0 = time.perf_counter()
     temp_c = tp.raw_to_celsius(raw)
     gray = tp.radiometric_bie_image(raw)
     t1 = time.perf_counter()
-    bie = tp.block_image_entropy(gray)
+    bie = tp.block_image_entropy(gray) if with_bie else NO_BIE
     t2 = time.perf_counter()
     frame = tp.yolo_frame_from_thermal(gray)
     t3 = time.perf_counter()
     det = detector(frame)
     t4 = time.perf_counter()
     return {"convert_ms": (t1 - t0) * 1e3, "bie_ms": (t2 - t1) * 1e3,
-            "prep_ms": (t3 - t2) * 1e3, **det, "total_ms": (t4 - t0) * 1e3,
+            "prep_ms": (t3 - t2) * 1e3, **det, "any_det": int(det["n_det"] > 0),
+            "total_ms": (t4 - t0) * 1e3, "total_no_bie_ms": (t4 - t0 - (t2 - t1)) * 1e3,
             "HT": bie["value"], "mean_c": float(temp_c.mean()), "max_c": float(temp_c.max()),
             "gray_sd": bie["global_sd"]}
 
@@ -134,6 +143,10 @@ def run_trial(bank, detector, out, args, bank_info):
     logger = tm.TegraLogger(out / "tegrastats.csv", args.tegra_interval_ms) if use_tegra else None
     period = 1.0 / args.fps
     n = len(bank)
+    with_bie = not args.no_bie
+    if not with_bie and "bank_HT_offline" not in bank_info:  # HT computed outside the timing
+        bank_info = {**bank_info, "bank_HT_offline": float(np.mean(
+            [tp.block_image_entropy(tp.radiometric_bie_image(raw))["value"] for raw in bank]))}
     rows = []
     if logger:
         logger.start()
@@ -145,7 +158,7 @@ def run_trial(bank, detector, out, args, bank_info):
         while time.monotonic() - warm_start < args.warmup:
             if not args.unpaced:
                 tm.wait_until(warm_start + index * period)
-            process_frame(bank[index % n], detector)
+            process_frame(bank[index % n], detector, with_bie)
             index += 1
         warm_frames = index
         base_mono, base_unix = time.monotonic(), time.time()
@@ -163,7 +176,7 @@ def run_trial(bank, detector, out, args, bank_info):
             offset = time.monotonic() - base_mono
             row = {"frame": index, "bank_frame": index % n, "unix_time": time.time(),
                    "offset_s": offset, "lateness_ms": late * 1e3}
-            row.update(process_frame(bank[index % n], detector))
+            row.update(process_frame(bank[index % n], detector, with_bie))
             rows.append(row)
             index += 1
         if not args.unpaced:
@@ -180,7 +193,8 @@ def run_trial(bank, detector, out, args, bank_info):
     duration = end_mono - base_mono
     col = lambda key: np.asarray([r[key] for r in rows], dtype=float)
     summary = {"status": "complete", **bank_info,
-               "backend": args.backend, "mode": "unpaced" if args.unpaced else "paced",
+               "backend": args.backend, "bie_in_loop": with_bie,
+               "any_det_frac": float(col("any_det").mean()), "mode": "unpaced" if args.unpaced else "paced",
                "target_fps": None if args.unpaced else args.fps,
                "seconds": args.seconds, "warmup_s": args.warmup, "warmup_frames": warm_frames,
                "frames": len(rows), "duration_s": duration, "achieved_fps": len(rows) / duration,
@@ -193,6 +207,8 @@ def run_trial(bank, detector, out, args, bank_info):
                "detector": getattr(detector, "info", {"backend": "none"}),
                "excluded": "camera acquisition, USB transfer, disk I/O; bank looped from RAM",
                "power_note": "tegrastats VDD_IN = module input power, not wall power"}
+    if summary["HT"] is None:
+        summary["HT"] = {"mean": bank_info["bank_HT_offline"], "offline": True}
     problems = []
     if abs((end_unix - base_unix) - duration) > 0.25:
         problems.append("wall clock jumped during the measured window")
@@ -278,6 +294,8 @@ def build_parser():
     ap.add_argument("--tegra-interval-ms", type=int, default=200)
     ap.add_argument("--no-tegrastats", action="store_true")
     ap.add_argument("--no-candidates", action="store_true", help="skip the pre-NMS candidate count")
+    ap.add_argument("--no-bie", action="store_true",
+                    help="leave the entropy (BIE/HT) stage out of the measured loop")
     ap.add_argument("--max-frames", type=int, default=0, help="use only the first K bank frames")
     return ap
 
