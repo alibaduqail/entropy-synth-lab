@@ -7,7 +7,7 @@
 set -u
 export PYTHONWARNINGS=ignore PYTHONDONTWRITEBYTECODE=1
 H=~/synthlab/harness; kind="$1"; O=${CMP_OUT:-~/synthlab/jetson-harness/runs/cmp}/$kind
-PER=${PER:-16}
+PER=${PER:-40}
 mkdir -p "$O"
 if [ ! -s "$O/banks.txt" ]; then
   if [ "$kind" = thermal ]; then ls -d ~/synthlab/*/banks/*/frames.npy | xargs -n1 dirname

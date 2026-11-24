@@ -11,4 +11,4 @@ name="${backend}_${mode}"; extra=""
 python3 $H/run_matrix.py --kind thermal --round "$round" --seed 2026 \
     --out ~/synthlab/jetson-harness/runs/ctl/$name \
     --banks $B/real_* $B/ctl_flat $B/ctl_noise_2K $B/ctl_noise_8K $B/mvp_objects_* $B/mvp_noise_16 \
-    -- --backend "$backend" --seconds 12 --warmup 3 --idle-seconds 2 $extra 2>&1 | grep -v -i warn
+    -- --backend "$backend" --seconds 10 --warmup 3 --idle-seconds 2 $extra 2>&1 | grep -v -i warn

@@ -10,14 +10,11 @@ nch() { msg=$("$J" run "bash ~/synthlab/harness/jobs/cmp_chunk.sh $1 list"); log
         echo "$msg" | awk '{print $3}'; }
 NT=$(nch thermal); NL=$(nch lidar)
 for b in $(seq "$first" "$last"); do
-  maxc=$(( NT > NL ? NT : NL ))
-  for c in $(seq 0 $((maxc - 1))); do
-    for kind in thermal lidar; do
-      lim=$NT; [ "$kind" = lidar ] && lim=$NL
-      [ "$c" -ge "$lim" ] && continue
-      log "block $b $kind chunk $c"
-      "$J" measured "bash ~/synthlab/harness/jobs/cmp_chunk.sh $kind $b $c"
-    done
+  for c in $(seq 0 $((NT - 1))); do
+    cmd="bash \$HOME/synthlab/harness/jobs/cmp_chunk.sh thermal $b $c"
+    [ "$c" = 0 ] && cmd="$cmd; bash \$HOME/synthlab/harness/jobs/cmp_chunk.sh lidar $b 0"
+    log "block $b chunk $c"
+    "$J" measured "$cmd"
   done
 done
 log "cmp queue done"
