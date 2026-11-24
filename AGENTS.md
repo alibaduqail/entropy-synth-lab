@@ -89,3 +89,13 @@ Also keep `docs/<track>.md` current as you go, so partial progress survives.
 - Shared Jetson harness (owned by the jetson-harness track) is installed at
   `~/synthlab/harness/` on the Jetson; `python3 ~/synthlab/harness/run_thermal_bank.py --help`
   and `run_lidar_bank.py --help`. If it is not there yet, keep building and check again later.
+
+## Cost rules (added 22:30 after the first wave hit the usage limit)
+- You are resuming a track that an earlier agent started. Its code, results and notes are in your
+  worktree (some uncommitted) and on the Jetson. Do NOT redo finished work: read `git log`,
+  `git status`, `docs/<track>.md` and file listings first, then continue.
+- Be token-frugal: read files in parts, never dump large outputs or data into your context
+  (use head/tail/wc, write to files), keep tool output short, no exploratory rewrites,
+  prefer one script run over many small probes. Stop when the listed deliverables are done.
+- Codex CLI: only where the owner required it (3D spatial generation: gpt-6.2-astra, medium
+  effort). Pass the effort explicitly; never the default xhigh. As few calls as possible.
