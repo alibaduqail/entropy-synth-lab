@@ -1,0 +1,35 @@
+{
+  "_note": "PROVISIONAL room estimated by eye from 5 phone photos (reference_local/room_*.jpg). Dimensions are guesses (+-0.4 m). A refined room_v1.json from the room-3d track replaces this; code must load any file with this schema.",
+  "units": "m", "up": "z", "origin": "south-west floor corner",
+  "room": {"size_xyz": [2.7, 3.5, 2.7], "air_temp_c": 22.5,
+    "surfaces": {
+      "floor":   {"material": "carpet",        "emissivity": 0.95, "temp_c": 22.0, "lidar_reflectivity": 0.25},
+      "ceiling": {"material": "acoustic_tile", "emissivity": 0.92, "temp_c": 23.0, "lidar_reflectivity": 0.70},
+      "wall_north": {"material": "painted_drywall_teal",  "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.45},
+      "wall_south": {"material": "painted_drywall_white", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.80},
+      "wall_west":  {"material": "painted_drywall_white", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.80},
+      "wall_east":  {"material": "painted_drywall_white", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.80}
+    }},
+  "objects": [
+    {"id": "tv", "shape": "box", "center": [1.35, 3.46, 1.50], "size": [1.25, 0.06, 0.72], "material": "glass_lcd_off", "emissivity": 0.90, "specular": 0.5, "temp_c": 23.0, "lidar_reflectivity": 0.08},
+    {"id": "desk_top", "shape": "box", "center": [1.20, 2.55, 0.73], "size": [1.50, 0.70, 0.04], "material": "laminate_wood", "emissivity": 0.90, "temp_c": 22.5, "lidar_reflectivity": 0.55},
+    {"id": "desk_modesty_panel", "shape": "box", "center": [1.20, 2.88, 0.45], "size": [1.50, 0.03, 0.55], "material": "laminate_wood", "emissivity": 0.90, "temp_c": 22.5, "lidar_reflectivity": 0.55},
+    {"id": "door", "shape": "box", "center": [2.68, 0.60, 1.05], "size": [0.05, 0.95, 2.10], "material": "wood_veneer", "emissivity": 0.90, "temp_c": 22.5, "lidar_reflectivity": 0.50},
+    {"id": "chair_mesh", "shape": "box", "center": [0.75, 1.95, 0.50], "size": [0.55, 0.55, 0.95], "material": "fabric_plastic", "emissivity": 0.93, "temp_c": 22.5, "lidar_reflectivity": 0.20},
+    {"id": "chair_green", "shape": "box", "center": [1.45, 1.90, 0.45], "size": [0.50, 0.50, 0.85], "material": "plastic", "emissivity": 0.93, "temp_c": 22.5, "lidar_reflectivity": 0.40},
+    {"id": "monitor_on_floor", "shape": "box", "center": [2.15, 2.75, 0.30], "size": [0.50, 0.08, 0.40], "material": "lcd_on", "emissivity": 0.90, "temp_c": 30.0, "lidar_reflectivity": 0.10},
+    {"id": "jetson", "shape": "box", "center": [1.30, 2.45, 0.78], "size": [0.10, 0.08, 0.05], "material": "electronics", "emissivity": 0.85, "temp_c": 45.0, "lidar_reflectivity": 0.20},
+    {"id": "sensor_box_stack", "shape": "box", "center": [1.75, 2.60, 0.93], "size": [0.25, 0.25, 0.36], "material": "cardboard", "emissivity": 0.92, "temp_c": 22.5, "lidar_reflectivity": 0.60}
+  ],
+  "sensors": {
+    "_note": "Sensor rig sits on the box stack on the desk, looking roughly -y (toward the open floor / door side).",
+    "lepton35": {"position": [1.75, 2.50, 1.12], "look_dir": [0.0, -1.0, -0.05], "hfov_deg": 57.0, "vfov_deg": 44.0, "width": 160, "height": 120, "fps": 8.7},
+    "mid360":   {"position": [1.75, 2.60, 1.16], "forward": [0.0, -1.0, 0.0], "hfov_deg": 360.0, "vfov_deg": [-7.0, 52.0], "points_per_s": 200000, "frame_hz": 10},
+    "iwr6843isk": {"position": [1.75, 2.48, 1.05], "boresight": [0.0, -1.0, 0.0], "az_fov_deg": 120, "el_fov_deg": 30}
+  },
+  "dynamic_slots": {
+    "person_mark": [1.35, 1.10, 0.0],
+    "heat_lamp":  {"position": [0.60, 1.40, 1.00], "temp_c": 180.0, "note": "250 W-class heat lamp used as thermal entropy injector in Experiment A"},
+    "fog_source": {"position": [1.35, 1.60, 0.30], "note": "ultrasonic mist maker for Experiment B (not yet run in real life)"}
+  }
+}

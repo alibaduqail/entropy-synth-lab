@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.DS_Store
+.claude/
+reference_local/
+data_local/
+*.npy
+*.npz
+!results/**/*.npz
+*.pt
+*.engine
+*.onnx
+.venv/
