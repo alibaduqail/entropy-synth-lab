@@ -80,7 +80,7 @@ def fig_fog(out):
             ax[1].text(m, 2e-5, name, rotation=90, va="bottom", ha="right", fontsize=8, color="green")
     ax[1].axhline(1.0, color="red", ls="--", lw=1); ax[1].text(0.012, 1.15, "1 dB", color="red", fontsize=8)
     ax[1].set_ylim(1e-5, 3); ax[1].set_xlabel("liquid water content (g/m³)")
-    ax[1].set_ylabel("two-way attenuation (dB)"); ax[1].set_title("62 GHz fog loss over room paths")
+    ax[1].set_ylabel("two-way attenuation (dB)"); ax[1].set_title("63 GHz fog loss over room paths")
     ax[1].legend(fontsize=8, loc="lower right")
     for (k, v), col in zip(c["fog_rcs_dbsm_2m"].items(), ["#6a51a3", "#cb181d"]):
         ax[2].semilogx(c["lwc"], v, color=col, label="mist in one cell, %s drops" % k.replace("um", " µm"))
