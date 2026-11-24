@@ -1,0 +1,94 @@
+# Thermal track: physically-based Lepton 3.5 simulator (`thermal-physics`)
+
+Branch `thermal-physics`. Code `synthlab/thermal_physics/`, tests `tests/test_thermal_physics.py`,
+numbers + figures `results/thermal-physics/`. Every number below comes from a file in that folder
+(file named in brackets). "Real" = Ali's Lepton 3.5 recordings under the original project's `data/`
+(read only); "sim" = this simulator.
+
+## 1. What it is
+
+Scene -> 8-14 um band radiance at the aperture -> Lepton 3.5 sensor model -> uint16 TLinear frames.
+
+| Stage | Status | Detail |
+|---|---|---|
+| Planck band radiance 8-14 um, T<->L LUT | physics | flat spectral response ASSUMED (camera reports black-body-equivalent T, so only the shape of T<->L matters) |
+| Geometry | room `scene/room_v1.json` from the room-3d track (photo-guided, +-0.3 m; camera pose ASSUMED) | ray caster: boxes, ellipsoids, capsules (numpy or torch/CUDA) |
+| Surface emission / reflection | physics | `L = e(th) B(T) + (1-e(th)) [(1-s) B(T_amb) + s L_spec]`, Schlick grazing roll-off, single specular bounce |
+| Material temps / emissivities | ASSUMED | walls ~air temp, skin 33-34 C, clothing 28-31 C, emissivity 0.90-0.98 |
+| Person | ASSUMED shape | articulated capsules/ellipsoids, poses standing/walking/seated/arms-up |
+| Heat lamp | ASSUMED | hot housing + steady-state warm patch on the surfaces it faces |
+| Fog | physics + ASSUMED constants | Beer-Lambert `L = tau L_scene + (1-tau) B(T_mist)`, `tau = exp(-beta d)`; beta = 0.14 m^2/g x LWC (literature 0.13-0.15); optional mist cooler than air, optional turbulent plume |
+| Lens PSF | MEASURED from real edges: sigma 0.50 px | literature/datasheet-derived value 0.74-0.79 px (research track) - our edge estimate is sharper; not resolved |
+| Temporal noise (pixel/row/column/flicker, AR(1) rho 0.89) | MEASURED from 5 flat-wall runs | `real_calibration.json` |
+| Fixed-pattern noise, low-order non-uniformity | MEASURED (flat wall) | may partly be the wall itself |
+| Global drift, FFC every ~180 s with 1.8 s gap and post-FFC bump (~165 counts = 1.65 K) | MEASURED (FFC interval from datasheet) | |
+| Output lattice 2.25 counts + dead-band hold (63 % pixels unchanged frame to frame) | MEASURED / TUNED | |
+| Absolute radiometric accuracy | not modelled (datasheet +-5 C) | |
+
+HT is computed with the exact BIE code path of the original `scripts/experimentA.py`
+(fixed 10-50 C -> 8 bit, 15 px blocks) (`synthlab/thermal_physics/bie.py`, test-checked).
+
+## 2. Realism check: real vs simulated  [`validation.json`, `contact_sheet_real_vs_sim.png`, `validation_hist_psd_ht.png`, `validation_temporal_psd.png`]
+
+The real recordings were not taken from the room_v1 camera pose, so each real group was matched with a
+hand-set view preset (air temperature, distance, pose set by eye once, not fitted to the metrics).
+n = 1031 frames per side for the static A0 groups; other groups use their full recordings.
+
+| Condition | mean C real / sim | frame spatial SD K real / sim | histogram W1 (K) | radial PSD rms log10 ratio | HT real / sim (ratio) |
+|---|---|---|---|---|---|
+| flat wall A0 | 21.79 / 21.88 | 0.28 / 0.23 | 0.14 (real-vs-real 0.10) | 0.33 | 0.0153 / 0.0120 (0.79) |
+| empty room A0 | 24.89 / 24.97 | 0.20 / 0.32 | 0.10 (real-vs-real 0.08) | 0.41 | 0.0132 / 0.0198 (1.49) |
+| two seated A1 | 24.48 / 25.51 | 3.13 / 4.14 | 1.24 | 0.25 | 0.0985 / 0.1165 (1.18) |
+| standing person A1 | 27.59 / 26.52 | 1.43 / 1.41 | 1.08 | 0.21 | 0.0724 / 0.0631 (0.87) |
+| person holding lamp A1 (lamp on) | 25.06 / 24.72 | 1.74 / 1.43 | 0.39 | 0.60 | 0.0703 / 0.0545 (0.78) |
+
+Temporal noise (static scenes, NEdT from frame differences): real 24.0 / 23.6 mK vs sim 25.1 / 25.0 mK
+(flat wall / empty room); pixels unchanged frame-to-frame real 63 % vs sim 64 %; AR(1) rho real 0.90 vs sim 0.86.
+
+Where it does NOT match (plain):
+- **HT is within a factor 0.78-1.49 of the real value, not equal.** The A0 < A1 ordering and the size of the
+  people step (HT x5-7) are reproduced; absolute HT per condition is off by up to 49 % (empty room).
+- **Empty room has too much large-scale structure in sim** (spatial SD 0.32 vs 0.20 K, a strong wall/door edge
+  the real view lacks) because the geometry/pose is not the real camera view. Real empty room shows
+  a small hot spot (equipment) the sim lacks.
+- **Noise spatial correlation is too low in sim** for the empty-room recording (neighbour corr 0.26 vs 0.57-0.62);
+  the flat-wall value (0.32-0.42) was the calibration target.
+- **People look like mannequins**: uniform clothing, no hair/folds, faces brighter and more uniform than real
+  (two-seated sim is 1 K warmer on average and has 33 % more spatial SD).
+- **Hand-held lamp is missing a visible hot housing in sim** (real max 39.7 C vs sim 33.6 C) -> lamp-on HT is
+  22 % low and the radial spectrum is the worst match (0.60 log10 rms).
+- PSF: measured sigma 0.50 px is sharper than the 0.74-0.79 px literature value; not reconciled.
+
+## 3. Fog: how flat is the thermal "control"?  [`fog_sweep.json`, `fog_levels_summary.json`, `ht_vs_fog.png`]
+
+Physics: fog makes every pixel a mix of the scene and the mist temperature, so contrast can only shrink
+(unless the mist itself is structured). Study fog levels B1-B3 = beta 0.07 / 0.21 / 0.56 per m
+(LWC 0.5 / 1.5 / 4.0 g/m^3, ASSUMED k = 0.14 m^2/g). 24 frames per configuration, seed 7, room_v1.
+
+| Level | tau (mean over image) | HT one person (change vs B0) | plain Shannon, fixed 10-50 C scale | Shannon, auto-stretched | HT empty room (change) |
+|---|---|---|---|---|---|
+| B0 | 1.00 | 0.0670 | 4.43 bits | 6.20 bits | 0.0162 |
+| B1 | 0.90 | 0.0641 (-4.5 %) | -1.0 % | +0.5 % | -2.8 % |
+| B2 | 0.74 | 0.0574 (-14.4 %) | -1.6 % | +2.3 % | -7.0 % |
+| B3 | 0.46 | 0.0443 (-34.0 %) | -2.6 % | +7.0 % | -9.7 % |
+
+(mist 1 K cooler than air; with mist = air: person HT -4.0 / -12.4 / -31.5 %, empty -3.3 / -9.0 / -13.8 %.)
+A turbulent mist plume (mist -1 K) keeps empty-room HT nearly flat (0.0141-0.0152 for beta 0.035-2,
+vs 0.0162 without fog; at beta 0.56 it is 4 % above uniform fog), i.e. structured fog partly cancels the
+contrast loss in an empty scene; with a person the plume does not help (-38 % at beta 0.56).
+
+Meaning for Hypothesis B: in this physics, **HT is not flat in fog; it falls**, by 4 % (B1), 14 % (B2) and 34 %
+(B3) for one person. Plain global Shannon entropy on the fixed scale is much flatter (-1 to -3 %), and on an
+auto-stretched image it even rises (+0.5 to +7 %) because the stretch amplifies noise. So "thermal is the
+control" holds for light fog only and depends on which entropy is used; for B2-B3 the thermal channel
+moves in the opposite direction to LiDAR (whose 905 nm attenuation is ~5x stronger, research track).
+This is a simulated prediction; it has never been checked against a real fogged Lepton recording.
+Caveat: the room is 2.6 m, so path lengths are short; a larger space would lose contrast faster.
+
+## 4. Jetson banks and cost  [pending: `jetson_bank_runs.json`, `cost_vs_ht.png`, `bench_jetson.json`]
+
+## 5. Limits
+- Appearance validated against 5 real recording groups only, none taken from the room_v1 camera pose.
+- People, lamp, materials and temperatures are assumptions; HT absolute values differ from real by up to 49 %.
+- Fog constants are literature values, no real fog recording exists to validate.
+- No reflection beyond one bounce; no convection plumes from people; no AGC (radiometric TLinear only).
