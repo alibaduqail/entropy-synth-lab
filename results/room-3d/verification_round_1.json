@@ -1,0 +1,205 @@
+{
+  "source": "Original object values transcribed from pass-1 scene before edits; final geometry and clearance checked in this worktree.",
+  "unit": "metres unless indicated",
+  "original_values": {
+    "mesh_center": [
+      0.854,
+      2.24,
+      0.463
+    ],
+    "mesh_size": [
+      0.47,
+      0.43,
+      0.91
+    ],
+    "green_center": [
+      0.855,
+      1.6,
+      0.428
+    ],
+    "green_size": [
+      0.47,
+      0.46,
+      0.84
+    ],
+    "monitor_xy": [
+      1.9,
+      1.86
+    ],
+    "keyboard_secondary_yaw_deg": 0,
+    "keyboard_primary_xy": [
+      1.186,
+      1.75
+    ],
+    "photo_5_position": [
+      1.99,
+      -0.26,
+      1.38
+    ],
+    "desk_apron_count": 0
+  },
+  "final_values": {
+    "chair_mesh": {
+      "center": [
+        0.971,
+        2.23,
+        0.44
+      ],
+      "size": [
+        0.264,
+        0.45,
+        0.864
+      ]
+    },
+    "chair_green": {
+      "center": [
+        0.971,
+        1.6,
+        0.414
+      ],
+      "size": [
+        0.264,
+        0.45,
+        0.8119999999999999
+      ]
+    },
+    "desk_top": {
+      "center": [
+        1.39,
+        1.87,
+        0.724
+      ],
+      "size": [
+        0.56,
+        1.4,
+        0.032
+      ]
+    },
+    "desk_apron_south": {
+      "center": [
+        1.375,
+        1.205,
+        0.605
+      ],
+      "size": [
+        0.426,
+        0.029,
+        0.076
+      ]
+    },
+    "desk_apron_north": {
+      "center": [
+        1.375,
+        2.535,
+        0.605
+      ],
+      "size": [
+        0.426,
+        0.029,
+        0.076
+      ]
+    },
+    "keyboard_primary": {
+      "center": [
+        1.2,
+        1.712,
+        0.755
+      ],
+      "size": [
+        0.118,
+        0.44,
+        0.02
+      ]
+    },
+    "keyboard_secondary": {
+      "center": [
+        1.269,
+        1.251,
+        0.755
+      ],
+      "size": [
+        0.39,
+        0.105,
+        0.02
+      ],
+      "yaw_deg": -34
+    },
+    "monitor_on_floor": {
+      "center": [
+        1.89,
+        1.94,
+        0.289
+      ],
+      "size": [
+        0.44,
+        0.055,
+        0.29
+      ]
+    },
+    "door": {
+      "center": [
+        2.434,
+        0.503,
+        1.191
+      ],
+      "size": [
+        0.042,
+        0.914,
+        2.37
+      ]
+    }
+  },
+  "person_mark": [
+    0.45,
+    0.45,
+    0
+  ],
+  "assumed_room_sigma_m": [
+    0.26,
+    0.32,
+    0.23
+  ],
+  "minimum_top_level_separating_axis_gap_m": 0.005,
+  "chair_to_desk_horizontal_gap_m": 0.007,
+  "top_level_solids": 37,
+  "test_count": 9,
+  "preview_image_scale": 0.5,
+  "alternate_peripherals": {
+    "keyboard_secondary": {
+      "center": [
+        1.95,
+        1.063,
+        0.018
+      ],
+      "size": [
+        0.44,
+        0.12,
+        0.02
+      ],
+      "yaw_deg": -30
+    },
+    "mouse_secondary": {
+      "center": [
+        2.238,
+        0.966,
+        0.027
+      ]
+    },
+    "keyboard_primary": {
+      "center": [
+        1.205,
+        1.302,
+        0.755
+      ],
+      "yaw_deg": -85
+    },
+    "mouse_primary": {
+      "center": [
+        1.48,
+        1.292,
+        0.764
+      ]
+    }
+  },
+  "numpy_scipy_room_max_abs_delta_m": 5.263326512405797e-07
+}

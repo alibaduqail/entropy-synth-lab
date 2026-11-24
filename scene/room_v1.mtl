@@ -1,0 +1,131 @@
+newmtl floor
+Kd 0.6 0.59 0.57
+# emissivity 0.95
+# lidar_reflectivity 0.25
+
+newmtl ceiling
+Kd 0.94 0.94 0.93
+# emissivity 0.92
+# lidar_reflectivity 0.7
+
+newmtl wall_south
+Kd 0.95 0.94 0.92
+# emissivity 0.92
+# lidar_reflectivity 0.8
+
+newmtl wall_north
+Kd 0.6 0.68 0.65
+# emissivity 0.92
+# lidar_reflectivity 0.45
+
+newmtl wall_west
+Kd 0.95 0.94 0.92
+# emissivity 0.92
+# lidar_reflectivity 0.8
+
+newmtl wall_east
+Kd 0.95 0.94 0.92
+# emissivity 0.92
+# lidar_reflectivity 0.8
+
+newmtl glass_lcd_off
+Kd 0.09 0.11 0.12
+# emissivity 0.9
+# lidar_reflectivity 0.08
+
+newmtl wood_veneer
+Kd 0.8 0.64 0.46
+# emissivity 0.9
+# lidar_reflectivity 0.5
+
+newmtl clear_architectural_glass
+Kd 0.45 0.79 0.84
+# emissivity 0.9
+# lidar_reflectivity 0.035
+d 0.3
+
+newmtl black_anodized_aluminium
+Kd 0.15 0.15 0.16
+# emissivity 0.9
+# lidar_reflectivity 0.18
+
+newmtl laminate_wood
+Kd 0.8 0.64 0.46
+# emissivity 0.9
+# lidar_reflectivity 0.55
+
+newmtl painted_steel
+Kd 0.51 0.53 0.54
+# emissivity 0.9
+# lidar_reflectivity 0.38
+
+newmtl black_mesh_fabric
+Kd 0.15 0.15 0.16
+# emissivity 0.93
+# lidar_reflectivity 0.2
+
+newmtl charcoal_mesh
+Kd 0.25 0.26 0.25
+# emissivity 0.93
+# lidar_reflectivity 0.2
+
+newmtl sage_plastic
+Kd 0.53 0.56 0.45
+# emissivity 0.93
+# lidar_reflectivity 0.4
+
+newmtl black_plastic
+Kd 0.15 0.15 0.16
+# emissivity 0.93
+# lidar_reflectivity 0.4
+
+newmtl lcd_on
+Kd 0.22 0.19 0.32
+# emissivity 0.9
+# lidar_reflectivity 0.1
+
+newmtl fabric_plastic
+Kd 0.13 0.14 0.15
+# emissivity 0.93
+# lidar_reflectivity 0.2
+
+newmtl black_enclosure
+Kd 0.15 0.15 0.16
+# emissivity 0.92
+# lidar_reflectivity 0.18
+
+newmtl cardboard
+Kd 0.69 0.52 0.32
+# emissivity 0.92
+# lidar_reflectivity 0.6
+
+newmtl sensor_housing
+Kd 0.84 0.83 0.79
+# emissivity 0.92
+# lidar_reflectivity 0.22
+
+newmtl electronics
+Kd 0.17 0.18 0.19
+# emissivity 0.85
+# lidar_reflectivity 0.2
+
+newmtl white_plastic
+Kd 0.95 0.94 0.92
+# emissivity 0.93
+# lidar_reflectivity 0.4
+
+newmtl red_strobe_plastic
+Kd 0.52 0.2 0.19
+# emissivity 0.93
+# lidar_reflectivity 0.4
+
+newmtl white_paper
+Kd 0.95 0.94 0.92
+# emissivity 0.9
+# lidar_reflectivity 0.35
+
+newmtl painted_drywall_white
+Kd 0.95 0.94 0.92
+# emissivity 0.92
+# lidar_reflectivity 0.8
+

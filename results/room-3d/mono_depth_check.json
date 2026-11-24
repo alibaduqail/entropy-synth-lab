@@ -1,0 +1,38 @@
+{
+ "model": "depth-anything/Depth-Anything-V2-Metric-Indoor-Small-hf",
+ "source": "synthlab/room3d/mono_depth.py (maps in data_local/depth, not in git)",
+ "max_possible_in_room_m": 4.45,
+ "percentiles_m": {
+  "photo_1": {
+   "p5": 2.92,
+   "p50": 4.54,
+   "p95": 6.16,
+   "p99": 7.61
+  },
+  "photo_2": {
+   "p5": 2.86,
+   "p50": 4.54,
+   "p95": 6.11,
+   "p99": 7.93
+  },
+  "photo_3": {
+   "p5": 2.6,
+   "p50": 5.1,
+   "p95": 6.89,
+   "p99": 7.26
+  },
+  "photo_4": {
+   "p5": 2.84,
+   "p50": 4.11,
+   "p95": 5.72,
+   "p99": 5.9
+  },
+  "photo_5": {
+   "p5": 2.34,
+   "p50": 3.21,
+   "p95": 4.15,
+   "p99": 4.59
+  }
+ },
+ "verdict": "Absolute scale biased high ~1.5-2x (p99 5-8 m in a room whose longest interior diagonal is 4.45 m); ultrawide frames are outside the model's training FOV. Use as relative structure only; not used for the fit."
+}
