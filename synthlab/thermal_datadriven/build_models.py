@@ -35,13 +35,13 @@ def main():
         print(name, json.dumps(m.stats)[:300], flush=True)
     # lamp-on background of the hl session (person always present) and heated-surface map
     on_stacks = [dataio.load_stack("hl_on", t) for t in BUILD["hl_on"]]
-    hl_on_bg = layers.occupied_background(on_stacks, models["hl"].bg)
+    hl_on_bg = layers.occupied_background(on_stacks, models["hl"].bg, t_pct=5, trial_pct=10)
     surface = np.clip(hl_on_bg - models["hl"].bg, 0, None)
     from scipy import ndimage as ndi
     surface = ndi.gaussian_filter(surface, 1.0)
-    surface = np.where(surface > 25.0, surface, 0.0).astype(np.float32)
+    surface = np.where(surface > 40.0, surface, 0.0).astype(np.float32)   # > 0.4 K
     np.savez_compressed(MODEL_DIR / "lamp_surface_hl.npz", hl_on_bg=hl_on_bg, surface=surface)
-    summary["lamp_surface_hl"] = {"pixels_gt_0p25K": int((surface > 0).sum()),
+    summary["lamp_surface_hl"] = {"pixels_gt_0p4K": int((surface > 0).sum()),
                                   "max_K": float(surface.max() * 0.01),
                                   "mean_K_over_frame": float(surface.mean() * 0.01)}
     lib = {}

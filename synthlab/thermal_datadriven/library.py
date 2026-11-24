@@ -10,6 +10,7 @@ from scipy import ndimage as ndi
 REPO = Path(__file__).resolve().parents[2]
 DEFAULT_LAYER_DIR = REPO / "data_local" / "thermal_datadriven" / "layers"
 FOCAL_PX = 80.0 / np.tan(np.radians(57.0 / 2))      # 147 px from the 57 deg HFOV
+NO_LAMP_MAX_C = 36.5        # a "no lamp" clip may not contain anything hotter than skin
 BODY_WIDTH_M = 0.42                                  # ASSUMED shoulder width for depth ordering
 
 
@@ -28,6 +29,8 @@ class Track:
         self.present = np.array([m is not None for m in self.meta])
         self.has_lamp = np.array([bool(m and m["lamp_px"] > 0) for m in self.meta])
         self.cut_bottom = np.array([bool(m and m["cut_bottom"]) for m in self.meta])
+        self.max_c = np.array([float(self.fg[i][self.alpha[i] >= 128].max()) * 0.01 - 273.15
+                               if m else np.nan for i, m in enumerate(self.meta)])
         self.area = np.array([m["area"] if m else 0 for m in self.meta])
         w = np.array([m["body_width_px"] if m else np.nan for m in self.meta])
         self.depth_m = FOCAL_PX * BODY_WIDTH_M / np.where(np.isfinite(w), w, np.nan)
@@ -60,7 +63,7 @@ class LayerLibrary:
     def pick_clip(self, rng, n, lamp=None, max_area_frac=0.30, tries=200):
         """Pick (track, frame indices) with the person present >= 90 % of the clip.
 
-        lamp=False -> no frame of the clip shows lamp pixels; lamp=True -> most frames do.
+        lamp=False -> nothing in the clip is hotter than skin (no lit or warm lamp); lamp=True -> most frames do.
         """
         for _ in range(tries):
             tr = self.tracks[int(rng.integers(len(self.tracks)))]
@@ -70,7 +73,7 @@ class LayerLibrary:
             if np.median(tr.area[idx]) > max_area_frac * 120 * 160:
                 continue
             lf = tr.has_lamp[idx].mean()
-            if lamp is False and lf > 0:
+            if lamp is False and (lf > 0 or np.nanmax(tr.max_c[idx]) > NO_LAMP_MAX_C):
                 continue
             if lamp is True and lf < 0.5:
                 continue
