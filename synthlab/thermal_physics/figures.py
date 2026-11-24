@@ -142,7 +142,7 @@ def cost():
     d = json.load(open(f"{RES}/jetson_bank_runs.json"))
     rows = [r for r in d["rows"] if r.get("mode") == "unpaced"] or d["rows"]
     fig, ax = plt.subplots(1, 3, figsize=(15, 4.4))
-    fam = {"A": "tab:red", "B": "tab:blue", "C": "tab:green", "L": "tab:orange", "R": "k"}
+    fam = {"A": "tab:red", "B": "tab:blue", "C": "tab:green", "L": "tab:orange", "R": "k", "r": "k"}
     for r in rows:
         c = fam.get(r["bank"][0], "0.4")
         for a, key in zip(ax, ("total_ms_mean", "yolo_inf_ms_mean", "power_w")):

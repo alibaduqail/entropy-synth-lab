@@ -28,7 +28,7 @@ def measure_config(scene_name, beta, offset, plume, seed, n_frames, n_renders, s
         spec.update(fog_plume=True, fog_turbulence=0.5)
     scn = Scenario(spec, room_path=scene_path)
     cam = Lepton35(SensorParams(seed=seed), first_ffc_s=1e12)
-    hts, sds, means, rad, tau = [], [], [], None, 1.0
+    hts, sds, means, hfix, hagc, rad, tau = [], [], [], [], [], None, 1.0
     per = max(1, n_frames // n_renders)
     for i in range(n_frames):
         if i % per == 0:
@@ -37,10 +37,13 @@ def measure_config(scene_name, beta, offset, plume, seed, n_frames, n_renders, s
             tau = out.get("tau_mean", 1.0)
         f, _ = cam.capture(rad)
         hts.append(bie.ht_of_raw(f))
+        hfix.append(bie.shannon_entropy(bie.radiometric_bie_image(f)))
+        hagc.append(bie.shannon_entropy(bie.normalize_to_u8(f)))
         sds.append(float(f.std()) / 100.0)
         means.append(float(f.mean()) / 100.0 - 273.15)
     return dict(scene=scene_name, beta_per_m=beta, lwc_g_m3=beta / K_LWIR_M2_PER_G, mist_offset_k=offset, plume=bool(plume),
                 tau_mean=float(tau), ht_mean=float(np.mean(hts)), ht_sd=float(np.std(hts)), n_frames=n_frames,
+                shannon_fixed_bits=float(np.mean(hfix)), shannon_agc_bits=float(np.mean(hagc)),
                 frame_sd_k=float(np.mean(sds)), mean_c=float(np.mean(means)))
 
 
@@ -64,7 +67,7 @@ def main(argv=None):
     with open(a.out, "w") as f:
         json.dump(dict(betas=BETAS, offsets_k=OFFSETS, fog_levels={str(k): v for k, v in FOG_BETA.items()},
                        k_lwir_m2_per_g=K_LWIR_M2_PER_G, seed=a.seed, rows=rows,
-                       note="simulated; scene = newest room JSON; sensor noise on; HT via experimentA BIE"), f, indent=1)
+                       scene_path=a.scene, note="simulated; shannon_fixed = global 8-bit entropy on fixed 10-50 C scale, shannon_agc = on 1-99 pct auto-stretch; sensor noise on; HT via experimentA BIE"), f, indent=1)
 
 
 if __name__ == "__main__":
