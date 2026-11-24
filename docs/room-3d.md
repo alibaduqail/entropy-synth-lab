@@ -1,3 +1,56 @@
+# Room 3D model (track room-3d)
+
+**Final file: `scene/room_v1.json`** (meshes `scene/room_v1.obj`, `.mtl`, `.glb`, rebuilt from it by `python3 -m synthlab.room3d.build_mesh --scene scene/room_v1.json --out scene/room_v1`). Units metres, origin at the SW floor corner, x east, y north, z up; North is the TV wall.
+
+**Model used:** every 3D fit/critique step ran on the Codex CLI model `gpt-6.2-astra` at **medium** reasoning effort (Codex CLI 0.171), as recorded in `scene/room_v1.json` provenance. Claude orchestrated, reviewed and made the small edits listed under v1 changes. No Codex call was made in this wrap-up pass.
+
+## Dimensions and uncertainty (1 sigma, judgmental, from `fit_report.json`)
+
+| Quantity | Value | Uncertainty | Scale reference |
+|---|---|---|---|
+| Interior E-W (x) | 2.56 m | +-0.26 m | desk height 0.74 m (soft); door 0.914 m, doors/leaf, keyboard 0.44 m, TV 0.952 m, switch 1.2 m as cross-checks |
+| Interior S-N (y) | 2.66 m | +-0.32 m | same; south boundary only partly visible |
+| Height (z) | 2.56 m | +-0.23 m | same; door leaf modeled 2.37 m (2.438 m nominal is more consistent) |
+| Sensor stack position | Mid-360 (1.444, 1.484, 1.119) m | +-0.115 m | visible cap in crops |
+| Lepton / radar position | (1.32, 1.43, 1.04) / (1.32, 1.44, 1.01) m | +-0.14 m | ASSUMED pose, aimed SW at torso height toward the mark (0.45, 0.45) |
+
+Rulers disagree: scaling by the door gives 2.54 x 2.67 x 2.50, by the keyboard 2.86 x 2.99 x 2.81, by desk height alone 2.74 x 2.88 x 2.70 (table below). No tape measurement exists, so the whole model could be uniformly off by roughly 5-10 %. Treat the sizes as one scale factor of uncertainty, not independent errors.
+
+## What changed vs room_v0.json
+
+- Room 2.70 x 3.50 x 2.70 (guess) -> 2.56 x 2.66 x 2.56 (fit): about 0.84 m shorter in y.
+- 9 provisional boxes -> 40 objects: desk apron/legs/modesty panel, chair sub-boxes (shell, post, base), keyboards/mice, monitor, TV, bag, fire strobe, thermostat, light switch, door with swing, glass partition with frame, faceted west return.
+- Sensors moved from the desk north end looking -y (1.75, 2.5, 1.1) to the south end of the desk (1.32-1.44, 1.43-1.48, ~1.0-1.1) aimed SW; `person_mark` at (0.45, 0.45), hypothetical heat lamp and fog source positions added.
+- South wall has distinct doorway and glazing apertures instead of a plain wall.
+- Wrap-up fix: `west_return_1` moved from y 0.13 to 0.145 m so it no longer overlaps the glass frame sill/head (the validation test caught this; all 9 tests now pass).
+
+## Validation (wrap-up, `python3.11 tests/test_room3d.py`)
+
+9 of 9 tests pass: schema loads for v0 and v1, every object inside the room, no overlapping top-level solids (5 mm separating-axis gap), sensor origins free and with line of sight to the person mark at feet and torso, OBJ/GLB build, preview renders. v0 is known provisional and is reported, not fixed.
+
+## Monocular depth cross-check (ran, not used in the fit)
+
+Depth Anything V2 Metric-Indoor-Small on the five photos (`results/room-3d/mono_depth_check.json`): median depth 3.2-5.1 m and 99th percentile 4.6-7.9 m, in a room whose longest interior diagonal is 4.45 m. The model overestimates absolute depth about 1.5-2x on these ultrawide frames, so it gives no usable scale; it is consistent with the fitted layout only as relative structure. It does not support or contradict the 2.56 x 2.66 m size.
+
+## Remaining discrepancies (see also the per-photo table below)
+
+- Photo 4 is the weakest: 26 px RMS; the NW floor junction is 34 px off, the curved west return is faceted, and the left wall colour band in the render does not match the photo.
+- Photo 1/2 door hinge corner 14-15 px off; photo 5 bag base 13 px, screen corner 14 px.
+- Chair backs are square, cables and the soft bag are not modeled, the glass width and corridor extent are guesses.
+- Lepton/radar identities and poses are assumed; Mid-360 yaw is assumed.
+- Scale rests on a nominal desk height and door width with no tape measure.
+
+## Capture protocol for a proper scan (about 10 minutes)
+
+1. Before starting: tape-measure one wall's full length (and the door-frame width) and write both down; place the tape or a 1 m rule in view of a photo.
+2. Photograph or note the sensor rig yaw and measure its height from the floor, and the lepton/radar mount orientation.
+3. Turn the lights on, close the door, do not move furniture or people during the scan.
+4. Preferred: an iPhone Pro with LiDAR and a RoomPlan-style app (e.g. Polycam, Scaniverse, Canvas): walk the perimeter slowly, then the middle, scan the ceiling and floor edges; export USDZ/OBJ plus the floor plan.
+5. Also take 60-100 overlapping photos (about 70 % overlap) from at least three heights, covering every wall, corners, ceiling, door, glass, desk and the rig from two sides; avoid pure rotation in place.
+6. Rescale the scan so the measured wall matches the tape value, then compare the other dimensions to the 2.56 x 2.66 x 2.56 m estimate and refit `room_v2.json`.
+
+---
+
 ## Metric estimation (Astra pass 1)
 
 **The adopted interior is 2.56 m east–west × 2.66 m south–north × 2.56 m high.** North is the TV wall. The pass‑1 positional uncertainties of ±0.26, ±0.32 and ±0.23 m are judgmental estimates. Depth is particularly uncertain because the south boundary is only partly visible. The shared model uses metres, with its origin at the southwest floor corner. [Fit report](../results/room-3d/fit_report.json) · [Geometry record](../results/room-3d/verification_round_1.json)

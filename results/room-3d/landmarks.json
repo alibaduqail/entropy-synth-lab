@@ -26,376 +26,263 @@
   },
   "photos": {
     "photo_1": {
-      "image_wh": [
-        1050,
-        1400
-      ],
+      "image_wh": [1050, 1400],
       "landmarks": {
-        "neceil": [
-          143,
-          12
-        ],
-        "nwdesk": [
-          63,
-          855
-        ],
-        "swdesk": [
-          730,
-          838
-        ],
-        "nedesk": [
-          190,
-          730
-        ],
-        "sedesk": [
-          654,
-          714
-        ],
-        "dtop": [
-          720,
-          85
-        ],
-        "dhinge": [
-          1032,
-          82
-        ],
-        "dbot": [
-          652,
-          784
-        ],
-        "dfoot": [
-          834,
-          775
-        ],
-        "switch": [
-          578,
-          519
-        ],
-        "rig": [
-          573,
-          630
-        ],
-        "kN": [
-          392,
-          816
-        ],
-        "kS": [
-          572,
-          813
-        ]
-      }
+        "neceil": [143, 12],
+        "nwdesk": [63, 855],
+        "swdesk": [730, 838],
+        "nedesk": [190, 730],
+        "sedesk": [654, 714],
+        "dtop": [720, 85],
+        "dhinge": [1032, 82],
+        "dbot": [652, 784],
+        "dfoot": [834, 775],
+        "switch": [578, 519],
+        "rig": [573, 630],
+        "kN": [392, 816],
+        "kS": [572, 813]
+      },
+      "n_landmarks": 13
     },
     "photo_2": {
-      "image_wh": [
-        1050,
-        1400
-      ],
+      "image_wh": [1050, 1400],
       "landmarks": {
-        "neceil": [
-          156,
-          42
-        ],
-        "nwdesk": [
-          79,
-          868
-        ],
-        "swdesk": [
-          740,
-          851
-        ],
-        "nedesk": [
-          201,
-          740
-        ],
-        "sedesk": [
-          665,
-          721
-        ],
-        "dtop": [
-          722,
-          98
-        ],
-        "dhinge": [
-          1033,
-          91
-        ],
-        "dbot": [
-          668,
-          791
-        ],
-        "dfoot": [
-          847,
-          781
-        ],
-        "switch": [
-          586,
-          526
-        ],
-        "rig": [
-          580,
-          639
-        ],
-        "kN": [
-          405,
-          826
-        ],
-        "kS": [
-          582,
-          822
-        ]
-      }
+        "neceil": [156, 42],
+        "nwdesk": [79, 868],
+        "swdesk": [740, 851],
+        "nedesk": [201, 740],
+        "sedesk": [665, 721],
+        "dtop": [722, 98],
+        "dhinge": [1033, 91],
+        "dbot": [668, 791],
+        "dfoot": [847, 781],
+        "switch": [586, 526],
+        "rig": [580, 639],
+        "kN": [405, 826],
+        "kS": [582, 822]
+      },
+      "n_landmarks": 13
     },
     "photo_3": {
-      "image_wh": [
-        1050,
-        1400
-      ],
+      "image_wh": [1050, 1400],
       "landmarks": {
-        "neceil": [
-          886,
-          25
-        ],
-        "nwceil": [
-          48,
-          71
-        ],
-        "nefloor": [
-          736,
-          777
-        ],
-        "nwfloor": [
-          207,
-          737
-        ],
-        "nwdesk": [
-          411,
-          630
-        ],
-        "swdesk": [
-          256,
-          842
-        ],
-        "nedesk": [
-          551,
-          639
-        ],
-        "sedesk": [
-          528,
-          862
-        ],
-        "rig": [
-          434,
-          631
-        ],
-        "tvl": [
-          430,
-          360
-        ],
-        "tvr": [
-          687,
-          358
-        ],
-        "tvb": [
-          669,
-          518
-        ]
-      }
+        "neceil": [886, 25],
+        "nwceil": [48, 71],
+        "nefloor": [736, 777],
+        "nwfloor": [207, 737],
+        "nwdesk": [411, 630],
+        "swdesk": [256, 842],
+        "nedesk": [551, 639],
+        "sedesk": [528, 862],
+        "rig": [434, 631],
+        "tvl": [430, 360],
+        "tvr": [687, 358],
+        "tvb": [669, 518]
+      },
+      "n_landmarks": 12
     },
     "photo_4": {
-      "image_wh": [
-        1050,
-        1400
-      ],
+      "image_wh": [1050, 1400],
       "landmarks": {
-        "nwfloor": [
-          747,
-          738
-        ],
-        "swfloor": [
-          138,
-          850
-        ],
-        "nwdesk": [
-          884,
-          772
-        ],
-        "sedesk": [
-          188,
-          1007
-        ],
-        "rig": [
-          390,
-          718
-        ],
-        "stro": [
-          534,
-          226
-        ],
-        "ther": [
-          179,
-          515
-        ]
-      }
+        "nwfloor": [747, 738],
+        "swfloor": [138, 850],
+        "nwdesk": [884, 772],
+        "sedesk": [188, 1007],
+        "rig": [390, 718],
+        "stro": [534, 226],
+        "ther": [179, 515]
+      },
+      "n_landmarks": 7
     },
     "photo_5": {
-      "image_wh": [
-        787,
-        1400
-      ],
+      "image_wh": [787, 1400],
       "landmarks": {
-        "sedesk": [
-          362,
-          287
-        ],
-        "nedesk": [
-          527,
-          38
-        ],
-        "swdesk": [
-          -12,
-          251
-        ],
-        "nwdesk": [
-          245,
-          8
-        ]
-      }
+        "sedesk": [362, 287],
+        "nedesk": [527, 38],
+        "swdesk": [-12, 251],
+        "nwdesk": [245, 8]
+      },
+      "n_landmarks": 4
     }
   },
   "photo_5_refit": {
     "method": "Visible scene points in metres; +/-1 means the signed side of a box, 0 its midpoint. Use rendered nominal geometry after the multi-view scale fit.",
     "landmarks": {
       "desk_SE": {
-        "xy": [
-          362,
-          287
-        ],
+        "xy": [362, 287],
         "box": "desk_top",
-        "half_size_offset": [
-          1,
-          -1,
-          1
-        ],
+        "half_size_offset": [1, -1, 1],
         "sigma_px": 10
       },
       "desk_NE": {
-        "xy": [
-          527,
-          38
-        ],
+        "xy": [527, 38],
         "box": "desk_top",
-        "half_size_offset": [
-          1,
-          1,
-          1
-        ],
+        "half_size_offset": [1, 1, 1],
         "sigma_px": 10
       },
       "leg_SW_foot": {
-        "xy": [
-          122,
-          601
-        ],
+        "xy": [122, 601],
         "box": "desk_leg_south_west",
-        "half_size_offset": [
-          0,
-          0,
-          -1
-        ],
+        "half_size_offset": [0, 0, -1],
         "sigma_px": 10
       },
       "panel_bottom": {
-        "xy": [
-          361,
-          649
-        ],
+        "xy": [361, 649],
         "box": "desk_modesty_panel",
-        "half_size_offset": [
-          0,
-          -1,
-          -1
-        ],
+        "half_size_offset": [0, -1, -1],
         "sigma_px": 10
       },
       "panel_top": {
-        "xy": [
-          349,
-          325
-        ],
+        "xy": [349, 325],
         "box": "desk_modesty_panel",
-        "half_size_offset": [
-          -1,
-          -1,
-          1
-        ],
+        "half_size_offset": [-1, -1, 1],
         "sigma_px": 10
       },
       "screen_TL": {
-        "xy": [
-          454,
-          259
-        ],
+        "xy": [454, 259],
         "box": "monitor_on_floor",
-        "half_size_offset": [
-          -1,
-          -1,
-          1
-        ],
+        "half_size_offset": [-1, -1, 1],
         "sigma_px": 22
       },
       "screen_TR": {
-        "xy": [
-          666,
-          275
-        ],
+        "xy": [666, 275],
         "box": "monitor_on_floor",
-        "half_size_offset": [
-          1,
-          -1,
-          1
-        ],
+        "half_size_offset": [1, -1, 1],
         "sigma_px": 22
       },
       "screen_BR": {
-        "xy": [
-          652,
-          418
-        ],
+        "xy": [652, 418],
         "box": "monitor_on_floor",
-        "half_size_offset": [
-          1,
-          -1,
-          -1
-        ],
+        "half_size_offset": [1, -1, -1],
         "sigma_px": 22
       },
       "bag_base": {
-        "xy": [
-          292,
-          638
-        ],
+        "xy": [292, 638],
         "box": "backpack",
-        "half_size_offset": [
-          0,
-          -1,
-          -1
-        ],
+        "half_size_offset": [0, -1, -1],
         "sigma_px": 22
       },
       "leaf_hinge_foot": {
         "box": "door",
-        "half_size_offset": [
-          -1,
-          -1,
-          -1
-        ],
-        "xy": [
-          690,
-          1295
-        ],
+        "half_size_offset": [-1, -1, -1],
+        "xy": [690, 1295],
         "sigma_px": 28
       }
+    },
+    "n_landmarks": 10
+  },
+  "parameters": "X,Y,H = room width, depth, height; x,y = desk SW corner; w,l,h = desk width, length, fixed height. hingey = hinge setback from south, dx = leaf setback from east, dz,dw = leaf height,width. kx,ky,klen = keyboard center and long dimension; sy,swH = switch y,z. rx,ry,rz = rig cap. sty,stH and thy,thH = strobe and thermostat y,z. tx,tz,tw = TV center x,z and width; 9/16 aspect. Coordinates in metres, x east, y north, z up.",
+  "round2_baseline": {
+    "photo_1": {
+      "rms_px": 5.6431420490586275,
+      "export_rms_px": 13.484505883282685,
+      "n_landmarks": 13
+    },
+    "photo_2": {
+      "rms_px": 5.718832821212815,
+      "export_rms_px": 13.26310645862006,
+      "n_landmarks": 13
+    },
+    "photo_3": {
+      "rms_px": 8.63302739178175,
+      "export_rms_px": 8.800236973613933,
+      "n_landmarks": 12
+    },
+    "photo_4": {
+      "rms_px": 25.779207397297117,
+      "export_rms_px": 26.09808069604743,
+      "n_landmarks": 7
+    },
+    "photo_5": {
+      "rms_px": 16.94308221122794,
+      "export_rms_px": 16.94308221122794,
+      "n_landmarks": 10
     }
   },
-  "parameters": "X,Y,H = room width, depth, height; x,y = desk SW corner; w,l,h = desk width, length, fixed height. hingey = hinge setback from south, dx = leaf setback from east, dz,dw = leaf height,width. kx,ky,klen = keyboard center and long dimension; sy,swH = switch y,z. rx,ry,rz = rig cap. sty,stH and thy,thH = strobe and thermostat y,z. tx,tz,tw = TV center x,z and width; 9/16 aspect. Coordinates in metres, x east, y north, z up."
+  "photo_4_refit": {
+    "method": "Native upright coordinates. Line picks constrain only perpendicular distance. Floor junction behind chair is extrapolated; upper junction lies above crop. Censored corners use the visible edge at the image boundary.",
+    "landmarks": {
+      "nwdesk": {
+        "xy": [884, 772],
+        "sigma_px": 7
+      },
+      "sedesk": {
+        "xy": [188, 1007],
+        "sigma_px": 7
+      },
+      "swdesk": {
+        "xy": [319, 790],
+        "sigma_px": 22
+      },
+      "panel_s": {
+        "xy": [282, 1182],
+        "sigma_px": 18
+      },
+      "panel_n": {
+        "xy": [949, 1143],
+        "sigma_px": 22
+      },
+      "stro": {
+        "xy": [534, 226],
+        "sigma_px": 7
+      },
+      "ther": {
+        "xy": [179, 515],
+        "sigma_px": 7
+      },
+      "rig": {
+        "xy": [390, 718],
+        "sigma_px": 7
+      },
+      "green_back": {
+        "xy": [486, 709],
+        "sigma_px": 18
+      },
+      "mesh_back": {
+        "xy": [722, 680],
+        "sigma_px": 18
+      },
+      "nwfloor": {
+        "xy": [736, 738],
+        "sigma_px": 30
+      },
+      "tv_lower_left": {
+        "xy": [984, 578],
+        "sigma_px": 12
+      },
+      "corner_top": {
+        "xy": [885, 0],
+        "sigma_px": 12,
+        "edge": [
+          "nwfloor",
+          "nwceil"
+        ]
+      },
+      "corner_lower": {
+        "xy": [748, 681],
+        "sigma_px": 12,
+        "edge": [
+          "nwfloor",
+          "nwceil"
+        ]
+      },
+      "tv_border": {
+        "xy": [1049, 444],
+        "sigma_px": 12,
+        "edge": [
+          "tv_lower_left",
+          "tvl"
+        ]
+      },
+      "desk_border": {
+        "xy": [1049, 995],
+        "sigma_px": 12,
+        "edge": [
+          "nedesk",
+          "sedesk"
+        ]
+      }
+    },
+    "n_landmarks": 16
+  }
 }

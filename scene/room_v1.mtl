@@ -124,3 +124,8 @@ Kd 0.95 0.94 0.92
 # emissivity 0.9
 # lidar_reflectivity 0.35
 
+newmtl painted_drywall_white
+Kd 0.95 0.94 0.92
+# emissivity 0.92
+# lidar_reflectivity 0.8
+
