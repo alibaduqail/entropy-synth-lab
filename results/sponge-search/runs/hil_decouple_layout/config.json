@@ -1,0 +1,17 @@
+{
+ "run": "/home/jetsonnano/synthlab/sponge-search/runs/hil_decouple_layout",
+ "mode": "decouple",
+ "tier": "layout",
+ "budget_s": 330.0,
+ "k": 16,
+ "bank": 2,
+ "popsize": 14,
+ "sigma": 0.3,
+ "seed": 1,
+ "shape": 0.0,
+ "x0": "",
+ "baseline": "~/synthlab/sponge-search/real_bg/a0_bank.npy",
+ "weights": "~/yolov8n.pt",
+ "expa": "",
+ "diag": false
+}
