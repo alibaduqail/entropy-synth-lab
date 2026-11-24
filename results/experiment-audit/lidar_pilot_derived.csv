@@ -1,0 +1,7 @@
+# Derived by the audit from the LiDAR track's study_summary.csv (Drive, 2026-09-15; AGX Orin "labagx", MAXN). Trial means only; 5 trials. M2 meaning in this pilot is not stated in the files read.
+trial_id,date,condition,H_DS,H_eigen,mean_S,frac_tag_particle,n_voxel,yolo_latency_ms,P_rails_sum_W,temp_tj_C
+EXP-M_M0_run01,2026-09-13,M0,0.76854,0.82112,0.12966,0.006074,12216.5,7.0229,13.6564,49.894
+EXP-M_M1_run01,2026-09-13,M1,0.77828,0.82616,0.13715,0.005500,12267.7,7.7873,14.0459,49.953
+EXP-M_M0_run02,2026-09-14,M0,0.77050,0.82421,0.13077,0.003088,12074.9,7.4415,14.5822,49.818
+EXP-M_M1_run02,2026-09-14,M1,0.77454,0.82665,0.13223,0.003933,12015.7,8.1121,14.8349,51.198
+EXP-M_M2_run01,2026-09-14,M2,0.77157,0.82488,0.13168,0.004575,12056.6,7.1180,14.8139,50.333

@@ -215,6 +215,32 @@ def main() -> None:
     f = load_frames(a.src, t)
     idle = idle_power_w(a.src)
 
+    # "any detection in the frame" step model: the right covariate turns out to be the
+    # FRACTION of frames with >= 1 detection, not the mean detection count.
+    t = t.merge(f.assign(any_det=(f["yolo_count"] > 0).astype(float))
+                .groupby("trial")["any_det"].mean().rename("frac_any").reset_index(), on="trial")
+    step = {}
+    for lab, g in [("all", t), ("objects", t[t["family"] == "objects"]),
+                   ("noise", t[t["family"] == "noise"])]:
+        step[lab] = {
+            "n": int(len(g)),
+            "r_frac_any_vs_yolo_ms": float(np.corrcoef(g["frac_any"], g["yolo_ms"])[0, 1]),
+            "r_mean_count_vs_yolo_ms": float(np.corrcoef(g["detections"], g["yolo_ms"])[0, 1]),
+            "partial_r_HT_vs_yolo_ms_given_frac_any":
+                S.partial_corr(g["ht"], g["yolo_ms"], [g["frac_any"]]),
+            "partial_r_HT_vs_power_given_frac_any":
+                S.partial_corr(g["ht"], g["module_power_w"], [g["frac_any"]]),
+            "partial_r_HT_vs_power_given_frac_any_and_tj":
+                S.partial_corr(g["ht"], g["module_power_w"], [g["frac_any"], g["tj_c"]]),
+            "partial_r_frac_any_vs_power_given_HT_and_tj":
+                S.partial_corr(g["frac_any"], g["module_power_w"], [g["ht"], g["tj_c"]]),
+        }
+    fit = S.ols(t["yolo_ms"].values, t["frac_any"].values, ["ms_per_unit_frac"])
+    fitp = S.ols(t["module_power_w"].values * 1e3,
+                 np.column_stack([t["frac_any"], t["tj_c"]]), ["mw_per_unit_frac", "mw_per_degC"])
+    step["yolo_ms_on_frac_any"] = fit
+    step["power_mw_on_frac_any_and_tj"] = fitp
+
     rows = corr_block(t, "all 279 trials")
     for fam in ["objects", "noise", "real"]:
         rows += corr_block(t[t["family"] == fam], f"family={fam}")
@@ -266,6 +292,7 @@ def main() -> None:
         "regressions_per_1sd": regressions(t),
         "blocked_permutation_by_round": perm,
         "frame_level": frame_level(f),
+        "step_model_any_detection": step,
         "drift": drift(t),
         "duty_cycle": duty,
         "seed": 1711,
