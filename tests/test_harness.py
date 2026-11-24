@@ -127,3 +127,24 @@ def test_runners_end_to_end(tmp_path):
     assert summary["bank_windows"] == 2 and summary["windows"] >= 1
     assert 0 < summary["values"]["H_eigen"]["mean"] < math.log(3)
     assert summary["values"]["frac_tag_particle"]["mean"] > 0.1
+
+
+def test_cmp_helpers():
+    import pandas as pd
+    import analyze_cmp as ac
+    assert ac.fog_of({"fog": {"alpha": 0.3}}) == 0.3
+    assert ac.fog_of({"frames": [{"fog_level": 1}, {"fog_level": 3}]}) == 2.0
+    assert ac.fog_of({"generator": "x"}) == 0.0
+    rng = np.random.default_rng(0)
+    rows = []
+    for b in range(6):
+        for k in range(3):
+            rows.append({"bank_id": f"b{b}", "block": k, "temp_tj_c": 50 + k + rng.normal(0, .1),
+                         "y": 10 + 2 * b + 0.5 * k + rng.normal(0, 0.05)})
+    means, sd, _ = ac.adjust(pd.DataFrame(rows), "y")
+    assert abs((means["b5"] - means["b0"]) - 10) < 0.3 and sd < 0.2
+    x = np.linspace(0, 10, 40)
+    knee = ac.hinge_test(x, np.where(x < 5, 1.0, 1 + 2 * (x - 5)) + rng.normal(0, .05, 40))
+    assert knee["dBIC_linear_minus_hinge"] > 6 and abs(knee["knee"] - 5) < 1
+    flat = ac.hinge_test(x, 2 * x + rng.normal(0, .05, 40))
+    assert flat["dBIC_linear_minus_hinge"] < 6
