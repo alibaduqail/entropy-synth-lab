@@ -1,0 +1,11 @@
+dev=/sys/class/hwmon/hwmon1
+update_interval=1
+samples=512
+in1_label=VDD_IN
+in2_label=VDD_CPU_GPU_CV
+in3_label=VDD_SOC
+in7_label=sum of shunt voltages
+shunt1_resistor=5000
+n_reads 2248 reads_per_s 749.3 distinct_currents_mA [1264, 1272, 1280, 1288, 1296, 1304, 1312, 1320, 1328, 1336, 1344, 1352, 1360, 1368, 1376, 1384, 1392, 1400, 1408, 1416, 1424, 1432] value_changes 80
+current_steps_mA [8] bus_mV_distinct [4936]
+2026-11-23T21:51:31-05:00
