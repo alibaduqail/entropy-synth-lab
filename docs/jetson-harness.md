@@ -98,7 +98,7 @@ configuration over 3 blocks). n = 1 trial per bank per configuration; frame-leve
 **(b) Inference vs NMS - confirmed with fresh data.**
 - YOLO inference does not follow the input: TensorRT FP16 inference is 9.67 ms with 0.04 ms SD
   across all bank-frames (r with candidates 0.09). PyTorch inference sits on a few discrete levels
-  (~18, 24, 27, 31 ms) that track GPU clock state, not the image (r with candidates -0.17 to 0.02).
+  (~18, 24, 27, 31 ms) that track GPU clock state (r with candidates -0.17 and 0.02 with BIE in the loop; 0.45 without BIE, where the clock level changed between banks of one round, so it is confounded with run order).
 - NMS/postprocess follows the pre-NMS candidate count (r = 0.93 in every configuration):
   ~1.7 ms at 0 candidates, ~3.2 ms at 1, ~4.7 ms at 2-10, up to ~11 ms at ~40 candidates.
   Regression (PyTorch unpaced): +1.82 ms (SE 0.04) for any detection plus 0.16 ms (SE 0.003) per
