@@ -1,0 +1,526 @@
+{
+ "ckpt": "ddpm_main",
+ "cells": {
+  "s0p0l0": {
+   "session": 0,
+   "person": 0,
+   "lamp": 0,
+   "real_test": {
+    "n": 256,
+    "ht_mean": 0.014479033390263303,
+    "ht_sd": 0.0015035428543700307,
+    "noise_mk_median": 82.36666666669666,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 8.138020833333334e-07,
+    "mean_c": 24.71387708740237,
+    "pixel_sd_c_median": 0.6371337592480553,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0
+   },
+   "real_train": {
+    "n": 256,
+    "ht_mean": 0.013015484449997184,
+    "ht_sd": 0.0010849175084956064,
+    "noise_mk_median": 84.01400000001314,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.0,
+    "mean_c": 24.40734524129234,
+    "pixel_sd_c_median": 0.45799731464359517,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0
+   },
+   "gen": {
+    "n": 128,
+    "ht_mean": 0.012075847037067893,
+    "ht_sd": 0.0007536755816796137,
+    "noise_mk_median": 56.00933333332892,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 1.708984375e-05,
+    "mean_c": 24.411823034668,
+    "pixel_sd_c_median": 0.31880395051233235,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0
+   },
+   "ht_ks_gen_vs_test": 0.70703125,
+   "ht_ks_train_vs_test": 0.484375,
+   "w1_c_gen_vs_test": 0.3057261724999999,
+   "w1_c_train_vs_test": 0.3064861725000006,
+   "spec_gen_vs_test": [
+    0.24993993425252312,
+    0.431429194069892
+   ],
+   "spec_train_vs_test": [
+    0.013785618169778613,
+    1.008380616788333
+   ],
+   "nn_rmse_c_median": {
+    "gen_to_train": 0.12510406970977783,
+    "test_to_train": 0.14188021421432495,
+    "train_to_other_train_trials": 0.138443723320961
+   },
+   "nn_gen_below_p5_of_test": 0.0,
+   "nn_gen_below_median_of_test": 0.90625
+  },
+  "s0p1l1": {
+   "session": 0,
+   "person": 1,
+   "lamp": 1,
+   "real_test": {
+    "n": 256,
+    "ht_mean": 0.07645894199670494,
+    "ht_sd": 0.0075822405931051376,
+    "noise_mk_median": 98.83999999997067,
+    "lamp_hot_fraction": 0.04296875,
+    "warm_fraction": 0.09686116536458333,
+    "mean_c": 25.757613983154314,
+    "pixel_sd_c_median": 1.0151318955928694,
+    "person_frame_rate": 0.8046875,
+    "persons_per_frame": 0.8046875,
+    "detections_per_frame": 1.015625
+   },
+   "real_train": {
+    "n": 256,
+    "ht_mean": 0.07581346601857973,
+    "ht_sd": 0.006274775762130167,
+    "noise_mk_median": 97.19266666668975,
+    "lamp_hot_fraction": 0.11328125,
+    "warm_fraction": 0.093790283203125,
+    "mean_c": 25.8190723083496,
+    "pixel_sd_c_median": 0.6539650142800083,
+    "person_frame_rate": 0.78125,
+    "persons_per_frame": 0.78125,
+    "detections_per_frame": 0.9375
+   },
+   "gen": {
+    "n": 128,
+    "ht_mean": 0.07565003186062187,
+    "ht_sd": 0.005012519926695722,
+    "noise_mk_median": 65.89333333335153,
+    "lamp_hot_fraction": 0.0390625,
+    "warm_fraction": 0.093656005859375,
+    "mean_c": 25.791805973307326,
+    "pixel_sd_c_median": 0.3953422463479128,
+    "person_frame_rate": 0.078125,
+    "persons_per_frame": 0.0859375,
+    "detections_per_frame": 0.1015625
+   },
+   "ht_ks_gen_vs_test": 0.203125,
+   "ht_ks_train_vs_test": 0.1484375,
+   "w1_c_gen_vs_test": 0.15632100000000013,
+   "w1_c_train_vs_test": 0.08686499999999978,
+   "spec_gen_vs_test": [
+    0.2435316870954195,
+    0.49280299518101545
+   ],
+   "spec_train_vs_test": [
+    0.02664352999731042,
+    1.0648855892565505
+   ],
+   "nn_rmse_c_median": {
+    "gen_to_train": 1.0439672470092773,
+    "test_to_train": 1.0246994495391846,
+    "train_to_other_train_trials": 1.0363558530807495
+   },
+   "nn_gen_below_p5_of_test": 0.0,
+   "nn_gen_below_median_of_test": 0.4609375
+  },
+  "s1p0l0": {
+   "session": 1,
+   "person": 0,
+   "lamp": 0,
+   "real_test": {
+    "n": 256,
+    "ht_mean": 0.015540894439736854,
+    "ht_sd": 0.0012166321883616965,
+    "noise_mk_median": 82.36666666665056,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 6.103515625e-07,
+    "mean_c": 21.711280487060574,
+    "pixel_sd_c_median": 0.4962385638415675,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0
+   },
+   "real_train": {
+    "n": 256,
+    "ht_mean": 0.015476030715839128,
+    "ht_sd": 0.0014835407516916696,
+    "noise_mk_median": 84.01399999999205,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.0,
+    "mean_c": 21.826111702473995,
+    "pixel_sd_c_median": 0.5084890617761271,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0
+   },
+   "gen": {
+    "n": 128,
+    "ht_mean": 0.01505334543474348,
+    "ht_sd": 0.0010440881393878158,
+    "noise_mk_median": 51.89100000000548,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.0,
+    "mean_c": 21.646081335449253,
+    "pixel_sd_c_median": 0.22409025608224215,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0
+   },
+   "ht_ks_gen_vs_test": 0.15625,
+   "ht_ks_train_vs_test": 0.15625,
+   "w1_c_gen_vs_test": 0.16949500000000106,
+   "w1_c_train_vs_test": 0.11471500000000007,
+   "spec_gen_vs_test": [
+    0.22969204793752268,
+    0.4464133926145405
+   ],
+   "spec_train_vs_test": [
+    0.015232884256767977,
+    0.9882450354483252
+   ],
+   "nn_rmse_c_median": {
+    "gen_to_train": 0.12510406970977783,
+    "test_to_train": 0.1150180995464325,
+    "train_to_other_train_trials": 0.11157022416591644
+   },
+   "nn_gen_below_p5_of_test": 0.0,
+   "nn_gen_below_median_of_test": 0.0546875
+  },
+  "s1p1l0": {
+   "session": 1,
+   "person": 1,
+   "lamp": 0,
+   "real_test": {
+    "n": 256,
+    "ht_mean": 0.1040230642284518,
+    "ht_sd": 0.0053412532301303365,
+    "noise_mk_median": 116.13700000002603,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.33178853352864585,
+    "mean_c": 24.912923826090516,
+    "pixel_sd_c_median": 0.5450995107886298,
+    "person_frame_rate": 1.0,
+    "persons_per_frame": 2.0,
+    "detections_per_frame": 2.0
+   },
+   "real_train": {
+    "n": 256,
+    "ht_mean": 0.10078832202350291,
+    "ht_sd": 0.0051824863905654255,
+    "noise_mk_median": 112.01866666667364,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.3184535725911458,
+    "mean_c": 24.755647601318376,
+    "pixel_sd_c_median": 0.6596679608317075,
+    "person_frame_rate": 1.0,
+    "persons_per_frame": 2.0,
+    "detections_per_frame": 2.0
+   },
+   "gen": {
+    "n": 128,
+    "ht_mean": 0.10384165233058368,
+    "ht_sd": 0.004046417421236982,
+    "noise_mk_median": 77.42466666663793,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.31999593098958334,
+    "mean_c": 24.616948636881546,
+    "pixel_sd_c_median": 0.3668497646155199,
+    "person_frame_rate": 1.0,
+    "persons_per_frame": 2.0078125,
+    "detections_per_frame": 2.0078125
+   },
+   "ht_ks_gen_vs_test": 0.10546875,
+   "ht_ks_train_vs_test": 0.24609375,
+   "w1_c_gen_vs_test": 0.29603597125000136,
+   "w1_c_train_vs_test": 0.1571825574999956,
+   "spec_gen_vs_test": [
+    0.09204763414293328,
+    0.7723001906633895
+   ],
+   "spec_train_vs_test": [
+    0.05644862574356404,
+    0.84856362553662
+   ],
+   "nn_rmse_c_median": {
+    "gen_to_train": 0.7519389390945435,
+    "test_to_train": 1.1433684825897217,
+    "train_to_other_train_trials": 0.8305824398994446
+   },
+   "nn_gen_below_p5_of_test": 0.40625,
+   "nn_gen_below_median_of_test": 0.9296875
+  },
+  "s2p0l0": {
+   "session": 2,
+   "person": 0,
+   "lamp": 0,
+   "real_test": {
+    "n": 169,
+    "ht_mean": 0.056683145331009224,
+    "ht_sd": 0.0022938545880592026,
+    "noise_mk_median": 79.07200000001235,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.015638251972386587,
+    "mean_c": 26.79536047830375,
+    "pixel_sd_c_median": 0.5674154646391311,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0
+   },
+   "real_train": {
+    "n": 256,
+    "ht_mean": 0.05266271117116049,
+    "ht_sd": 0.0011509391402697799,
+    "noise_mk_median": 84.01399999998284,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.012861531575520833,
+    "mean_c": 26.62869187825523,
+    "pixel_sd_c_median": 0.12089981319779478,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0
+   },
+   "gen": {
+    "n": 128,
+    "ht_mean": 0.052146492524707995,
+    "ht_sd": 0.0019696249429697788,
+    "noise_mk_median": 59.30400000003297,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.012076009114583333,
+    "mean_c": 26.585509236653678,
+    "pixel_sd_c_median": 0.15881748957558267,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0
+   },
+   "ht_ks_gen_vs_test": 0.7632673816568047,
+   "ht_ks_train_vs_test": 0.836561575443787,
+   "w1_c_gen_vs_test": 0.3054257424999993,
+   "w1_c_train_vs_test": 0.29452999999999996,
+   "spec_gen_vs_test": [
+    0.12513021526531956,
+    0.6781436102130175
+   ],
+   "spec_train_vs_test": [
+    0.018078805696361645,
+    1.0108149775926778
+   ],
+   "nn_rmse_c_median": {
+    "gen_to_train": 0.18736104667186737,
+    "test_to_train": 0.1852644383907318,
+    "train_to_other_train_trials": 0.0
+   },
+   "nn_gen_below_p5_of_test": 0.0,
+   "nn_gen_below_median_of_test": 0.4375
+  },
+  "s2p1l0": {
+   "session": 2,
+   "person": 1,
+   "lamp": 0,
+   "real_test": {
+    "n": 173,
+    "ht_mean": 0.0726573427877906,
+    "ht_sd": 0.002349166521233162,
+    "noise_mk_median": 95.54533333332192,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.09345797206165703,
+    "mean_c": 27.13932469894029,
+    "pixel_sd_c_median": 0.10990491578436277,
+    "person_frame_rate": 1.0,
+    "persons_per_frame": 1.0,
+    "detections_per_frame": 1.0
+   },
+   "real_train": {
+    "n": 256,
+    "ht_mean": 0.0704401392957469,
+    "ht_sd": 0.003823445146037822,
+    "noise_mk_median": 90.60333333333696,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.06931193033854166,
+    "mean_c": 27.49832612711592,
+    "pixel_sd_c_median": 0.5434822626483565,
+    "person_frame_rate": 0.96875,
+    "persons_per_frame": 0.96875,
+    "detections_per_frame": 0.96875
+   },
+   "gen": {
+    "n": 128,
+    "ht_mean": 0.06939935892483257,
+    "ht_sd": 0.003720022571635768,
+    "noise_mk_median": 62.598666666710685,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.06943074544270833,
+    "mean_c": 27.335827262369804,
+    "pixel_sd_c_median": 0.4231315488129836,
+    "person_frame_rate": 0.15625,
+    "persons_per_frame": 0.15625,
+    "detections_per_frame": 0.1875
+   },
+   "ht_ks_gen_vs_test": 0.5064125722543352,
+   "ht_ks_train_vs_test": 0.45578937861271673,
+   "w1_c_gen_vs_test": 0.253543648749997,
+   "w1_c_train_vs_test": 0.36718999999999996,
+   "spec_gen_vs_test": [
+    0.16415241740411451,
+    0.6122194066107033
+   ],
+   "spec_train_vs_test": [
+    0.06440755639042271,
+    0.8571602744120619
+   ],
+   "nn_rmse_c_median": {
+    "gen_to_train": 0.8164958357810974,
+    "test_to_train": 0.669421374797821,
+    "train_to_other_train_trials": 0.9081946015357971
+   },
+   "nn_gen_below_p5_of_test": 0.046875,
+   "nn_gen_below_median_of_test": 0.125
+  }
+ },
+ "novel": {
+  "s0p0l1": {
+   "session": 0,
+   "person": 0,
+   "lamp": 1,
+   "gen": {
+    "n": 64,
+    "ht_mean": 0.01692030966990179,
+    "ht_sd": 0.015163610967226349,
+    "noise_mk_median": 55.185666666651585,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.00456787109375,
+    "mean_c": 24.76378447265628,
+    "pixel_sd_c_median": 0.4108265653492982,
+    "person_frame_rate": 0.015625,
+    "persons_per_frame": 0.015625,
+    "detections_per_frame": 0.015625,
+    "nn_rmse_c_median_gen_to_train": 0.14178867638111115
+   }
+  },
+  "s0p1l0": {
+   "session": 0,
+   "person": 1,
+   "lamp": 0,
+   "gen": {
+    "n": 64,
+    "ht_mean": 0.06818470683554251,
+    "ht_sd": 0.013394853953106576,
+    "noise_mk_median": 65.89333333332783,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.09989990234375,
+    "mean_c": 25.460015193684935,
+    "pixel_sd_c_median": 1.0803827974183182,
+    "person_frame_rate": 0.234375,
+    "persons_per_frame": 0.296875,
+    "detections_per_frame": 0.296875,
+    "nn_rmse_c_median_gen_to_train": 1.1298494338989258
+   }
+  },
+  "s1p0l1": {
+   "session": 1,
+   "person": 0,
+   "lamp": 1,
+   "gen": {
+    "n": 64,
+    "ht_mean": 0.014061849136789943,
+    "ht_sd": 0.0013882466943716536,
+    "noise_mk_median": 47.77266666667413,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.0,
+    "mean_c": 22.36414676920576,
+    "pixel_sd_c_median": 0.3892586572520108,
+    "person_frame_rate": 0.0,
+    "persons_per_frame": 0.0,
+    "detections_per_frame": 0.0,
+    "nn_rmse_c_median_gen_to_train": 0.1586068570613861
+   }
+  },
+  "s1p1l1": {
+   "session": 1,
+   "person": 1,
+   "lamp": 1,
+   "gen": {
+    "n": 64,
+    "ht_mean": 0.097605703049254,
+    "ht_sd": 0.004853542575746729,
+    "noise_mk_median": 75.777333333332,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.3056184895833333,
+    "mean_c": 24.911066422526076,
+    "pixel_sd_c_median": 0.7837313562890431,
+    "person_frame_rate": 0.984375,
+    "persons_per_frame": 1.953125,
+    "detections_per_frame": 1.953125,
+    "nn_rmse_c_median_gen_to_train": 0.9880110025405884
+   }
+  },
+  "s2p1l1": {
+   "session": 2,
+   "person": 1,
+   "lamp": 1,
+   "gen": {
+    "n": 64,
+    "ht_mean": 0.06965881641621975,
+    "ht_sd": 0.0043308736894773535,
+    "noise_mk_median": 62.598666666647475,
+    "lamp_hot_fraction": 0.0,
+    "warm_fraction": 0.06826090494791667,
+    "mean_c": 27.139427270507838,
+    "pixel_sd_c_median": 0.6227748572421423,
+    "person_frame_rate": 0.109375,
+    "persons_per_frame": 0.109375,
+    "detections_per_frame": 0.109375,
+    "nn_rmse_c_median_gen_to_train": 1.0678898096084595
+   }
+  }
+ },
+ "real_vs_gen_accuracy": {
+  "u8": [
+   {
+    "acc": 0.6401124648547329,
+    "real_recall": 1.0,
+    "gen_recall": 0.0
+   },
+   {
+    "acc": 0.6401124648547329,
+    "real_recall": 1.0,
+    "gen_recall": 0.0
+   },
+   {
+    "acc": 0.6401124648547329,
+    "real_recall": 1.0,
+    "gen_recall": 0.0
+   }
+  ],
+  "rad": [
+   {
+    "acc": 0.6401124648547329,
+    "real_recall": 1.0,
+    "gen_recall": 0.0
+   },
+   {
+    "acc": 0.6401124648547329,
+    "real_recall": 1.0,
+    "gen_recall": 0.0
+   },
+   {
+    "acc": 0.6401124648547329,
+    "real_recall": 1.0,
+    "gen_recall": 0.0
+   }
+  ]
+ },
+ "condition_classifier": {
+  "person": {
+   "acc_on_real_heldout": 0.966,
+   "acc_on_generated": 1.0
+  },
+  "session": {
+   "acc_on_real_heldout": 0.9613333333333334,
+   "acc_on_generated": 0.9869791666666666
+  }
+ }
+}

@@ -43,10 +43,14 @@ def main():
     ap.add_argument("--vae", default="vae_main")
     ap.add_argument("--n", type=int, default=128)
     ap.add_argument("--minutes", type=float, default=16.0)
+    ap.add_argument("--only", default="", help="comma-separated substrings; only generate matching banks")
     a = ap.parse_args()
+    keep = lambda n: (not a.only) or any(k in n for k in a.only.split(","))
     t_end = time.time() + a.minutes * 60
     pack = Pack(f"{HOME}/data/pack.npz")
     for name, p, l, s in REAL_BANKS:
+        if not keep(name):
+            continue
         if os.path.exists(f"{HOME}/banks/{name}/manifest.json"):
             continue
         idx = np.where(pack.mask("test", p, l, s))[0]
@@ -63,6 +67,8 @@ def main():
         print("real bank", name, len(fr), flush=True)
     jobs = [(a.ddpm, b) for b in DDPM_BANKS] + [(a.vae, b) for b in VAE_BANKS]
     for ck, (name, p, l, s, over) in jobs:
+        if not keep(name):
+            continue
         if os.path.exists(f"{HOME}/banks/{name}/manifest.json") or not os.path.exists(f"{HOME}/ckpt/{ck}.pt"):
             continue
         if time.time() > t_end:

@@ -1,0 +1,7 @@
+ddpm base=32 batch=32 amp=True cl=True params=1.84M 3.80 it/s 122 img/s mem=1008MB
+ddpm base=32 batch=32 amp=False cl=True params=1.84M 3.05 it/s 98 img/s mem=1343MB
+ddpm base=32 batch=32 amp=True cl=False params=1.84M 4.55 it/s 146 img/s mem=1018MB
+ddpm base=48 batch=32 amp=True cl=True params=4.01M 2.43 it/s 78 img/s mem=1525MB
+ddpm base=64 batch=32 amp=True cl=True params=7.03M 1.82 it/s 58 img/s mem=2057MB
+ddpm base=48 batch=64 amp=True cl=True params=4.01M 1.24 it/s 79 img/s mem=2974MB
+vae base=0 batch=64 amp=True cl=True params=10.37M 3.60 it/s 230 img/s mem=1266MB
