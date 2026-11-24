@@ -1,0 +1,15 @@
+{
+ "run": "/home/jetsonnano/synthlab/sponge-search/runs/hil_latency_layout",
+ "mode": "latency",
+ "tier": "layout",
+ "budget_s": 300.0,
+ "k": 16,
+ "bank": 2,
+ "popsize": 14,
+ "sigma": 0.3,
+ "seed": 1,
+ "shape": 0.0,
+ "x0": "",
+ "baseline": "~/synthlab/sponge-search/real_bg/a0_bank.npy",
+ "diag": false
+}
