@@ -11,7 +11,12 @@ THERMAL
   python3 ~/synthlab/harness/run_thermal_bank.py \
       --bank ~/synthlab/<track>/banks/<bank> --out ~/synthlab/<track>/runs/<new_dir> \
       [--seconds 60] [--warmup 15] [--fps 8.7] [--unpaced] \
-      [--backend pytorch|tensorrt|none] [--repeats N]
+      [--backend pytorch|tensorrt|none] [--repeats N] [--no-bie] [--idle-seconds 3] \
+      [--max-frames K] [--conf 0.25] [--no-candidates]
+  --no-bie      : skip the entropy stage inside the timed loop (HT is then computed after
+                  the trial, outside all timings), to measure the pipeline without BIE
+  --backend tensorrt uses ~/synthlab/harness/models/yolov8n_fp16_480x640.engine (TensorRT
+                  10.3 FP16, built without sudo); pytorch loads ~/yolov8n.pt read-only
   bank   : frames.npy uint16 (N,120,160) TLinear counts (0.01 K/count) + manifest.json
   does   : TLinear->Celsius, fixed 10..50 C -> 8-bit, block image entropy (HT), YOLOv8n
            (pytorch = CUDA FP32, as in the original project; tensorrt = FP16 engine), NMS
@@ -45,6 +50,13 @@ LIDAR
            track's value); set it for your sensor height. Cost grows fast with the number
            of occupied 5 cm voxels: ~100k voxels takes ~2.8 s per window on this Jetson,
            so a 1 s paced window overruns (summary.json reports overrun_windows).
+
+MANY BANKS IN ONE RANDOMISED ROUND (model loaded once; one round per locked command)
+  python3 ~/synthlab/harness/run_matrix.py --kind thermal|lidar --banks <bank dirs...> \
+      --round R --seed 2026 --out ~/synthlab/<track>/runs/<dir> [--max-minutes 18] \
+      -- <any run_thermal_bank.py / run_lidar_bank.py options, e.g. --seconds 12 --unpaced>
+  writes <out>/round_RR/<order>_<track>__<bank>/... and order.json; a failing bank writes
+  FAILED.json and the round continues.
 
 SELF-TEST BANKS (made-up, not research data): ~/synthlab/harness/selftest_banks/
   thermal_flat, thermal_blobs, lidar_room, lidar_room_fog
