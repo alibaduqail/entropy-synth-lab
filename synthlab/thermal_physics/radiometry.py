@@ -29,7 +29,7 @@ def band_radiance_exact(t_k, band_um=BAND_UM, n=600):
     t_k = np.atleast_1d(np.asarray(t_k, dtype=np.float64))
     lam = np.linspace(band_um[0], band_um[1], n) * 1e-6
     b = planck_spectral(lam[None, :], t_k[:, None])
-    return np.trapz(b, lam, axis=1) if hasattr(np, "trapz") else np.trapezoid(b, lam, axis=1)
+    return np.trapezoid(b, lam, axis=1) if hasattr(np, "trapezoid") else np.trapz(b, lam, axis=1)
 
 
 class BandLUT:

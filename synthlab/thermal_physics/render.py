@@ -239,9 +239,12 @@ def fog_noise(h, w, time_s, seed=0, n_comp=8):
     return f / np.sqrt(n_comp / 2.0)
 
 
-def build_static(room, extra=None, skip_ids=(), include_objects=True):
+def build_static(room, extra=None, skip_ids=(), include_objects=True, cam=None):
+    """Static primitive set. Objects closer than 0.25 m to the camera (the sensor rig itself,
+    which the real camera never sees) are dropped when `cam` is given."""
     from .scene import static_prims
-    ps = static_prims(room, include_objects=include_objects, skip_ids=skip_ids)
+    ps = static_prims(room, include_objects=include_objects, skip_ids=skip_ids,
+                      near=None if cam is None else cam["position"])
     if extra is not None:
         ps.extend(extra)
     return ps

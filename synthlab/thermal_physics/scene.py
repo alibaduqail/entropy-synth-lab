@@ -17,8 +17,14 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
 def newest_room_path(scene_dir=None):
-    scene_dir = scene_dir or os.path.join(REPO_ROOT, "scene")
-    files = sorted(glob.glob(os.path.join(scene_dir, "room_v*.json")))
+    """Newest room_v*.json: $SYNTHLAB_SCENE if set, else the highest version found in this
+    checkout's scene/ or in the sibling room-3d worktree (where v1 lands before it is merged)."""
+    if os.environ.get("SYNTHLAB_SCENE"):
+        return os.environ["SYNTHLAB_SCENE"]
+    dirs = [scene_dir] if scene_dir else [os.path.join(REPO_ROOT, "scene"),
+                                          os.path.join(REPO_ROOT, "..", "room-3d", "scene")]
+    files = sorted((f for d in dirs for f in glob.glob(os.path.join(d, "room_v*.json"))),
+                   key=lambda f: os.path.basename(f))
     if not files:
         raise FileNotFoundError("no scene/room_v*.json found")
     return files[-1]
@@ -97,7 +103,7 @@ class PrimSet:
         return out
 
 
-def static_prims(room, include_objects=True, skip_ids=()):
+def static_prims(room, include_objects=True, skip_ids=(), near=None, near_m=0.25, skip_detail=False):
     """Room surfaces + the JSON's static objects (all `shape: box`)."""
     ps = PrimSet()
     surfaces = room["room"]["surfaces"]
@@ -107,8 +113,14 @@ def static_prims(room, include_objects=True, skip_ids=()):
                                 specular=s.get("specular", 0.0), tex=s.get("tex", 0.06))
     if include_objects:
         for ob in room.get("objects", []):
-            if ob["id"] in skip_ids:
+            if ob["id"] in skip_ids or ob.get("solid", True) is False or ob.get("emissivity", 0.9) <= 0:
                 continue
+            if skip_detail and ob.get("detail"):
+                continue
+            if near is not None and "center" in ob and "size" in ob:    # the rig's own boxes
+                gap = np.abs(np.asarray(near, float) - np.asarray(ob["center"], float)) - np.asarray(ob["size"], float) / 2
+                if np.linalg.norm(np.clip(gap, 0, None)) < near_m:
+                    continue
             warm = ob["temp_c"] > room["room"]["air_temp_c"] + 3.0
             kw = dict(temp_c=ob["temp_c"], emissivity=ob.get("emissivity", 0.92),
                       specular=ob.get("specular", 0.0), label=WARM if warm else FURNITURE,
