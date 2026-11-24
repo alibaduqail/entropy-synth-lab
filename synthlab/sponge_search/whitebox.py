@@ -51,13 +51,15 @@ def main():
     ap.add_argument("--n-frames", type=int, default=8)
     ap.add_argument("--ht-w", type=float, default=0.0,
                     help="penalty weight on contrast (keeps the frame flat -> low HT)")
+    ap.add_argument("--device", default="cuda")
+    ap.add_argument("--weights", default="~/yolov8n.pt")
     ap.add_argument("--amp", type=float, default=1.0,
                     help="panel: fraction of the bg..t_hot span the pattern may use")
     args = ap.parse_args()
 
     torch.manual_seed(args.seed)
-    dev = "cuda"
-    net = YOLO(os.path.expanduser("~/yolov8n.pt")).model.to(dev).eval().float()
+    dev = args.device
+    net = YOLO(os.path.expanduser(args.weights)).model.to(dev).eval().float()
     for p in net.parameters():
         p.requires_grad_(False)
     kern, rad = gaussian_kernel(args.blur, torch)

@@ -10,14 +10,20 @@ import numpy as np
 from . import scenes
 
 REAL = ("~/thermal-camera-radiometric/jetson_experiment_A_thermal_yolo_handoff/"
-        "experiment_A_radiometric/{run}/thermal_raw/*.npy")
+        "{run}/thermal_raw/*.npy")
+REAL_RUNS = (  # formal heat-lamp batch: lamp off = empty room (A0), lamp on = A1
+    ("experiment_A_heat_lamp/lamp_off/EXP-A_A0_run01", "a0_bank"),
+    ("experiment_A_heat_lamp/lamp_on/EXP-A_A1_run01", "a1_bank"),
+    ("experiment_A_radiometric/EXP-A_A0_run03", "a0_early_session"),
+    ("data/experiment_A_warmup60_capture120/EXP-A_A1_run01", "a1_two_det"),
+)
 
 
 def main(out="~/synthlab/sponge-search"):
     out = os.path.expanduser(out)
     os.makedirs(out + "/real_bg", exist_ok=True)
     os.makedirs(out + "/controls", exist_ok=True)
-    for run, name in (("EXP-A_A0_run03", "a0_bank"), ("EXP-A_A1_run01", "a1_bank")):
+    for run, name in REAL_RUNS:
         files = sorted(glob.glob(os.path.expanduser(REAL.format(run=run))))
         if files:
             pick = files[100:100 + 8 * 40:40]

@@ -72,12 +72,12 @@ class PowerLog:
 
 class Rig:
     def __init__(self, weights="~/yolov8n.pt", expa_path=None, power_interval_ms=50,
-                 imgsz=640, conf=0.25):
+                 imgsz=640, conf=0.25, power=True):
         from ultralytics import YOLO
         self.E, self.expa_path = load_expa(expa_path)
         self.model = YOLO(os.path.expanduser(weights))
         self.imgsz, self.conf = imgsz, conf
-        self.power = PowerLog(power_interval_ms)
+        self.power = PowerLog(power_interval_ms) if power else None
         self._devnull = open(os.devnull, "w", newline="")
         self._writer = csv.writer(self._devnull)
         self._cap = None
@@ -195,4 +195,5 @@ class Rig:
         return out
 
     def close(self):
-        self.power.close()
+        if self.power:
+            self.power.close()

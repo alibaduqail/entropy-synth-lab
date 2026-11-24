@@ -40,6 +40,9 @@ def main():
     banks = {}
     for item in args.banks:
         name, path = item.split("=", 1)
+        if not os.path.exists(os.path.expanduser(path)):
+            print("skip missing bank", name, path, flush=True)
+            continue
         banks[name] = np.load(os.path.expanduser(path))[: args.max_frames]
     overrides = parse_overrides(args.variant)
     rig = Rig()

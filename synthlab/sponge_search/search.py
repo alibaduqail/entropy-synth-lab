@@ -61,6 +61,10 @@ def score(mode, m, base, lam_ht=5.0, lam_ms=50.0, tol_ms=0.4, shape=0.0):
         return ht / 0.001 - lam_ms * max(0.0, d_ms - tol_ms)
     if mode == "cand":
         return m["n_cand"] + 0.01 * m.get("n_cand10", 0.0)
+    if mode == "det":
+        return m["n_det"] + 0.01 * m["n_cand"] + 0.0001 * m.get("n_cand10", 0.0)
+    if mode == "det_stealth":
+        return m["n_det"] + 0.01 * m["n_cand"] + 0.0001 * m.get("n_cand10", 0.0) - 2.0 * viol
     if mode == "cand_stealth":
         return m["n_cand"] + 0.01 * m.get("n_cand10", 0.0) - 20.0 * viol
     raise ValueError(mode)
@@ -84,6 +88,8 @@ def main():
                     help="tie-breaker added to the objective per pre-NMS candidate")
     ap.add_argument("--x0", default="", help="npy file with a start vector")
     ap.add_argument("--baseline", default="~/synthlab/sponge-search/real_bg/a0_bank.npy")
+    ap.add_argument("--weights", default="~/yolov8n.pt")
+    ap.add_argument("--expa", default="", help="path to experimentA.py (default: deployed copy)")
     ap.add_argument("--diag", action="store_true", help="sep-CMA (for high dimensions)")
     args = ap.parse_args()
 
@@ -93,7 +99,7 @@ def main():
     state_p = os.path.join(run, "cma.pkl")
     base_raw = np.load(os.path.expanduser(args.baseline))
     background = scenes.raw_to_celsius(base_raw).mean(0)
-    proxy = args.mode.startswith("cand")
+    proxy = args.mode.startswith(("cand", "det"))
     if os.path.exists(state_p):
         with open(state_p, "rb") as fh:
             es, gen, best = pickle.load(fh)
@@ -106,7 +112,7 @@ def main():
         es = cma.CMAEvolutionStrategy(x0, args.sigma, opts)
         gen, best = 0, {"f": -1e9}
         json.dump(vars(args), open(os.path.join(run, "config.json"), "w"), indent=1)
-    rig = Rig()
+    rig = Rig(weights=args.weights, expa_path=args.expa or None, power=not proxy)
     log = open(os.path.join(run, "evals.jsonl"), "a")
     while time.time() < t_end:
         base = {"ht": 0.0} if proxy else rig.measure(base_raw, k=args.k)
