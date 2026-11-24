@@ -318,6 +318,15 @@ def main():
     if len(th):
         th.drop(columns=["dir"]).to_csv(args.out / "cmp_thermal_trials.csv", index=False)
         nb = int(th.block.nunique())
+        # sponge-search banks are adversarial optimisations (candidate explosions): keep them out
+        # of the noise model and HT slopes, report them on their own
+        sp = th[th.track == "sponge-search"]
+        if len(sp):
+            sp.groupby("bank").agg(n=("ok", "size"), HT=("HT", "mean"), total_ms=("total_ms", "mean"),
+                                   yolo_post_ms=("yolo_post_ms", "mean"), n_candidates=("n_candidates", "mean"),
+                                   power_w=("power_w", "mean"), energy_per_unit_j=("energy_per_unit_j", "mean")
+                                   ).to_csv(args.out / "cmp_thermal_sponge_banks.csv")
+        th = th[th.track != "sponge-search"]
         tab, stats = bank_table(th, T_METRICS,
                                 ["entropy", "HT", "n_det", "n_candidates", "any_det_frac"])
         tab.to_csv(args.out / "cmp_thermal_banks.csv")
