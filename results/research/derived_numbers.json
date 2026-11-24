@@ -1,0 +1,134 @@
+{
+ "seed": 20261123,
+ "p840_kl_dB_per_km_per_g_m3": {
+  "60GHz_20C": 1.746,
+  "60GHz_0C": 2.485,
+  "64GHz_20C": 1.962,
+  "64GHz_0C": 2.734,
+  "77GHz_20C": 2.713,
+  "77GHz_0C": 3.537
+ },
+ "radar_fog_loss_dB_8m_roundtrip": {
+  "M=0.05g_m3": 0.0007,
+  "M=0.5g_m3": 0.007,
+  "M=5.0g_m3": 0.0699
+ },
+ "lidar_two_way_loss": {
+  "alpha=0.06": {
+   "R=2m": 0.7866,
+   "R=4m": 0.6188
+  },
+  "alpha=0.15": {
+   "R=2m": 0.5488,
+   "R=4m": 0.3012
+  },
+  "alpha=0.3": {
+   "R=2m": 0.3012,
+   "R=4m": 0.0907
+  },
+  "alpha=0.6": {
+   "R=2m": 0.0907,
+   "R=4m": 0.0082
+  },
+  "alpha=1.0": {
+   "R=2m": 0.0183,
+   "R=4m": 0.0003
+  }
+ },
+ "alpha_from_MOR_ln20": {
+  "MOR=600m": 0.005,
+  "MOR=300m": 0.01,
+  "MOR=150m": 0.02,
+  "MOR=100m": 0.03,
+  "MOR=50m": 0.0599,
+  "MOR=20m": 0.1498,
+  "MOR=10m": 0.2996,
+  "MOR=5m": 0.5991,
+  "MOR=3m": 0.9986
+ },
+ "lepton_psf": {
+  "sigma_lens_px": 0.739,
+  "pixel_sinc_at_quarter": 0.9,
+  "sigma_system_px": 0.794
+ },
+ "ina3221_vdd_in_step_mW": 39.5,
+ "fog_alpha_per_m_LWC_1g_m3": {
+  "r_eff=2um": {
+   "nir": 0.75,
+   "lwir_k0p13": 0.13,
+   "lwir_k0p15": 0.15
+  },
+  "r_eff=5um": {
+   "nir": 0.3,
+   "lwir_k0p13": 0.13,
+   "lwir_k0p15": 0.15
+  },
+  "r_eff=10um": {
+   "nir": 0.15,
+   "lwir_k0p13": 0.13,
+   "lwir_k0p15": 0.15
+  }
+ },
+ "bie_vs_noise": [
+  {
+   "noise_sigma_C": 0.0,
+   "adp": 0.59728,
+   "mod": 0.06566,
+   "block_entropy": 1.22236,
+   "global_sd": 15.2606,
+   "block_sd": 2.28972,
+   "bie": 0.08186,
+   "global_shannon": 2.45194
+  },
+  {
+   "noise_sigma_C": 0.035,
+   "adp": 0.59916,
+   "mod": 0.09051,
+   "block_entropy": 1.85779,
+   "global_sd": 15.1843,
+   "block_sd": 2.59873,
+   "bie": 0.08007,
+   "global_shannon": 2.81511
+  },
+  {
+   "noise_sigma_C": 0.1,
+   "adp": 0.59935,
+   "mod": 0.12653,
+   "block_entropy": 2.6822,
+   "global_sd": 15.22556,
+   "block_sd": 3.03434,
+   "bie": 0.07773,
+   "global_shannon": 3.51165
+  },
+  {
+   "noise_sigma_C": 0.3,
+   "adp": 0.59917,
+   "mod": 0.20628,
+   "block_entropy": 3.90558,
+   "global_sd": 15.47921,
+   "block_sd": 4.74882,
+   "bie": 0.06784,
+   "global_shannon": 4.58663
+  },
+  {
+   "noise_sigma_C": 1.0,
+   "adp": 0.59829,
+   "mod": 0.33647,
+   "block_entropy": 5.26121,
+   "global_sd": 18.38257,
+   "block_sd": 11.15169,
+   "bie": 0.04864,
+   "global_shannon": 5.84395
+  },
+  {
+   "noise_sigma_C": 3.0,
+   "adp": 0.60272,
+   "mod": 0.29033,
+   "block_entropy": 6.40751,
+   "global_sd": 34.14998,
+   "block_sd": 30.8982,
+   "bie": 0.02529,
+   "global_shannon": 7.0819
+  }
+ ]
+}
