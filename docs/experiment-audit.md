@@ -13,8 +13,6 @@ Reproduce: `PYTHONPATH=. python synthlab/audit/analyze_sweep.py && python synthl
 && python synthlab/audit/analyze_validity_power.py && python synthlab/audit/figures.py` (numpy, scipy,
 pandas, matplotlib; seeds 1711 and 20261123). Tests: `pytest tests/test_audit_stats.py` (14 pass).
 
----
-
 ## 1. The five problems that matter most
 
 | # | Problem | Evidence | Fix |
@@ -28,8 +26,6 @@ pandas, matplotlib; seeds 1711 and 20261123). Tests: `pytest tests/test_audit_st
 The honest one-line status: **on the current pipeline the data support the null for the neural network
 and a small "any detection vs none" post-processing effect; they do not support an entropy-driven or
 security-relevant effect.** That is a publishable finding only if it is framed that way.
-
----
 
 ## 2. What the study claims and what each track measures today
 
@@ -62,8 +58,6 @@ security-relevant effect.** That is a publishable finding only if it is framed t
 | Replay of the same frames, 2026-11-06 | 50 trials | Cleanest real-data comparison: identical input, fresh process per trial. |
 | Synthetic sweep, 2026-11-16 | 279 trials, 13 scenarios x 21-22 rounds, 145,638 frames, 6.0 h | Mechanism: randomised within rounds, same input replicated about 21 times. |
 | LiDAR pilot, AGX, 2026-09-13/14 (Drive) | 5 trials: 2 M0, 2 M1, 1 M2 | Too small for inference; shows day-to-day drift. Lab 5 x M0 + 5 x M1 from October is described in the summary but its comparison table was not found on Drive. |
-
----
 
 ## 3. Mechanism check: where could input-dependent cost come from?
 
@@ -179,8 +173,6 @@ post-processing**, with the caveat that it is one batch and A0 was replayed befo
 
 Conclusion: real and repeatable, but not meaningful as an attack on this workload.
 
----
-
 ## 4. Metric validity
 
 ![metric](../results/experiment-audit/fig_metric_validity.png)
@@ -237,8 +229,6 @@ rewards global contrast with locally smooth blocks. Consequences:
 - So in both stacks the power attributed to "perception" is roughly half "computing the entropy".
   A robot would not run BIE or eigen-entropy. Any power-vs-entropy slope that passes through the
   entropy code is circular.
-
----
 
 ## 5. Design validity
 
@@ -342,8 +332,6 @@ measured relation is a step in "any detection", and the x-axis metric is non-mon
 "bent line fits better" test across pooled A and B conditions would find a knee produced by mixing
 families (as the pooled HT correlations here already do). Drop C until A or B shows a graded effect.
 
----
-
 ## 6. Novelty and framing versus Sponge Examples
 
 Sponge Examples obtained energy increases where computation depends on data: variable-length token
@@ -376,8 +364,6 @@ where the mechanism is weakest. The research track adds four points, not re-veri
 | Cost falls with disorder | A real finding against the attack framing; report it |
 
 Where we are today: row 3 for the detector (as a step), row 5 for inference time, row 6 for noise.
-
----
 
 ## 7. Recommendations, ranked by value for effort
 
@@ -451,8 +437,6 @@ Where we are today: row 3 for the detector (as a step), row 5 for inference time
 - Any "entropy" effect must be shown with detection fraction, candidate count and point or voxel
   counts in the model.
 
----
-
 ## 8. What to say to the advisor
 
 "We re-analysed everything we have. On our pipeline the neural network costs the same for every
@@ -468,8 +452,6 @@ itself. We propose to (1) move the entropy calculations offline, (2) add a LiDAR
 whose work depends on the data, (3) pre-register the fog experiment using synthetic data with
 detections held fixed, with interleaved trials and a power analysis, and (4) write up either a
 bounded null or a fused-pipeline effect, whichever the data give."
-
----
 
 ## 9. Limits of this audit
 
